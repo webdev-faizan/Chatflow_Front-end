@@ -1,6 +1,7 @@
-import React from "react";
-
+import React, { useState } from "react";
 import { StyledBadge } from "../StyledBadge";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 import {
   Box,
@@ -11,6 +12,7 @@ import {
   Avatar,
   TextField,
   InputAdornment,
+  useScrollTrigger,
 } from "@mui/material";
 
 import {
@@ -20,9 +22,20 @@ import {
   Phone,
   VideoCamera,
   Smiley,
+  PaperPlaneTilt,
+  Image,
+  File,
+  Camera,
+  User,
 } from "phosphor-react";
 
 const Conversion = () => {
+  const [showPicker, setShowPicker] = useState(false);
+  const [ShowAttachement, setShowAttachement] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const EmojiSelect = ({ native }) => {
+    setInputValue(inputValue + native);
+  };
   return (
     <Stack
       direction={"column"}
@@ -119,67 +132,121 @@ const Conversion = () => {
           </IconButton>
         </Stack>
       </Stack>
-      {/* user footer */}
-      <Stack
-        className="row"
-        spacing={3}
-        alignItems={"center"}
-        sx={{ width: "100%" }}
+      {/*  */}
+      <Box
+        display={"flex"}
+        gap={3}
+        alignItems="center"
+        sx={{ width: "100%", paddingX: "30px", position: "relative" }}
       >
+        <Box
+          sx={{
+            position: "absolute",
+            right: "99px",
+            bottom: "60px",
+            display: `${showPicker ? "block" : "none"}`,
+          }}
+        >
+          <Picker
+            data={data}
+            emojiSize={20}
+            onEmojiSelect={EmojiSelect}
+            dynamicWidth={false}
+            className="picker"
+          />
+        </Box>
+        {/*  */}
+        <Stack
+          spacing={1}
+          sx={{
+            position: "absolute",
+            left: "42px",
+            bottom: "60px",
+
+            display: `${ShowAttachement ? "flex" : "none"}`,
+          }}
+        >
+          <IconButton
+            sx={{
+              background: "#007bff",
+              ":hover": {
+                background: "#007bff",
+              },
+            }}
+          >
+            <File size={24} />
+          </IconButton>
+          <IconButton
+            sx={{
+              background: "#6c757d",
+              ":hover": {
+                background: "#6c757d",
+              },
+            }}
+          >
+            <User size={24} />
+          </IconButton>
+          <IconButton
+            sx={{
+              background: "#28a745",
+              ":hover": {
+                background: "#28a745",
+              },
+            }}
+          >
+            <Image size={24} />
+          </IconButton>
+          <IconButton
+            sx={{
+              background: "#dc3545",
+              ":hover": {
+                background: "#dc3545",
+              },
+            }}
+          >
+            <Camera size={24} />
+          </IconButton>
+        </Stack>
+
         <TextField
-          fullwidth
-          sx={{ width: "98%" }}
+          fullWidth
           placeholder="write a message..."
-          inputProps={{
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          InputProps={{
             disableUnderline: true,
-            startAdorment: (
+            // Corrected attribute name
+            startAdornment: (
               <InputAdornment>
                 <IconButton>
-                  <LinkSimple></LinkSimple>
+                  <LinkSimple
+                    onClick={() => setShowAttachement(!ShowAttachement)}
+                  />
                 </IconButton>
               </InputAdornment>
             ),
-            endAdorment: (
+            endAdornment: (
               <InputAdornment>
                 <IconButton>
-                  <Smiley />
+                  <Smiley onClick={() => setShowPicker(!showPicker)} />
                 </IconButton>
               </InputAdornment>
             ),
           }}
         ></TextField>
-      </Stack>
-      {/*  */}
-      <Stack
-  className="row"
-  spacing={3}
-  alignItems="center"
-  sx={{ width: "100%" }}
->
-  <TextField
-    fullWidth // Corrected attribute name
-    sx={{ width: "98%" }}
-    placeholder="write a message..."
-    inputProps={{
-      disableUnderline: true,
-      startAdornment: ( // Corrected attribute name
-        <InputAdornment>
-          <IconButton>
-            <LinkSimple />
-          </IconButton>
-        </InputAdornment>
-      ),
-      endAdornment: ( // Corrected attribute name
-        <InputAdornment>
-          <IconButton>
-            <Smiley />
-          </IconButton>
-        </InputAdornment>
-      ),
-    }}
-  ></TextField>
-</Stack>
-
+        <Stack
+          alignItems={"center"}
+          justifyContent={"center"}
+          sx={{
+            width: "48px",
+            height: "48px",
+            borderRadius: "12px",
+            background: "#5B96F7",
+          }}
+        >
+          <PaperPlaneTilt size={25} color="white" />
+        </Stack>
+      </Box>
     </Stack>
   );
 };

@@ -36,3 +36,7 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.picker{
+  width: 300px !important;
+}
