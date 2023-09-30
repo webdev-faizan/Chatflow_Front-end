@@ -48,7 +48,7 @@ const Conversion = () => {
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
-        
+
         sx={{
           width: "100%",
           height: "80px",
@@ -56,6 +56,7 @@ const Conversion = () => {
           background: "#F8FAFF",
           "box-shadow": "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
         }}
+        
       >
         <Box
           sx={{
