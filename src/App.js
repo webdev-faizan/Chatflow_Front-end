@@ -1,4 +1,5 @@
 import Index from "./layout/Dashboard";
+import { faker } from "@faker-js/faker";
 import Chart from "./chat/Chart";
 import {
   Box,
