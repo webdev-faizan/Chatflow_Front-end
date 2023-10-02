@@ -14,6 +14,7 @@ import {
   TextField,
   Popover,
   InputAdornment,
+  useScrollTrigger,
 } from "@mui/material";
 
 import {
@@ -51,6 +52,7 @@ const Conversion = () => {
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
+
         sx={{
           width: "inherit",
           position: "fixed",
