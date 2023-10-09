@@ -83,8 +83,17 @@ const chat_history = [
   },
   {
     type: "msg",
+    subtype: "reply",
+    reply: "how are you 😇",
+    message: "I am good and you",
+    incoming: true,
+    outgoing: false,
+  },
+  {
+    type: "msg",
     subtype: "link",
-    preview: "",
+    preview: faker.image.abstract(),
+    link: "https://www.upwork.com/freelancers/~01fd17d7943d98645a?s=1110580755057594368",
     message: "yes i also can do that",
     incoming: false,
     outgoing: true,
@@ -99,8 +108,16 @@ const chat_history = [
   },
   {
     type: "msg",
+    message: "great drawing",
+    incoming: false,
+    outgoing: true,
+  },
+  {
+    type: "msg",
     subtype: "doc",
-    message: "here you go",
+    message: "check this pdf",
+    preview: faker.image.abstract(),
+    filename: "Abstract.png",
     incoming: true,
     outgoing: false,
   },
@@ -113,5 +130,24 @@ const chat_history = [
     outgoing: false,
   },
 ];
-
-export { NavButton, chat_history, chatlist };
+const message_options = [
+  {
+    title: "reply",
+  },
+  {
+    title: "React to Message",
+  },
+  {
+    title: "Forward to message",
+  },
+  {
+    title: "Start message",
+  },
+  {
+    title: "Report",
+  },
+  {
+    title: "Delete Message",
+  },
+];
+export { NavButton, chat_history, chatlist, message_options };

@@ -5,6 +5,7 @@ import Index from "../layout/Dashboard";
 import Chart from "./Chart";
 import Conversion from "../components/Chat/Conversion";
 import Message from "../components/Chat/message";
+import Contact from "../components/Chat/Contact";
 
 const GeneralApp = () => {
   return (
@@ -13,11 +14,14 @@ const GeneralApp = () => {
         <Index />
         <Chart />
       </Stack>
-      <Stack direction={"column"} sx={{ marginLeft: "500px" }}>
-        <Conversion />
-        <Box sx={{ marginTop: "80px" }} padding="20px">
-          <Message />
-        </Box>
+      <Stack direction={"row"}>
+        <Stack direction={"column"} sx={{ marginLeft: "500px" }}>
+          <Conversion />
+          <Box sx={{ marginY: "80px" }} padding="20px" overflow={"scroll"}>
+            <Message />
+          </Box>
+        </Stack>
+        <Contact />
       </Stack>
     </div>
   );

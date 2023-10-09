@@ -5,7 +5,7 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { StyledBadge } from "../StyledBadge";
 
-export const AllChat = () => {
+export const Chatlist = () => {
   return (
     <div>
       {/* one user */}
@@ -170,8 +170,6 @@ export const AllChat = () => {
             >
               9:36
             </Typography>
-
-       
           </Box>
         </Box>
       </Box>{" "}
@@ -351,4 +349,4 @@ export const AllChat = () => {
   );
 };
 
-export default AllChat;
+export default Chatlist;

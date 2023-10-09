@@ -8,7 +8,7 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
 import { StyledBadge } from "../components/StyledBadge";
-import { AllChat } from "../components/Chat/AllChat";
+import { Chatlist } from "../components/Chat/Chatlist";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -229,7 +229,7 @@ const Chart = () => {
             width: "100%",
             height: "0.5px",
             background: "#B4B4B4",
-            marginTop:"10px"
+            marginTop: "10px",
           }}
         />
         <Typography
@@ -245,7 +245,7 @@ const Chart = () => {
         >
           All Chats
         </Typography>
-        <AllChat />
+        <Chatlist />
       </Box>
     </Box>
   );

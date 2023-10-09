@@ -44,7 +44,8 @@ const Conversion = () => {
     <Stack
       direction={"column"}
       sx={{
-        width: "calc(100vw - 500px)",
+        // width: "calc(100vw - 500px)",
+        width: "calc(100vw - 820px)",
       }}
       justifyContent={"space-between"}
     >
