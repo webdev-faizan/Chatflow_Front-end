@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { StyledBadge } from "../StyledBadge";
 import data from "@emoji-mart/data";
+import { useSelector, useDispatch } from "react-redux";
 import Picker from "@emoji-mart/react";
+import { toggleContactUs } from "../../redux/silice/contactusToogle";
 
 import {
   Box,
@@ -32,6 +34,7 @@ import {
   PaperPlaneTilt,
 } from "phosphor-react";
 import NativeSelectInput from "@mui/material/NativeSelect/NativeSelectInput";
+import { style } from "@mui/system";
 
 const Conversion = () => {
   const [showPicker, setShowPicker] = useState(false);
@@ -40,12 +43,14 @@ const Conversion = () => {
   const EmojiSelect = ({ native }) => {
     setInputValue(inputValue + native);
   };
-  return (
+  const dispatch = useDispatch();
+  const Tooglevalue = useSelector((state) => state.contactUsReducer.isToggled);
+ 
+ return (
     <Stack
       direction={"column"}
       sx={{
-        // width: "calc(100vw - 500px)",
-        width: "calc(100vw - 820px)",
+        width: `calc(100vw - ${Tooglevalue ? "820px" : "510px"})`,
       }}
       justifyContent={"space-between"}
     >
@@ -53,7 +58,6 @@ const Conversion = () => {
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
-
         sx={{
           width: "inherit",
           position: "fixed",
@@ -83,6 +87,7 @@ const Conversion = () => {
               sx={{ width: "48px", height: "48px" }}
               alt="Nemy Sharp"
               src="/static/images/avatar/1.jpg"
+              onClick={() => dispatch(toggleContactUs())}
             />
           </StyledBadge>
           <Box
@@ -269,4 +274,3 @@ const Conversion = () => {
 };
 
 export default Conversion;
-
