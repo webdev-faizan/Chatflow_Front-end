@@ -1,5 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { contactUsReducer } from "./silice/contactusToogle";
-export const store = configureStore({
-  reducer: { contactUsReducer },
-});
+import { persistStore, persistReducer } from "redux-persist";
+import { rootPersistConfig, rootReducer } from "./rootReducer";
+import { applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+
+export const store = configureStore(
+  {
+    reducer: persistReducer(rootPersistConfig, rootReducer),
+
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+        immutableCheck: false,
+      }),
+  },
+  applyMiddleware(thunk)
+);

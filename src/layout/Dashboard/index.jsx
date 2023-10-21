@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { Box, Stack, IconButton, Divider, Switch, Avatar } from "@mui/material";
 import { NavButton } from "../../data/index";
 import { Gear } from "phosphor-react";
+import { NavLink } from "react-router-dom";
 
 function Index() {
   const [select, SetSlect] = useState(0);
@@ -47,7 +48,7 @@ function Index() {
           <br />
           <Stack spacing={1} direction="column" alignItems="center">
             {NavButton.map((icons) => {
-              const { icon, index } = icons;
+              const { icon, index, to } = icons;
               return (
                 <Box
                   sx={{
@@ -68,7 +69,7 @@ function Index() {
                     key={index}
                     onClick={() => SetSlect(index)}
                   >
-                    {icon}
+                    <NavLink to={to}>{icon}</NavLink>
                   </IconButton>
                 </Box>
               );
@@ -102,7 +103,9 @@ function Index() {
               alignItems: "center",
             }}
           >
+            <NavLink to="setting">
             <Gear sx={{ width: "24px", height: "24px", fontSize: "24px" }} />
+            </NavLink>
           </IconButton>
           <Stack spacing={3}>
             <Switch defaultChecked />

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import { StyledBadge } from "../StyledBadge";
 import data from "@emoji-mart/data";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Picker from "@emoji-mart/react";
-import { toggleContactUs } from "../../redux/silice/contactusToogle";
+import { useDispatch } from "react-redux";
 
 import {
   Box,
@@ -33,24 +32,24 @@ import {
   Image,
   PaperPlaneTilt,
 } from "phosphor-react";
-import NativeSelectInput from "@mui/material/NativeSelect/NativeSelectInput";
-import { style } from "@mui/system";
+import { toggleSidebar } from "../../redux/app";
 
 const Conversion = () => {
+  const dispatch = useDispatch();
+
   const [showPicker, setShowPicker] = useState(false);
   const [ShowAttachement, setShowAttachement] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const EmojiSelect = ({ native }) => {
     setInputValue(inputValue + native);
   };
-  const dispatch = useDispatch();
-  const Tooglevalue = useSelector((state) => state.contactUsReducer.isToggled);
- 
- return (
+  const sideBar = useSelector((state) => state.app.sideBar.open);
+
+  return (
     <Stack
       direction={"column"}
       sx={{
-        width: `calc(100vw - ${Tooglevalue ? "820px" : "510px"})`,
+        width: `calc(100vw - ${sideBar ? "820px" : "510px"})`,
       }}
       justifyContent={"space-between"}
     >
@@ -87,7 +86,8 @@ const Conversion = () => {
               sx={{ width: "48px", height: "48px" }}
               alt="Nemy Sharp"
               src="/static/images/avatar/1.jpg"
-              onClick={() => dispatch(toggleContactUs())}
+              // onClick={() => dispatch(toggleSidebar())}
+              onClick={() => dispatch(toggleSidebar())}
             />
           </StyledBadge>
           <Box
@@ -232,6 +232,7 @@ const Conversion = () => {
           <TextField
             fullWidth
             placeholder="write a message..."
+            sx={{ background:"white"}}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             InputProps={{

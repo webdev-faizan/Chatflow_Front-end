@@ -13,13 +13,16 @@ import {
 const NavButton = [
   {
     index: 0,
+    to: "/",
     icon: <ChatCircleDots />,
   },
   {
+    to: "/group",
     index: 1,
     icon: <Users />,
   },
   {
+    to: "/callhistory",
     index: 2,
     icon: <Phone />,
   },
@@ -60,15 +63,16 @@ const chatlist = [
 
 const chat_history = [
   {
+    type: "divider",
+    text: "Yesterday",
+  },
+  {
     type: "msg",
     message: "hello ✋",
     incoming: true,
     outgoing: false,
   },
-  {
-    type: "divider",
-    text: "Today",
-  },
+
   {
     type: "msg",
     message: "Hii",
@@ -88,6 +92,10 @@ const chat_history = [
     message: "I am good and you",
     incoming: true,
     outgoing: false,
+  },
+  {
+    type: "divider",
+    text: "Tday",
   },
   {
     type: "msg",
