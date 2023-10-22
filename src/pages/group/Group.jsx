@@ -5,10 +5,9 @@ import Message from "../../components/Chat/message";
 import Conversion from "../../components/Chat/Conversion";
 
 const Group = () => {
-
   return (
-    <div>
-      <Stack direction={"row"} sx={{ position: "fixed", left: "130px" }}>
+    <Box>
+      <Stack direction={"row"} sx={{ position: "fixed", left: "123px" }}>
         <GroupChatlist />
       </Stack>
 
@@ -24,7 +23,7 @@ const Group = () => {
           </Box>
         </Stack>
       </Stack>
-    </div>
+    </Box>
   );
 };
 

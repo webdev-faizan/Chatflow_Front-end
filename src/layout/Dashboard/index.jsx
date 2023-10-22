@@ -104,12 +104,14 @@ function Index() {
             }}
           >
             <NavLink to="setting">
-            <Gear sx={{ width: "24px", height: "24px", fontSize: "24px" }} />
+              <Gear sx={{ width: "24px", height: "24px", fontSize: "24px" }} />
             </NavLink>
           </IconButton>
           <Stack spacing={3}>
             <Switch defaultChecked />
-            <Avatar alt="Remy Sharp" src="./Ellipse 1.svg" />
+            <NavLink to={"/profile"}>
+              <Avatar alt="Remy Sharp" src="./Ellipse 1.svg" />
+            </NavLink>
           </Stack>
         </Stack>
       </Box>

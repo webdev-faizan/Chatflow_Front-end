@@ -21,16 +21,14 @@ const GeneralApp = () => {
       <Stack direction={"row"} sx={{ position: "fixed", left: "130px" }}>
         <Chart />
       </Stack>
-      
+
       <Stack direction={"row"}>
-        <Stack direction={"column"} 
-        sx={{ marginLeft: "370px" }}>
+        <Stack direction={"column"} sx={{ marginLeft: "370px" }}>
           <Conversion />
           <Box sx={{ marginY: "80px" }} padding="20px" overflow={"scroll"}>
             <Message />
           </Box>
         </Stack>
-
 
         <Box
           sx={{

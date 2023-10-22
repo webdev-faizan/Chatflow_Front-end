@@ -1,11 +1,11 @@
 import { Typography, Button, TextField } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
+import Slide from "@mui/material/Slide";
 import DialogContent from "@mui/material/DialogContent";
 import { XCircle } from "phosphor-react";
 import Autocomplete from "@mui/material/Autocomplete";
 
 import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
 import React, { useState } from "react";
 import { CircleDashed, ArchiveBox } from "phosphor-react";
 import { Box, Stack, IconButton, Divider, InputBase } from "@mui/material";
@@ -50,7 +50,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const GroupChatlist = () => {
   const [isArcived, SetIsArcived] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
@@ -90,7 +90,6 @@ const GroupChatlist = () => {
                   id="tags-outlined"
                   options={[{ title: "faizan" }, { title: "ali" }]}
                   getOptionLabel={(option) => option.title}
-                  // defaultValue={[top100Films[13]]}
                   filterSelectedOptions
                   renderInput={(params) => (
                     <TextField
@@ -121,6 +120,7 @@ const GroupChatlist = () => {
         <Box
           sx={{
             height: "100vh",
+            overflow: "hidden",
             overflowY: "scroll",
             width: "360px",
             background: "#F8FAFF",
