@@ -1,6 +1,7 @@
+import Slide from "@mui/material/Slide";
 import { Grid, Typography, Paper } from "@mui/material";
 import React, { useState } from "react";
-import { CircleDashed, ArchiveBox } from "phosphor-react";
+import { CircleDashed, ArchiveBox, Users, XCircle } from "phosphor-react";
 import { Box, Stack, IconButton, Divider } from "@mui/material";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
@@ -10,6 +11,7 @@ import { styled } from "@mui/material/styles";
 import { StyledBadge } from "../components/StyledBadge";
 import { Chatlist } from "../components/Chat/Chatlist";
 
+import Friends from "../layout/Dashboard/Friends";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -44,6 +46,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Chart = () => {
   const [isArcived, SetIsArcived] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Box component={"section"}>
       <Box
@@ -76,6 +82,9 @@ const Chart = () => {
             >
               Chats
             </Typography>
+            <IconButton onClick={handleOpen}>
+              <Users fontSize={24} />
+            </IconButton>
             <IconButton>
               <CircleDashed fontSize={24} />
             </IconButton>
@@ -247,6 +256,8 @@ const Chart = () => {
         </Typography>
         <Chatlist />
       </Box>
+      {/*  */}
+      <Friends handleClose={handleClose} open={open} />
     </Box>
   );
 };

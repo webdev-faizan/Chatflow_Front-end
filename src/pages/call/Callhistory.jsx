@@ -24,8 +24,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { calllog } from "../../data/calllog";
 import Dialog from "@mui/material/Dialog";
-import Slide from "@mui/material/Slide";
 import DialogContent from "@mui/material/DialogContent";
+import Slide from "@mui/material/Slide";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import appReducer from "./app";
-import storage from 'redux-persist/lib/storage';
-import {} from '../'
+import storage from "redux-persist/lib/storage";
+import authReducer from "./silice/auth";
 const rootPersistConfig = {
   key: "root",
   storage,
@@ -9,5 +9,6 @@ const rootPersistConfig = {
 };
 const rootReducer = combineReducers({
   app: appReducer,
+  auth: authReducer,
 });
 export { rootPersistConfig, rootReducer };

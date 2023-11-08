@@ -1,35 +1,19 @@
-import { faker } from "@faker-js/faker";
-import Chart from "./chat/Chart";
-import {
-  Box,
-  Stack,
-  IconButton,
-  Divider,
-  Switch,
-  Avatar,
-  AppBar,
-} from "@mui/material";
-import GeneralApp from "./chat/GeneralApp";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
-import Privacy from "./pages/setting/Privacy";
+import { Box } from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import RouterComponent from "./routes/RouterComponent";
-// import Setting from "./pages/setting/Setting";
-// import Setting from "./pages/setting/notification";
-import Index from "./layout/Dashboard/index";
+import DirectionSnackbar from "./components/Snackbar";
 
 function App() {
   return (
     <>
-      {/* <GeneralApp /> */}
+      <ToastContainer />
 
-      <Box sx={{position:"fixed",left:0}}>
-        <Index />
-      </Box>
-      <Box sx={{marginLeft:"130px"}}>
+      <Box sx={{ marginLeft: "130px" }}>
         <RouterComponent />
       </Box>
-      {/* <Picker data={data} /> */}
+      <DirectionSnackbar />
     </>
   );
 }
