@@ -4,6 +4,7 @@ import data from "@emoji-mart/data";
 import { useSelector } from "react-redux";
 import Picker from "@emoji-mart/react";
 import { useDispatch } from "react-redux";
+import { Cloudinary } from "@cloudinary/url-gen";
 
 import {
   Box,
@@ -33,17 +34,116 @@ import {
   PaperPlaneTilt,
 } from "phosphor-react";
 import { toggleSidebar } from "../../redux/app";
+import { socket, token } from "../../socket";
 
 const Conversion = () => {
+  // const cld = new Cloudinary({cloud: {cloudName: 'dkhgfsefj'}});
+
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.conversions);
 
   const [showPicker, setShowPicker] = useState(false);
   const [ShowAttachement, setShowAttachement] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [Assest, setAssest] = useState(null);
+  const [link, setLink] = useState(null);
   const EmojiSelect = ({ native }) => {
     setInputValue(inputValue + native);
   };
   const sideBar = useSelector((state) => state.app.sideBar.open);
+  const { sentMessageInfo } = useSelector((state) => state.app);
+
+  //! upload assests
+  const handleAssestUpload = async () => {
+    const formData = new FormData();
+    formData.append("file", Assest);
+    formData.append("cloud_name", "dkhgfsefj");
+    formData.append("upload_preset", "chating");
+
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dkhgfsefj/upload",
+        {
+          method: "POST",
+
+          body: formData,
+        }
+      );
+
+      const result = await response.json();
+      setLink(result.url);
+      return { link: result.url, fileName: result.original_filename };
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const sendMsg = async () => {
+    //! image message
+
+    if (Assest) {
+      const { link, fileName } = await handleAssestUpload();
+      if (Assest.type.startsWith("image")) {
+        socket.emit("link_message", {
+          token,
+          from: sentMessageInfo.from,
+          conversation_id: sentMessageInfo.roomId,
+          type: "msg",
+          subType: "Media",
+          fileName,
+          link: link,
+          mimeType: "",
+          message: inputValue || inputValue === 0 ? inputValue : "",
+        });
+      } else {
+        socket.emit("link_message", {
+          token,
+          from: sentMessageInfo.from,
+          conversation_id: sentMessageInfo.roomId,
+          type: "msg",
+          fileName: "",
+          mimeType: "",
+          subType: "Document",
+          link: link,
+          message: inputValue,
+        });
+      }
+    }
+
+    // ! for text Link
+    //check is link or not
+    else if (
+      inputValue.startsWith("http://") ||
+      inputValue.startsWith("https://")
+    ) {
+      //sperate text or link
+      const linkPattern = /\b(?:https?|ftp):\/\/\S+\b/g;
+      const links = inputValue.match(inputValue) || [];
+      const textWithoutLinks = inputValue.replace(linkPattern, "");
+      //send link_message
+      socket.emit("link_message", {
+        token,
+        from: sentMessageInfo.from,
+        conversation_id: sentMessageInfo.roomId,
+        type: "msg",
+        subType: "Link",
+        link: links[0],
+        message: textWithoutLinks,
+      });
+    } else {
+      // ! for tet message
+      socket?.emit("text_message", {
+        token,
+        from: sentMessageInfo.from,
+        conversation_id: sentMessageInfo.roomId,
+        type: "Text",
+        message: inputValue,
+      });
+    }
+
+    setInputValue("");
+  };
+  // const [image, setImage] = useState('');
 
   return (
     <Stack
@@ -77,19 +177,31 @@ const Conversion = () => {
             padding: "0 10px",
           }}
         >
-          <StyledBadge
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            variant="dot"
-          >
+          {userInfo?.online ? (
+            <StyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+              sx={{
+                opacity: `${userInfo?.online ? "100" : "0"}`,
+              }}
+            >
+              <Avatar
+                sx={{ width: "48px", height: "48px" }}
+                src={userInfo?.name}
+                alt={userInfo?.name}
+                onClick={() => dispatch(toggleSidebar())}
+              />
+            </StyledBadge>
+          ) : (
             <Avatar
               sx={{ width: "48px", height: "48px" }}
-              alt="Nemy Sharp"
-              src="/static/images/avatar/1.jpg"
-              // onClick={() => dispatch(toggleSidebar())}
+              src={userInfo.name}
+              alt={userInfo?.name}
               onClick={() => dispatch(toggleSidebar())}
             />
-          </StyledBadge>
+          )}
+
           <Box
             sx={{
               display: "flex",
@@ -110,7 +222,7 @@ const Conversion = () => {
                   marginBottom: "3px",
                 }}
               >
-                Dog Hat
+                {userInfo?.name}
               </Typography>
               <Typography
                 sx={{
@@ -123,7 +235,7 @@ const Conversion = () => {
                   background: "unset",
                 }}
               >
-                online
+                {userInfo?.online && "online"}
               </Typography>
             </Box>
           </Box>
@@ -195,6 +307,19 @@ const Conversion = () => {
                 },
               }}
             >
+              <input
+                style={{
+                  position: "absolute",
+                  width: "36px",
+                  height: "40px",
+                  top: "10px",
+                  opacity: "0",
+                }}
+                type="file"
+                accept="application/*"
+                size={"10MB"}
+                onChange={(e) => setAssest(e.target.files[0])}
+              />
               <File size={24} />
             </IconButton>
             <IconButton
@@ -209,12 +334,26 @@ const Conversion = () => {
             </IconButton>
             <IconButton
               sx={{
+                position: "relative",
                 background: "#28a745",
                 ":hover": {
                   background: "#28a745",
                 },
               }}
             >
+              <input
+                style={{
+                  position: "absolute",
+                  width: "36px",
+                  height: "40px",
+                  top: "10px",
+                  opacity: "0",
+                }}
+                type="file"
+                accept="image/*"
+                size={"10MB"}
+                onChange={(e) => setAssest(e.target.files[0])}
+              />
               <Image size={24} />
             </IconButton>
             <IconButton
@@ -232,7 +371,7 @@ const Conversion = () => {
           <TextField
             fullWidth
             placeholder="write a message..."
-            sx={{ background:"white"}}
+            sx={{ background: "white" }}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             InputProps={{
@@ -256,7 +395,8 @@ const Conversion = () => {
               ),
             }}
           ></TextField>
-          <Stack
+          <IconButton
+            onClick={sendMsg}
             alignItems={"center"}
             justifyContent={"center"}
             sx={{
@@ -264,10 +404,13 @@ const Conversion = () => {
               height: "48px",
               borderRadius: "12px",
               background: "#5B96F7",
+              "&:hover": {
+                background: "#5B96F7",
+              },
             }}
           >
             <PaperPlaneTilt size={25} color="white" />
-          </Stack>
+          </IconButton>
         </Box>
       </Stack>
     </Stack>

@@ -9,15 +9,43 @@ import {
   MenuItem,
   Menu,
 } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import { DownloadSimple, Image, DotsThreeVertical } from "phosphor-react";
 import { message_options } from "../../data/index";
+import { Cookies } from "react-cookie";
+const cookie = new Cookies().get("user_id");
+
 const DocMsg = ({ ele }) => {
+  const [, , time] = ele.created_at.split("+");
+  const download = (e, filename) => {
+    fetch(e, {
+      method: "GET",
+      headers: {},
+    })
+      .then((response) => {
+        response.arrayBuffer().then(function (buffer) {
+          const url = window.URL.createObjectURL(new Blob([buffer]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `${filename}.pdf`); //or any other extension
+          document.body.appendChild(link);
+          link.click();
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
+    <Stack
+      direction={"row"}
+      justifyContent={ele.to == cookie ? "start" : "end"}
+    >
       <Box
         sx={{
           borderRadius: "10px",
-          background: ele.incoming ? "#d3d3d3fa" : "#5B96F7",
+          background: ele.to == cookie ? "#d3d3d3fa" : "#5B96F7",
 
           width: "max-content",
           padding: "10px",
@@ -28,18 +56,18 @@ const DocMsg = ({ ele }) => {
             <Image size={48} color="gray" />
             <Typography
               variant="caption"
-              color={ele.incoming ? "#696969" : "#FFF"}
+              color={ele.to == cookie ? "#696969" : "#FFF"}
             >
               {" "}
-              {ele.filename}
+              {ele.message}
             </Typography>
-            <IconButton>
+            <IconButton onClick={() => download(ele.link, ele.fileName)}>
               <DownloadSimple />
             </IconButton>
           </Stack>
-          <Typography color={ele.incoming ? "#696969" : "#FFF"}>
+          <Typography color={ele.to == cookie ? "#696969" : "#FFF"}>
             {" "}
-            {ele.message}
+            {time}
           </Typography>
         </Stack>
       </Box>
@@ -48,38 +76,41 @@ const DocMsg = ({ ele }) => {
   );
 };
 const LinkMsg = ({ ele }) => {
+  const [, , time] = ele.created_at.split("+");
+
   return (
-    <Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
+    <Stack
+      direction={"row"}
+      justifyContent={ele.to == cookie ? "start" : "end"}
+    >
       <Box
         sx={{
           borderRadius: "10px",
-          background: ele.incoming ? "#d3d3d3fa" : "#5B96F7",
+
+          background: ele.to == cookie ? "#5B96F7" : "#d3d3d3fa",
 
           width: "max-content",
           padding: "10px",
         }}
       >
         <Stack spacing={1}>
-          <img
-            src={ele.preview}
-            alt={ele.message}
-            style={{ width: "201px", height: "183px" }}
-          />
-          <Typography variant="subtitle2">creating chating app</Typography>
           <Typography
             variant="subtitle2"
             component={Link}
             href={ele.link}
             target="_faizan"
           >
-            Upwork
+            {ele.link}
           </Typography>
 
           <Typography
             variant="subtitle2"
-            color={ele.incoming ? "#696969" : "#FFF"}
+            color={ele.to == cookie ? "#696969" : "#FFF"}
           >
-            yep
+            {ele.message}
+          </Typography>
+          <Typography variant="caption" color={"white"}>
+            {time}
           </Typography>
         </Stack>
       </Box>
@@ -128,7 +159,10 @@ const ReplyMsg = ({ ele }) => {
 
 const MediaMsg = ({ ele }) => {
   return (
-    <Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
+    <Stack
+      direction={"row"}
+      justifyContent={ele.to == cookie ? "start" : "end"}
+    >
       <Box
         sx={{
           borderRadius: "10px",
@@ -137,11 +171,14 @@ const MediaMsg = ({ ele }) => {
         }}
       >
         <img
-          src={ele.img}
+          src={ele.link}
           alt="as"
           style={{ width: "201px", height: "183px" }}
         />
-        <Typography variant="body2" color={ele.incoming ? "#696969" : "#FFF"}>
+        <Typography
+          variant="body2"
+          color={ele.to == cookie ? "#696969" : "#FFF"}
+        >
           {ele.message}
         </Typography>
       </Box>
@@ -165,18 +202,47 @@ const TimeLine = ({ ele }) => {
 };
 
 const TextMsg = ({ ele }) => {
+  const path = window.location.pathname;
+  // const id = path.split("/").splice(-1).split("#");
+  // console.log(id);
+  // const id = path.split("/").pop().split("#");
+  const [, , time] = ele.created_at.split("+");
+
   return (
-    <Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
+    <Stack
+      direction={"row"}
+      sx={{
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+      justifyContent={ele.to == cookie ? "start" : "end"}
+    >
       <Box
         sx={{
-          background: ele.incoming ? "#d3d3d3fa" : "#5B96F7",
+          background: ele.to == cookie ? "#5B96F7" : "#d3d3d3fa",
+          overflowWrap: "break-word",
+          wordWrap: "break-word",
           borderRadius: "10px",
-          width: "max-content",
           padding: "10px",
+          paddingX: "30px",
         }}
       >
-        <Typography color={ele.incoming ? "#696969" : "#FFF"}>
+        <Typography
+          color={ele.to == cookie ? "white" : "black"}
+          sx={{
+            overflowWrap: "break-word",
+            wordWrap: "break-word",
+          }}
+        >
           {ele.message}
+        </Typography>
+        <Typography
+          color={ele.to == cookie ? "white" : "black"}
+          sx={{
+            fontSize: "12px",
+          }}
+        >
+          {time}
         </Typography>
       </Box>
       <MessageOption />

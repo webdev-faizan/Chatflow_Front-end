@@ -33,7 +33,8 @@ const RouterComponent = () => {
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/login" element={<Login />}></Route>
         {/* index route */}
-        <Route path="/" element={<GeneralApp />}></Route>
+        <Route path="/c/:id" element={<GeneralApp />}></Route>
+        <Route path="/c" element={<GeneralApp />}></Route>
         <Route path="/group" element={<Group />}></Route>
         <Route path="/Callhistory" element={<Callhistory />}></Route>
         <Route path="/profile" element={<Profile />}></Route>

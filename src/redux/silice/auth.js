@@ -75,6 +75,9 @@ export function LoginUser(FormData) {
         cookie.set("auth", data?.data?.token, {
           path: "/",
         });
+        cookie.set("user_id", data?.data?.id, {
+          path: "/",
+        });
         setTimeout(() => {
           window.location.href = "/";
         }, 1500);

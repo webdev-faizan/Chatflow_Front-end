@@ -1,24 +1,42 @@
 import React from "react";
 import { Box, Stack } from "@mui/system";
 import { chat_history } from "../../data";
-import { TimeLine, TextMsg, MediaMsg, ReplyMsg, LinkMsg ,DocMsg} from "./MsgTypes";
+import {
+  TimeLine,
+  TextMsg,
+  MediaMsg,
+  ReplyMsg,
+  LinkMsg,
+  DocMsg,
+} from "./MsgTypes";
+// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-const message = () => {
+const Message = () => {
+  const { current_messages } = useSelector(
+    (state) => state.conversions.direct_chat
+  );
   return (
     <Box>
-      <Stack spacing={3}>
-        {chat_history.map((ele) => {
+      <Stack
+        spacing={3}
+        sx={{
+          marginBottom: "50px",
+        }}
+      >
+        {current_messages.map((ele) => {
+          console.log(ele);
           switch (ele.type) {
             case "divider":
               return <TimeLine ele={ele} />;
             case "msg":
-              switch (ele.subtype) {
-                case "link":
+              switch (ele.subType) {
+                case "Link":
                   return <LinkMsg ele={ele} />;
-                case "img":
+                case "Media":
                   return <MediaMsg ele={ele} />;
 
-                case "doc":
+                case "Document":
                   return <DocMsg ele={ele} />;
 
                 case "reply":
@@ -29,6 +47,7 @@ const message = () => {
               }
 
             default:
+              <></>;
           }
         })}
       </Stack>
@@ -36,4 +55,4 @@ const message = () => {
   );
 };
 
-export default message;
+export default Message;

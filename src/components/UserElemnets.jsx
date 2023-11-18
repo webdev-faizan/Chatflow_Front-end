@@ -69,7 +69,7 @@ const UserElement = () => {
       p={2}
     >
       <Stack spacing={2}>
-        {alluser.map((ele, index) => {
+        {alluser?.map((ele, index) => {
           const { status, fullname, _id } = ele;
           return (
             <Stack
@@ -97,7 +97,7 @@ const UserElement = () => {
               <Stack direction={"row"} spacing={2} alignItems={"center"}>
                 <Button
                   onClick={() =>
-                    socket.emit("friendRequest", {
+                    socket?.emit("friendRequest", {
                       to: _id,
                       from: token,
                     })
@@ -134,7 +134,6 @@ const FriendRequestElement = () => {
         {requestToConnected.map((ele) => {
           // const { fullname, _id, status } = ele.recipeint;
           const { fullname, _id, status } = ele.sender;
-          console.log(_id);
           return (
             <Stack
               direction="row"
@@ -161,7 +160,7 @@ const FriendRequestElement = () => {
               <Stack direction={"row"} spacing={2} alignItems={"center"}>
                 <Button
                   onClick={() =>
-                    socket.emit("friend_request_accept", {
+                    socket?.emit("friend_request_accept", {
                       _id,
                     })
                   }
@@ -189,6 +188,7 @@ const FriendElement = () => {
 
   return (
     <StyledChatBox
+
       sx={{
         width: "100%",
 
@@ -227,7 +227,7 @@ const FriendElement = () => {
                 <Stack direction={"row"} spacing={2} alignItems={"center"}>
                   <IconButton
                     onClick={() =>
-                      socket.emit("start_conversion", { token, from: _id })
+                      socket?.emit("start_conversion", { token, from: _id })
                     }
                   >
                     <Chat />

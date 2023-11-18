@@ -4,7 +4,7 @@ import { RedoOutlined } from "@mui/icons-material";
 import axios from "axios";
 const initialState = {
   sideBar: {
-    open: true,
+    open: false,
     type: "CONTACT",
   },
   snackbar: {
@@ -14,6 +14,9 @@ const initialState = {
   alluser: [],
   friends: [],
   requestToConnected: [],
+  roomId: null,
+  sentMessageInfo:{},
+  chatType: null,
 };
 
 export const Slice = createSlice({
@@ -42,8 +45,13 @@ export const Slice = createSlice({
       state.friends = action.payload.friends;
     },
     requestToConnected: (state, action) => {
-      console.log(action.payload)
+      console.log(action.payload);
       state.requestToConnected = action.payload.requestToConnected;
+    },
+    selectConversation: (state, action) => {
+      state.chatType = "individual";
+      state.sentMessageInfo.roomId = action.payload.roomId;
+      state.sentMessageInfo.from = action.payload.from;
     },
   },
 });
@@ -117,5 +125,11 @@ export function FetchRequestToConnectedFriends() {
     } catch (error) {
       console.log(error);
     }
+  };
+}
+
+export function SelectConversation({ roomId, userId }) {
+  return (disptach) => {
+    disptach(Slice.actions.selectConversation({ roomId, from: userId }));
   };
 }

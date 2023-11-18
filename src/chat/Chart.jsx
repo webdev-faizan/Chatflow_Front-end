@@ -1,17 +1,16 @@
 import Slide from "@mui/material/Slide";
 import { Grid, Typography, Paper } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CircleDashed, ArchiveBox, Users, XCircle } from "phosphor-react";
 import { Box, Stack, IconButton, Divider } from "@mui/material";
-import Badge from "@mui/material/Badge";
-import Avatar from "@mui/material/Avatar";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
-import { StyledBadge } from "../components/StyledBadge";
 import { Chatlist } from "../components/Chat/Chatlist";
-
+import { FetchDirectConversion } from "../redux/silice/conversions";
 import Friends from "../layout/Dashboard/Friends";
+import { socket, token } from "../socket";
+import { useDispatch } from "react-redux";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -45,10 +44,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Chart = () => {
-  const [isArcived, SetIsArcived] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const disptach = useDispatch();
+
+  useEffect(() => {
+    // socket?.emit("get_direct_conversions", { token }, (data, userId) => {
+    //   disptach(FetchDirectConversion(data, userId));
+    // });
+
+    return () => {
+      // socket?.off("get_direct_conversions");
+    };
+  }, [socket]);
 
   return (
     <Box component={"section"}>
@@ -105,134 +114,8 @@ const Chart = () => {
               />
             </Search>
           </Box>
-
-          <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <ArchiveBox
-              onClick={() => SetIsArcived(!isArcived)}
-              style={{
-                fontSize: "22px",
-                color: "#676667",
-              }}
-            ></ArchiveBox>
-            <Typography
-              sx={{
-                color: "#709CE6",
-                "font-family": "Manrope",
-                "font-size": "15px",
-                "font-style": "normal",
-                "font-weight": "700",
-                "line-height": "normal",
-              }}
-            >
-              Archived
-            </Typography>
-          </Stack>
         </Stack>
 
-        {isArcived ? (
-          <>
-            <Typography
-              sx={{
-                color: "#676667",
-                fontFamily: "Manrope",
-                fontSize: "16px",
-                fontStyle: "normal",
-                fontWeight: "700",
-                padding: "15px 0",
-              }}
-            >
-              Pinned
-            </Typography>
-            <Box
-              sx={{
-                height: "81px",
-                "flex-shrink": 0,
-                "border-radius": "15px",
-                // background: "#5B96F7",
-                display: "flex",
-                alignItems: "center",
-                padding: "0 10px",
-              }}
-            >
-              <StyledBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                variant="dot"
-              >
-                <Avatar
-                  sx={{ width: "48px", height: "48px" }}
-                  alt="Nemy Sharp"
-                  src="/static/images/avatar/1.jpg"
-                />
-              </StyledBadge>
-              <Box
-                sx={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                  padding: "0 15px",
-                }}
-              >
-                <Box>
-                  <Typography
-                    sx={{
-                      color: "#030303",
-                      fontFamily: "Manrope",
-                      fontSize: "16px",
-                      fontStyle: "normal",
-                      fontWeight: "800",
-                      background: "unset",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    Dog Hat
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "#7C7C7D",
-                      fontFamily: "Manrope",
-                      fontSize: "14px",
-                      fontStyle: "normal",
-                      fontWeight: "600",
-                      lineHeight: "normal",
-                      background: "unset",
-                    }}
-                  >
-                    It’s so quite outside
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <Typography
-                    sx={{
-                      color: "#686768",
-                      fontFamily: "Manrope",
-                      fontSize: "12px",
-                      fontStyle: "normal",
-                      fontWeight: "500",
-                      lineHeight: "normal",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    9:36
-                  </Typography>
-
-                  <Badge
-                    color="secondary"
-                    badgeContent={1}
-                    sx={{
-                      position: "relative",
-                      top: "3px",
-                      left: "12px",
-                    }}
-                  ></Badge>
-                </Box>
-              </Box>
-            </Box>
-          </>
-        ) : (
-          ""
-        )}
         <Divider
           sx={{
             width: "100%",
@@ -263,3 +146,4 @@ const Chart = () => {
 };
 
 export default Chart;
+
