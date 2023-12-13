@@ -22,7 +22,7 @@ export const StartMessages = () => {
       <Box
         height={80}
         sx={{
-          marginLeft: "-4px",
+          marginLeft: "4px",
           width: "308px",
           marginTop: "-4px",
           boxShadow: " 0px 0px 4px 0px rgba(0, 0, 0, 0.25)",

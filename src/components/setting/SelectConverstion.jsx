@@ -9,9 +9,9 @@ const SelectConverstion = () => {
       justifyContent={"center"}
       alignItems={"center"}
     >
-      <Stack spacing={0.5}>
+      <Stack spacing={2}>
         <img
-          src={faker.image.abstract()}
+          src={"/conversion.svg"}
           width={287}
           height={287}
           style={{ objectFit: "cover" }}

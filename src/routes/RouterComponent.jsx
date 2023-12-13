@@ -1,14 +1,16 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import SettingRoute from "./settingRoute/SettingRoute";
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import GeneralApp from "../chat/GeneralApp";
 import Group from "../pages/group/Group";
 import Callhistory from "../pages/call/Callhistory";
 import Profile from "../pages/Profile";
-import Index from "../layout/Dashboard";
+import Index from "../layout/Dashboard/SideNav";
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
+import { NewConversion } from "../redux/silice/conversions";
+import { useDispatch } from "react-redux";
 
 const RouterComponent = () => {
   const navigate = useNavigate();
@@ -23,6 +25,16 @@ const RouterComponent = () => {
       <Index />
     </Box>
   );
+  const dispatch = useDispatch();
+  const router = useNavigate();
+
+  useEffect(() => {
+    if (window.location.pathname == "/c") {
+      dispatch(NewConversion(true));
+    } else {
+      dispatch(NewConversion(false));
+    }
+  }, [router]);
 
   return (
     <>

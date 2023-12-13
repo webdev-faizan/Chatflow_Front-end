@@ -11,8 +11,8 @@ function Index() {
     <Box>
       <Box
         sx={{
-          width: "129px",
-          background: "#F0F4FA",
+          width: "100px",
+          background: "#FFFFFF",
           boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           height: "100vh",
           borderRadius: 2,
@@ -28,7 +28,7 @@ function Index() {
               width: "64px",
               height: "64px",
               borderRadius: "12px",
-              background: "#5B96F7",
+              background: "#AFBBF7",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -56,35 +56,39 @@ function Index() {
                     borderRadius: "12px",
                   }}
                 >
-                  <IconButton
-                    sx={{
-                      color: select === index ? "#F0F4FA" : "#080707",
-                      fontSize: "24px",
-                      width: "48px",
-                      height: "48px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    key={index}
-                    onClick={() => SetSlect(index)}
-                  >
-                    <NavLink to={to}>{icon}</NavLink>
-                  </IconButton>
+                  <NavLink to={to}>
+                    <IconButton
+                      sx={{
+                        color: select === index ? "#FFFFFF" : "#080707",
+                        fontSize: "24px",
+                        width: "48px",
+                        height: "48px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      key={index}
+                      onClick={() => SetSlect(index)}
+                    >
+                      {icon}
+                    </IconButton>
+                  </NavLink>
                 </Box>
               );
             })}
           </Stack>
+          <br />
           <Divider
             orientation="horizontal"
             sx={{
               background: "#B4B4B4",
+              marginY: "40px",
               width: "100%",
               height: "1px",
             }}
           />
-          <br />
         </Stack>
+        <br />
 
         <Stack
           sx={{
@@ -92,23 +96,29 @@ function Index() {
             justifyContent: "space-between",
           }}
         >
-          <IconButton
-            sx={{
-              fontSize: "24px",
-              color: "#080707",
-              width: "48px",
-              height: "48px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <NavLink to="setting">
-              <Gear sx={{ width: "24px", height: "24px", fontSize: "24px" }} />
-            </NavLink>
-          </IconButton>
+          <NavLink to="setting">
+            <IconButton
+              sx={{
+                fontSize: "24px",
+                color: "#080707",
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Gear
+                sx={{
+                  width: "24px",
+                  height: "24px",
+                  color: "#080707",
+                  fontSize: "24px",
+                }}
+              />
+            </IconButton>
+          </NavLink>
           <Stack spacing={3}>
-            <Switch defaultChecked />
             <NavLink to={"/profile"}>
               <Avatar alt="Remy Sharp" src="./Ellipse 1.svg" />
             </NavLink>
@@ -120,4 +130,3 @@ function Index() {
 }
 
 export default Index;
-

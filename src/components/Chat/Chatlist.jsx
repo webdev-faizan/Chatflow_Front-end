@@ -9,7 +9,11 @@ import { socket, token } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { SelectConversation } from "../../redux/app";
-import { FetchCurrentMessages, UserInfo } from "../../redux/silice/conversions";
+import {
+  FetchCurrentMessages,
+  FetchDirectConversion,
+  UserInfo,
+} from "../../redux/silice/conversions";
 export const Chatlist = () => {
   const { convsersions } = useSelector(
     (state) => state.conversions.direct_chat
@@ -23,19 +27,28 @@ export const Chatlist = () => {
   const navigate = useNavigate();
   const disptach = useDispatch();
   const fetchMessages = async (conversation_id, userId) => {
+    //read user message
+
     navigate(`/c/${userId}#load`);
+
     disptach(UserInfo(userId));
-    disptach(SelectConversation({ roomId: conversation_id ,userId}));
-    console.log(conversation_id);
+
+    disptach(SelectConversation({ roomId: conversation_id, userId }));
+
     socket.emit(
       "get_message",
       {
         conversions_id: conversation_id,
+        token,
       },
       (data) => {
         disptach(FetchCurrentMessages(data));
       }
     );
+    socket?.emit("get_direct_conversions", { token }, (data, userId) => {
+      disptach(FetchDirectConversion(data, userId));
+    });
+
     setTimeout(() => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 200);
@@ -44,7 +57,7 @@ export const Chatlist = () => {
   return (
     <Stack spacing={1}>
       {convsersions.map((ele) => {
-        const { userId, name, online, msg, time, unread, conversation_id } =
+        const { userId, name, online, time, unread, conversation_id, lastMsg } =
           ele;
         return (
           <Box
@@ -61,7 +74,6 @@ export const Chatlist = () => {
               cursor: "pointer",
               background: `${conversationId == userId ? "#5B96F7" : ""}`,
             }}
-            on
           >
             {online ? (
               <StyledBadge
@@ -118,7 +130,7 @@ export const Chatlist = () => {
                     background: "unset",
                   }}
                 >
-                  {msg}{" "}
+                  {lastMsg}{" "}
                 </Typography>
               </Box>
 
@@ -145,7 +157,7 @@ export const Chatlist = () => {
                     top: "3px",
                     left: "12px",
                   }}
-                ></Badge>
+                />
               </Box>
             </Box>
           </Box>

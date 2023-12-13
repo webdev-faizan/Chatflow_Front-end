@@ -10,7 +10,12 @@ import {
   Menu,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { DownloadSimple, Image, DotsThreeVertical } from "phosphor-react";
+import {
+  Download,
+  Image,
+  DotsThreeVertical,
+  DownloadSimple,
+} from "phosphor-react";
 import { message_options } from "../../data/index";
 import { Cookies } from "react-cookie";
 const cookie = new Cookies().get("user_id");
@@ -27,7 +32,7 @@ const DocMsg = ({ ele }) => {
           const url = window.URL.createObjectURL(new Blob([buffer]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `${filename}.pdf`); //or any other extension
+          link.setAttribute("download", `file.pdf`); //or any other extension
           document.body.appendChild(link);
           link.click();
         });

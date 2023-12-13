@@ -57,9 +57,19 @@ export const GeneralApp = () => {
     socket?.emit("get_direct_conversions", { token }, (data, userId) => {
       disptach(FetchDirectConversion(data, userId));
     });
+
     socket?.on("new_message", (data) => {
       disptach(UpdateCurrentMessage(data));
+      socket?.emit("get_direct_conversions", { token }, (data, userId) => {
+        disptach(FetchDirectConversion(data, userId));
+      });
+
+      // Scroll to the bottom of the page
+      window.scrollTo(0, document.body.scrollHeight);
+
+      // window.scrollTo()
     });
+
     // window.scrollTo = window.innerHeight;
 
     // window.scrollTo(0, window.innerHeight);
@@ -77,14 +87,20 @@ export const GeneralApp = () => {
 
   return (
     <div>
-      <Stack direction={"row"} sx={{ position: "fixed", left: "130px" }}>
+      <Stack direction={"row"} sx={{ position: "fixed", left: "100px" }}>
         <Chart />
       </Stack>
 
       <Stack direction={"row"}>
-        <Stack direction={"column"} sx={{ marginLeft: "370px" }}>
+        <Stack
+          direction={"column"}
+          sx={{ marginLeft: "331px", marginTop: "110px" }}
+        >
           <Conversion />
-          <Box sx={{ marginY: "80px" }} padding="20px" overflow={"scroll"}>
+          <Box
+          // sx={{ marginY: "80px" }}
+          //  overflow={"scroll"}
+          >
             <Message />
           </Box>
         </Stack>

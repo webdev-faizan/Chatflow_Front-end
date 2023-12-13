@@ -16,6 +16,7 @@ code {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth ;
 }
 /* CSS for custom scrollbar */
 ::-webkit-scrollbar {
@@ -36,4 +37,9 @@ code {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+body{ 
+
+  overflow-x: hidden !important;
 }

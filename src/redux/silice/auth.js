@@ -79,7 +79,7 @@ export function LoginUser(FormData) {
           path: "/",
         });
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "/c";
         }, 1500);
       })
       .catch((error) => {

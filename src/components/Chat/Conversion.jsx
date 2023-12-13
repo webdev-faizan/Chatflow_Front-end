@@ -35,12 +35,13 @@ import {
 } from "phosphor-react";
 import { toggleSidebar } from "../../redux/app";
 import { socket, token } from "../../socket";
+import SelectConverstion from "../setting/SelectConverstion";
 
 const Conversion = () => {
   // const cld = new Cloudinary({cloud: {cloudName: 'dkhgfsefj'}});
 
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.conversions);
+  const { userInfo, newConversion } = useSelector((state) => state.conversions);
 
   const [showPicker, setShowPicker] = useState(false);
   const [ShowAttachement, setShowAttachement] = useState(false);
@@ -50,8 +51,9 @@ const Conversion = () => {
   const EmojiSelect = ({ native }) => {
     setInputValue(inputValue + native);
   };
-  const sideBar = useSelector((state) => state.app.sideBar.open);
-  const { sentMessageInfo } = useSelector((state) => state.app);
+  // const sideBar = useSelector((state) => state.app.sideBar.open);
+  const { sentMessageInfo, sideBar } = useSelector((state) => state.app);
+  console.log(sideBar.open);
 
   //! upload assests
   const handleAssestUpload = async () => {
@@ -144,276 +146,321 @@ const Conversion = () => {
     setInputValue("");
   };
   // const [image, setImage] = useState('');
-
   return (
-    <Stack
-      direction={"column"}
-      sx={{
-        width: `calc(100vw - ${sideBar ? "820px" : "510px"})`,
-      }}
-      justifyContent={"space-between"}
-    >
+    <>
       <Stack
+        display={`${newConversion ? "flex" : "none"}`}
         direction={"row"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
         sx={{
-          width: "inherit",
-          position: "fixed",
-          top: "0",
-          height: "80px",
-          padding: "5px 20px",
-          background: "#F8FAFF",
-          "box-shadow": "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+          justifyItems: "center",
+          width: `calc(100vw - 470px)`,
+          overflow: "hidden",
+          height: "90vh",
         }}
+        alignItems={"center"}
       >
-        <Box
+        <SelectConverstion />
+      </Stack>
+
+      <Stack
+        // display={"none"}
+        display={`${newConversion ? "none" : "block"}`}
+        direction={"column"}
+        sx={{
+          width: `calc(100vw - ${sideBar.open ? "781px" : "462px"})`,
+        }}
+        justifyContent={"space-between"}
+      >
+        <Stack
+          direction={"row"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
           sx={{
-            height: "81px",
-            "flex-shrink": 0,
-            "border-radius": "15px",
-            display: "flex",
-            alignItems: "center",
-            padding: "0 10px",
+            width: "inherit",
+            position: "fixed",
+            top: "0",
+            height: "80px",
+            padding: "5px 20px",
+            background: "#F8FAFF",
+            "box-shadow": "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
         >
-          {userInfo?.online ? (
-            <StyledBadge
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant="dot"
-              sx={{
-                opacity: `${userInfo?.online ? "100" : "0"}`,
-              }}
-            >
+          <Box
+            sx={{
+              height: "81px",
+              "flex-shrink": 0,
+              "border-radius": "15px",
+              display: "flex",
+              alignItems: "center",
+              padding: "0 10px",
+            }}
+          >
+            {userInfo?.online ? (
+              <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                variant="dot"
+                sx={{
+                  opacity: `${userInfo?.online ? "100" : "0"}`,
+                }}
+              >
+                <Avatar
+                  sx={{ width: "48px", height: "48px" }}
+                  src={userInfo?.name}
+                  alt={userInfo?.name}
+                  onClick={() => dispatch(toggleSidebar())}
+                />
+              </StyledBadge>
+            ) : (
               <Avatar
                 sx={{ width: "48px", height: "48px" }}
-                src={userInfo?.name}
+                src={userInfo.name}
                 alt={userInfo?.name}
                 onClick={() => dispatch(toggleSidebar())}
               />
-            </StyledBadge>
-          ) : (
-            <Avatar
-              sx={{ width: "48px", height: "48px" }}
-              src={userInfo.name}
-              alt={userInfo?.name}
-              onClick={() => dispatch(toggleSidebar())}
-            />
-          )}
+            )}
 
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
-              padding: "0 15px",
-            }}
-          >
-            <Box>
-              <Typography
-                sx={{
-                  color: "#000",
-                  fontFamily: "Manrope",
-                  fontSize: "16px",
-                  fontStyle: "normal",
-                  fontWeight: "800",
-                  background: "unset",
-                  marginBottom: "3px",
-                }}
-              >
-                {userInfo?.name}
-              </Typography>
-              <Typography
-                sx={{
-                  color: "#696969",
-                  fontFamily: "Manrope",
-                  fontSize: "14px",
-                  fontStyle: "normal",
-                  fontWeight: "600",
-                  lineHeight: "normal",
-                  background: "unset",
-                }}
-              >
-                {userInfo?.online && "online"}
-              </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                padding: "0 15px",
+              }}
+            >
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#000",
+                    fontFamily: "Manrope",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: "800",
+                    background: "unset",
+                    marginBottom: "3px",
+                  }}
+                >
+                  {userInfo?.name}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "#696969",
+                    fontFamily: "Manrope",
+                    fontSize: "14px",
+                    fontStyle: "normal",
+                    fontWeight: "600",
+                    lineHeight: "normal",
+                    background: "unset",
+                  }}
+                >
+                  {userInfo?.online && "online"}
+                </Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
-        {/* converions */}
-        <Stack direction={"row"}>
-          <IconButton>
-            <VideoCamera />
-          </IconButton>
-          <IconButton>
-            <Phone />
-          </IconButton>
-          <IconButton>
-            <MagnifyingGlass />
-          </IconButton>
-          <Divider orientation="vertical" flexItem></Divider>
-          <IconButton>
-            <CaretDown />
-          </IconButton>
-        </Stack>
-      </Stack>
-      {/* user footer */}
-      <Stack
-        className="row"
-        spacing={3}
-        direction={"row"}
-        paddingRight={"10px"}
-        alignItems={"center"}
-        sx={{ width: "inherit", position: "fixed", bottom: "3px" }}
-      >
-        <Box
-          display={"flex"}
-          gap={3}
-          alignItems="center"
-          sx={{ width: "100%", paddingX: "30px", position: "relative" }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              right: "99px",
-              bottom: "60px",
-              display: `${showPicker ? "block" : "none"}`,
-            }}
-          >
-            <Picker
-              data={data}
-              emojiSize={20}
-              onEmojiSelect={EmojiSelect}
-              dynamicWidth={false}
-              className="picker"
-            />
-          </Box>
-          {/*  */}
-          <Stack
-            spacing={1}
-            sx={{
-              position: "absolute",
-              left: "42px",
-              bottom: "60px",
-
-              display: `${ShowAttachement ? "flex" : "none"}`,
-            }}
-          >
-            <IconButton
-              sx={{
-                background: "#007bff",
-                ":hover": {
-                  background: "#007bff",
-                },
-              }}
-            >
-              <input
-                style={{
-                  position: "absolute",
-                  width: "36px",
-                  height: "40px",
-                  top: "10px",
-                  opacity: "0",
-                }}
-                type="file"
-                accept="application/*"
-                size={"10MB"}
-                onChange={(e) => setAssest(e.target.files[0])}
-              />
-              <File size={24} />
+          {/* converions */}
+          <Stack direction={"row"}>
+            <IconButton>
+              <VideoCamera />
             </IconButton>
-            <IconButton
-              sx={{
-                background: "#6c757d",
-                ":hover": {
-                  background: "#6c757d",
-                },
-              }}
-            >
-              <User size={24} />
+            <IconButton>
+              <Phone />
             </IconButton>
-            <IconButton
-              sx={{
-                position: "relative",
-                background: "#28a745",
-                ":hover": {
-                  background: "#28a745",
-                },
-              }}
-            >
-              <input
-                style={{
-                  position: "absolute",
-                  width: "36px",
-                  height: "40px",
-                  top: "10px",
-                  opacity: "0",
-                }}
-                type="file"
-                accept="image/*"
-                size={"10MB"}
-                onChange={(e) => setAssest(e.target.files[0])}
-              />
-              <Image size={24} />
+            <IconButton>
+              <MagnifyingGlass />
             </IconButton>
-            <IconButton
-              sx={{
-                background: "#dc3545",
-                ":hover": {
-                  background: "#dc3545",
-                },
-              }}
-            >
-              <Camera size={24} />
+            <Divider orientation="vertical" flexItem></Divider>
+            <IconButton>
+              <CaretDown />
             </IconButton>
           </Stack>
-
-          <TextField
-            fullWidth
-            placeholder="write a message..."
-            sx={{ background: "white" }}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            InputProps={{
-              disableUnderline: true,
-              // Corrected attribute name
-              startAdornment: (
-                <InputAdornment>
-                  <IconButton>
-                    <LinkSimple
-                      onClick={() => setShowAttachement(!ShowAttachement)}
-                    />
-                  </IconButton>
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment>
-                  <IconButton>
-                    <Smiley onClick={() => setShowPicker(!showPicker)} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          ></TextField>
-          <IconButton
-            onClick={sendMsg}
-            alignItems={"center"}
-            justifyContent={"center"}
-            sx={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "12px",
-              background: "#5B96F7",
-              "&:hover": {
-                background: "#5B96F7",
-              },
-            }}
+        </Stack>
+        {/* user footer */}
+        <Stack
+          className="row"
+          spacing={3}
+          direction={"row"}
+          paddingRight={"10px"}
+          alignItems={"center"}
+          sx={{ width: "inherit", position: "fixed", bottom: "3px" }}
+        >
+          <Box
+            display={"flex"}
+            gap={3}
+            alignItems="center"
+            sx={{ width: "inherit", paddingX: "1px", position: "relative" }}
           >
-            <PaperPlaneTilt size={25} color="white" />
-          </IconButton>
-        </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                right: "99px",
+                bottom: "70px",
+                display: `${showPicker ? "block" : "none"}`,
+              }}
+            >
+              <Picker
+                data={data}
+                emojiSize={20}
+                onEmojiSelect={EmojiSelect}
+                dynamicWidth={false}
+                className="picker"
+              />
+            </Box>
+            {/*  */}
+            <Stack
+              spacing={1}
+              sx={{
+                position: "absolute",
+                left: "42px",
+                bottom: "72px",
+
+                display: `${ShowAttachement ? "flex" : "none"}`,
+              }}
+            >
+              <IconButton
+                sx={{
+                  background: "#007bff",
+                  ":hover": {
+                    background: "#007bff",
+                  },
+                }}
+              >
+                <input
+                  style={{
+                    position: "absolute",
+                    width: "36px",
+                    height: "40px",
+                    top: "10px",
+                    opacity: "0",
+                  }}
+                  type="file"
+                  accept="application/*"
+                  size={"10MB"}
+                  onChange={(e) => setAssest(e.target.files[0])}
+                />
+                <File size={24} />
+              </IconButton>
+              <IconButton
+                sx={{
+                  background: "#6c757d",
+                  ":hover": {
+                    background: "#6c757d",
+                  },
+                }}
+              >
+                <User size={24} />
+              </IconButton>
+              <IconButton
+                sx={{
+                  position: "relative",
+                  background: "#28a745",
+                  ":hover": {
+                    background: "#28a745",
+                  },
+                }}
+              >
+                <input
+                  style={{
+                    position: "absolute",
+                    width: "36px",
+                    height: "40px",
+                    top: "10px",
+                    opacity: "0",
+                  }}
+                  type="file"
+                  accept="image/*"
+                  size={"10MB"}
+                  onChange={(e) => setAssest(e.target.files[0])}
+                />
+                <Image size={24} />
+              </IconButton>
+              <IconButton
+                sx={{
+                  background: "#dc3545",
+                  ":hover": {
+                    background: "#dc3545",
+                  },
+                }}
+              >
+                <Camera size={24} />
+              </IconButton>
+            </Stack>
+            <Stack
+              sx={{
+                background: "#F7F9FD",
+                height: "80px",
+                alignItems: "center",
+
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
+              }}
+              width={"inherit"}
+              direction={"row"}
+              paddingX={4}
+              position={"relative"}
+              bottom="-10px"
+              zIndex={100}
+            >
+              <Stack
+                sx={{ alignItems: "center" }}
+                width={"inherit"}
+                direction={"row"}
+                spacing={1}
+              >
+                <TextField
+                  fullWidth
+                  placeholder="write a message..."
+                  sx={{
+                    background: "white",
+                    "&:hover": {
+                      outline: "none",
+                      border: "none",
+                    },
+                  }}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  InputProps={{
+                    disableUnderline: true,
+                    // Corrected attribute name
+                    startAdornment: (
+                      <InputAdornment>
+                        <IconButton>
+                          <LinkSimple
+                            onClick={() => setShowAttachement(!ShowAttachement)}
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment>
+                        <IconButton>
+                          <Smiley onClick={() => setShowPicker(!showPicker)} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                ></TextField>
+                <IconButton
+                  onClick={sendMsg}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  sx={{
+                    width: "48px",
+                    height: "48px",
+                    borderRadius: "12px",
+                    background: "#5B96F7",
+                    "&:hover": {
+                      background: "#5B96F7",
+                    },
+                  }}
+                >
+                  <PaperPlaneTilt size={25} color="white" />
+                </IconButton>
+              </Stack>
+            </Stack>
+          </Box>
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 

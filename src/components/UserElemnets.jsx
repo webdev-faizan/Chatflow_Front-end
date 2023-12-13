@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Badge,
@@ -14,9 +16,15 @@ import {
   FetchAllUsers,
   FetchFriends,
   FetchRequestToConnectedFriends,
+  SelectConversation,
 } from "../redux/app";
 import { useDispatch, useSelector } from "react-redux";
 import { socket, token } from "../socket";
+import {
+  FetchCurrentMessages,
+  FetchDirectConversion,
+  UserInfo,
+} from "../redux/silice/conversions";
 
 const StyledChatBox = styled(Box)(({ theme }) => ({
   "&:hover": {
@@ -178,7 +186,61 @@ const FriendRequestElement = () => {
 
 // FriendElement
 
-const FriendElement = () => {
+const FriendElement = ({ handleClose }) => {
+  const navigate = useNavigate();
+
+  const StartConversion = async (_id) => {
+    socket?.emit(
+      "start_conversion",
+      { token, from: _id },
+      (conversation_id, userId) => {
+        disptach(UserInfo(userId));
+
+        navigate(`/c/${userId}#load`);
+
+        disptach(SelectConversation({ roomId: conversation_id, userId }));
+
+        socket.emit(
+          "get_message",
+          {
+            conversions_id: conversation_id,
+          },
+          (data) => {
+            disptach(FetchCurrentMessages(data));
+          }
+        );
+
+        handleClose()
+        setTimeout(() => {
+
+        
+
+        }, 100);
+      }
+    );
+
+    socket?.emit("get_direct_conversions", { token }, (data, userId) => {
+      disptach(FetchDirectConversion(data, userId));
+    });
+
+    // socket.emit(
+    //   "get_message",
+    //   {
+    //     conversions_id: conversation_id,
+    //   },
+    //   (data) => {
+    //     disptach(FetchCurrentMessages(data));
+    //   }
+    // );
+
+    // socket?.on("start_chat", (data) => {
+
+    //   // disptach(SelectConversation(data._id));
+    // });
+
+    // handleClose();
+  };
+
   const disptach = useDispatch();
   const { friends } = useSelector((state) => state.app);
 
@@ -188,7 +250,6 @@ const FriendElement = () => {
 
   return (
     <StyledChatBox
-
       sx={{
         width: "100%",
 
@@ -209,7 +270,7 @@ const FriendElement = () => {
               >
                 <Stack direction="row" alignItems={"center"} spacing={2}>
                   {" "}
-                  {status == "online" ? (
+                  {status === "online" ? (
                     <StyledBadge
                       overlap="circular"
                       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -225,11 +286,7 @@ const FriendElement = () => {
                   </Stack>
                 </Stack>
                 <Stack direction={"row"} spacing={2} alignItems={"center"}>
-                  <IconButton
-                    onClick={() =>
-                      socket?.emit("start_conversion", { token, from: _id })
-                    }
-                  >
+                  <IconButton onClick={() => StartConversion(_id)}>
                     <Chat />
                   </IconButton>
                 </Stack>

@@ -21,11 +21,11 @@ const Message = () => {
       <Stack
         spacing={3}
         sx={{
-          marginBottom: "50px",
+          marginBottom: "100px",
+          paddingX:"18px"
         }}
       >
         {current_messages.map((ele) => {
-          console.log(ele);
           switch (ele.type) {
             case "divider":
               return <TimeLine ele={ele} />;

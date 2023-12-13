@@ -26,12 +26,6 @@ const Friends = ({ open, handleClose }) => {
     setValue(newValue);
   };
 
-  useEffect(() => {
-
-
-
-  }, []);
-
   return (
     <Dialog
       TransitionComponent={Transition}
@@ -64,9 +58,11 @@ const Friends = ({ open, handleClose }) => {
             case 0:
               return <UserElement />;
             case 1:
-              return <FriendElement />;
+              return <FriendElement handleClose={handleClose}/>;
             case 2:
               return <FriendRequestElement />;
+            default:
+              <></>;
           }
         })()}
       </DialogContent>

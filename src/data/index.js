@@ -13,7 +13,7 @@ import {
 const NavButton = [
   {
     index: 0,
-    to: "/",
+    to: "/c#load",
     icon: <ChatCircleDots />,
   },
   {
