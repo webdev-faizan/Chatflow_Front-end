@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import Picker from "@emoji-mart/react";
 import { useDispatch } from "react-redux";
 import { Cloudinary } from "@cloudinary/url-gen";
+import { Howl } from "howler";
 
 import {
   Box,
@@ -53,11 +54,11 @@ const Conversion = () => {
   };
   // const sideBar = useSelector((state) => state.app.sideBar.open);
   const { sentMessageInfo, sideBar } = useSelector((state) => state.app);
-  console.log(sideBar.open);
+  const [error, setError] = useState(false);
 
   //! upload assests
   const handleAssestUpload = async () => {
-    const formData = new FormData();
+    let formData = new FormData();
     formData.append("file", Assest);
     formData.append("cloud_name", "dkhgfsefj");
     formData.append("upload_preset", "chating");
@@ -74,17 +75,30 @@ const Conversion = () => {
 
       const result = await response.json();
       setLink(result.url);
-      return { link: result.url, fileName: result.original_filename };
+      setError(false);
+
+      return {
+        link: result?.url,
+        fileName: result?.original_filename,
+      };
     } catch (error) {
-      console.error("Error uploading image:", error);
+      setError(true);
+      formData = {};
+      return {
+        link: null,
+        fileName: null,
+      };
     }
   };
 
   const sendMsg = async () => {
     //! image message
-
     if (Assest) {
       const { link, fileName } = await handleAssestUpload();
+      if (error) {
+        return alert("fail to upload");
+      }
+
       if (Assest.type.startsWith("image")) {
         socket.emit("link_message", {
           token,
@@ -142,6 +156,10 @@ const Conversion = () => {
         message: inputValue,
       });
     }
+    const sound = new Howl({
+      src: ["/mixkit-bubble-pop-up-alert-notification-2357.wav"],
+    });
+    sound.play();
 
     setInputValue("");
   };

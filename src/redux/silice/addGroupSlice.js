@@ -12,7 +12,7 @@ const addGroupSlice = createSlice({
   },
 });
 
-export default addGroupSlice.reducer
+export default addGroupSlice.reducer;
 
 export function ToogeddGroupSlice() {
   return async((disptach) => {

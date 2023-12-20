@@ -4,9 +4,15 @@ import { Box, Stack, IconButton, Divider, Switch, Avatar } from "@mui/material";
 import { NavButton } from "../../data/index";
 import { Gear } from "phosphor-react";
 import { NavLink } from "react-router-dom";
+import {
+  NewConversion,
+  RemoveCurrentMessages,
+} from "../../redux/silice/conversions";
+import { useDispatch } from "react-redux";
 
 function Index() {
   const [select, SetSlect] = useState(0);
+  const disptach = useDispatch();
   return (
     <Box>
       <Box
@@ -51,6 +57,10 @@ function Index() {
               const { icon, index, to } = icons;
               return (
                 <Box
+                  onClick={() => {
+                    disptach(NewConversion(true));
+                    disptach(RemoveCurrentMessages());
+                  }}
                   sx={{
                     background: select === index ? "#5B96F7" : "#F0F4FA",
                     borderRadius: "12px",
@@ -58,6 +68,11 @@ function Index() {
                 >
                   <NavLink to={to}>
                     <IconButton
+                      onClick={() => {
+                        SetSlect(index);
+                        disptach(NewConversion(true));
+                        disptach(RemoveCurrentMessages());
+                      }}
                       sx={{
                         color: select === index ? "#FFFFFF" : "#080707",
                         fontSize: "24px",
@@ -68,7 +83,6 @@ function Index() {
                         alignItems: "center",
                       }}
                       key={index}
-                      onClick={() => SetSlect(index)}
                     >
                       {icon}
                     </IconButton>

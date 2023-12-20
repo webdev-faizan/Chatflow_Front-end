@@ -9,7 +9,6 @@ import Profile from "../pages/Profile";
 import Index from "../layout/Dashboard/SideNav";
 import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
-import { NewConversion } from "../redux/silice/conversions";
 import { useDispatch } from "react-redux";
 
 const RouterComponent = () => {
@@ -28,13 +27,7 @@ const RouterComponent = () => {
   const dispatch = useDispatch();
   const router = useNavigate();
 
-  useEffect(() => {
-    if (window.location.pathname == "/c") {
-      dispatch(NewConversion(true));
-    } else {
-      dispatch(NewConversion(false));
-    }
-  }, [router]);
+
 
   return (
     <>

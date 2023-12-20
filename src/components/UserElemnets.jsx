@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Howl } from "howler";
 
 import {
   Box,
@@ -104,12 +105,18 @@ const UserElement = () => {
               </Stack>
               <Stack direction={"row"} spacing={2} alignItems={"center"}>
                 <Button
-                  onClick={() =>
+                  onClick={() => {
+                    const sound = new Howl({
+                      src: [
+                        "/mixkit-bubble-pop-up-alert-notification-2357.wav",
+                      ],
+                    });
+                    sound.play();
                     socket?.emit("friendRequest", {
                       to: _id,
                       from: token,
-                    })
-                  }
+                    });
+                  }}
                 >
                   Send Request
                 </Button>
@@ -210,12 +217,8 @@ const FriendElement = ({ handleClose }) => {
           }
         );
 
-        handleClose()
-        setTimeout(() => {
-
-        
-
-        }, 100);
+        handleClose();
+        setTimeout(() => {}, 100);
       }
     );
 

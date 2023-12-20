@@ -7,11 +7,16 @@ import Typography from "@mui/material/Typography";
 import { StyledBadge } from "../StyledBadge";
 import { socket, token } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { Trash } from "phosphor-react";
+
 import { SelectConversation } from "../../redux/app";
 import {
+  CurrentConversation,
   FetchCurrentMessages,
   FetchDirectConversion,
+  NewConversion,
+  RemoveCurrentMessages,
   UserInfo,
 } from "../../redux/silice/conversions";
 export const Chatlist = () => {
@@ -27,12 +32,9 @@ export const Chatlist = () => {
   const navigate = useNavigate();
   const disptach = useDispatch();
   const fetchMessages = async (conversation_id, userId) => {
-    //read user message
-
+    disptach(NewConversion(false));
     navigate(`/c/${userId}#load`);
-
     disptach(UserInfo(userId));
-
     disptach(SelectConversation({ roomId: conversation_id, userId }));
 
     socket.emit(
@@ -61,7 +63,12 @@ export const Chatlist = () => {
           ele;
         return (
           <Box
-            onClick={() => fetchMessages(conversation_id, userId)}
+            className="userChat"
+            onClick={(e) => {
+              e.stopPropagation();
+
+              fetchMessages(conversation_id, userId);
+            }}
             key={userId}
             sx={{
               height: "81px",
@@ -73,6 +80,9 @@ export const Chatlist = () => {
               marginTop: "10px",
               cursor: "pointer",
               background: `${conversationId == userId ? "#5B96F7" : ""}`,
+              "&:hover": {
+                background: "#5B96F7",
+              },
             }}
           >
             {online ? (
@@ -144,20 +154,58 @@ export const Chatlist = () => {
                     fontWeight: "500",
                     lineHeight: "normal",
                     marginBottom: "10px",
+                    textAlign: "end",
                   }}
                 >
                   {time}
                 </Typography>
 
-                <Badge
-                  color="secondary"
-                  badgeContent={unread}
-                  sx={{
-                    position: "relative",
-                    top: "3px",
-                    left: "12px",
-                  }}
-                />
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: "30px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box>
+                      <Badge
+                        color="secondary"
+                        badgeContent={unread}
+                        sx={{
+                          position: "relative",
+                          top: "3px",
+                          left: "12px",
+                        }}
+                      />
+                    </Box>
+                    <Trash
+                      size={22}
+                      color="#ff1e00"
+                      className="trash showtrash"
+                      onClick={(e) => {
+                        e.stopPropagation();
+
+                        disptach(RemoveCurrentMessages());
+                        socket.emit("delete_chatlist", {
+                          token,
+                          conversions_id: conversation_id,
+                        });
+
+                        socket?.emit(
+                          "get_direct_conversions",
+                          { token },
+                          (data, userId) => {
+                            disptach(FetchDirectConversion(data, userId));
+                          }
+                        );
+
+                        disptach(NewConversion(false));
+                        navigate(`/c/#load`);
+                      }}
+                    />
+                  </Box>
+                </Box>
               </Box>
             </Box>
           </Box>

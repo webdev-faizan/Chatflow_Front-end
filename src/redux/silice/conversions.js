@@ -3,7 +3,7 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { Cookies } from "react-cookie";
 import { socket, token } from "../../socket";
 
-const user_id = new Cookies().get("user_id");
+// const user_id = new Cookies().get("user_id");
 const initialState = {
   newConversion: true,
   direct_chat: {
@@ -25,10 +25,15 @@ const slice = createSlice({
     fetchDirectConversion(state, actions) {
       const userId = actions.payload.userId;
       let users = actions.payload.directConversions.map((el) => {
-        const { lastMessage, lastMessageTime, unread, lastMessageTimeSort } =
-          el;
-        let user = el.participants.find((ele) => ele._id !== userId);
+        const {
+          lastMessage,
+          lastMessageTime,
+          unread,
+          lastMessageTimeSort,
+          status,
+        } = el;
 
+        let user = el.participants.find((ele) => ele._id !== userId);
         const window_url = window.location.href;
         const open_conversion = window_url.split("/").at(-1).split("#").at(0);
 
@@ -43,6 +48,7 @@ const slice = createSlice({
             unread: 0,
             online: user?.status === "online",
             sort: lastMessageTimeSort,
+            status,
           };
           socket.emit("read_message", { conversions_id: el._id, token });
           return directConversionsUser;
@@ -59,16 +65,22 @@ const slice = createSlice({
           unread: unreadMsg.unread,
           online: user?.status === "online",
           sort: lastMessageTimeSort,
+          status,
         };
 
         return directConversionsUser;
       });
 
-      const sortUserChatList = users.sort((a, b) => {
+      //remove delet user
+      const removeDeleteUser = users.filter((ele) => {
+        const { status } = ele;
+
+        return status.some((ele) => ele.id === userId && !ele.delete);
+      });
+      //! sort user base on the last message
+      const sortUserChatList = removeDeleteUser.sort((a, b) => {
         return Date.parse(b.sort) - Date.parse(a.sort);
       });
-
-      //! sort user base on the last message
 
       state.direct_chat.convsersions = sortUserChatList;
       // state.direct_chat.convsersions.push({_conversation_id:actions.directConversions._id})
@@ -80,15 +92,20 @@ const slice = createSlice({
       state.direct_chat.current_messages = action.payload;
     },
     updateCurrentMessage(state, action) {
+      if (state.newConversion) return;
+
       window.scrollTo(0, document.body.scrollHeight + 300);
       state.direct_chat.current_messages.push(action.payload);
       setTimeout(() => {
         window.scrollTo(0, document.body.scrollHeight + 300);
       }, 100);
     },
+    removeCurrentMessages(state) {
+      state.direct_chat.current_messages = [];
+    },
     userInfo(state, action) {
       const this_user = current(state.direct_chat.convsersions).find(
-        (ele) => ele.userId == action.payload.userId
+        (ele) => ele.userId === action.payload.userId
       );
       state.userInfo.name = this_user.name;
       state.userInfo.online = this_user.online;
@@ -110,6 +127,7 @@ export function FetchCurrentMessages(messages) {
     disptach(slice.actions.CurrentMessages(messages));
   };
 }
+
 export function UpdateCurrentMessage(messages) {
   return async (disptach) => {
     disptach(slice.actions.updateCurrentMessage(messages.message));
@@ -118,6 +136,11 @@ export function UpdateCurrentMessage(messages) {
 export function CurrentConversation(conversation_id) {
   return (disptach) => {
     disptach(slice.actions.CurrentConversation(conversation_id));
+  };
+}
+export function RemoveCurrentMessages() {
+  return (disptach) => {
+    disptach(slice.actions.removeCurrentMessages());
   };
 }
 export function UserInfo(userId) {

@@ -11,10 +11,14 @@ import { connectSocket, socket } from "../socket";
 import { Cookies } from "react-cookie";
 import { SelectConversation, showSnackBar } from "../redux/app";
 import { useDispatch } from "react-redux";
+
+import { Howl } from "howler";
+
 import {
   FetchDirectConversion,
   UpdateCurrentMessage,
 } from "../redux/silice/conversions";
+// import Videocall from "../components/videocalling/p2p/Videocall";
 
 export const GeneralApp = () => {
   const cookie = new Cookies();
@@ -40,14 +44,24 @@ export const GeneralApp = () => {
       connectSocket();
     }
     socket?.on("friend_request_sent", (data) => {
+      const sound = new Howl({
+        src: ["/mixkit-bubble-pop-up-alert-notification-2357.wav"],
+      });
+      sound.play();
       disptach(showSnackBar({ open: true, message: data?.message }));
     });
     socket?.on("new_friend_request", (data) => {
-      alert("new friend request");
-      // console.log({ newFriendRequst: "newFriendRequst", data });
+      const sound = new Howl({
+        src: ["/mixkit-happy-bells-notification-937.wav"],
+      });
+      sound.play();
     });
 
     socket?.on("friend_request_accepted", (data) => {
+      const sound = new Howl({
+        src: ["/mixkit-bubble-pop-up-alert-notification-2357.wav"],
+      });
+      sound.play();
       disptach(showSnackBar({ open: true, message: data?.message }));
     });
 
@@ -59,6 +73,13 @@ export const GeneralApp = () => {
     });
 
     socket?.on("new_message", (data) => {
+      if (token != data.token) {
+        const sound = new Howl({
+          src: ["/mixkit-happy-bells-notification-937.wav"],
+        });
+        sound.play();
+      }
+
       disptach(UpdateCurrentMessage(data));
       socket?.emit("get_direct_conversions", { token }, (data, userId) => {
         disptach(FetchDirectConversion(data, userId));
@@ -87,6 +108,7 @@ export const GeneralApp = () => {
 
   return (
     <div>
+      {/* <Videocall /> */}
       <Stack direction={"row"} sx={{ position: "fixed", left: "100px" }}>
         <Chart />
       </Stack>
@@ -97,10 +119,7 @@ export const GeneralApp = () => {
           sx={{ marginLeft: "331px", marginTop: "110px" }}
         >
           <Conversion />
-          <Box
-          // sx={{ marginY: "80px" }}
-          //  overflow={"scroll"}
-          >
+          <Box>
             <Message />
           </Box>
         </Stack>

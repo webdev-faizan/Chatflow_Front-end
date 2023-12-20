@@ -1,4 +1,4 @@
-import io, { connect } from "socket.io-client";
+import io from "socket.io-client";
 import { Cookies } from "react-cookie";
 const cookie = new Cookies();
 
@@ -11,4 +11,4 @@ const connectSocket = () => {
   });
 };
 
-export { connectSocket, socket,token };
+export { connectSocket, socket, token };

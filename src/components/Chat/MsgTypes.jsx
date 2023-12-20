@@ -45,12 +45,12 @@ const DocMsg = ({ ele }) => {
   return (
     <Stack
       direction={"row"}
-      justifyContent={ele.to == cookie ? "start" : "end"}
+      justifyContent={ele.to === cookie ? "start" : "end"}
     >
       <Box
         sx={{
           borderRadius: "10px",
-          background: ele.to == cookie ? "#d3d3d3fa" : "#5B96F7",
+          background: ele.to === cookie ? "#d3d3d3fa" : "#5B96F7",
 
           width: "max-content",
           padding: "10px",
@@ -61,7 +61,7 @@ const DocMsg = ({ ele }) => {
             <Image size={48} color="gray" />
             <Typography
               variant="caption"
-              color={ele.to == cookie ? "#696969" : "#FFF"}
+              color={ele.to === cookie ? "#696969" : "#FFF"}
             >
               {" "}
               {ele.message}
@@ -70,7 +70,7 @@ const DocMsg = ({ ele }) => {
               <DownloadSimple />
             </IconButton>
           </Stack>
-          <Typography color={ele.to == cookie ? "#696969" : "#FFF"}>
+          <Typography color={ele.to === cookie ? "#696969" : "#FFF"}>
             {" "}
             {time}
           </Typography>
@@ -81,7 +81,8 @@ const DocMsg = ({ ele }) => {
   );
 };
 const LinkMsg = ({ ele }) => {
-  const [, , time] = ele.created_at.split("+");
+  const time=ele.created_at.split("+").at(-1)
+
 
   return (
     <Stack
@@ -208,10 +209,8 @@ const TimeLine = ({ ele }) => {
 
 const TextMsg = ({ ele }) => {
   const path = window.location.pathname;
-  // const id = path.split("/").splice(-1).split("#");
-  // console.log(id);
-  // const id = path.split("/").pop().split("#");
-  const [, , time] = ele.created_at.split("+");
+  const time=ele.created_at.split("+").at(-1)
+  
 
   return (
     <Stack
@@ -244,7 +243,7 @@ const TextMsg = ({ ele }) => {
         <Typography
           color={ele.to == cookie ? "white" : "black"}
           sx={{
-            fontSize: "12px",
+            fontSize: "10px",
           }}
         >
           {time}
