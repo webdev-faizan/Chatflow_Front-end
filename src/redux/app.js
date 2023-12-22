@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../service/axiosInstance";
-import { RedoOutlined } from "@mui/icons-material";
-import axios from "axios";
 const initialState = {
   sideBar: {
     open: false,
@@ -15,7 +13,7 @@ const initialState = {
   friends: [],
   requestToConnected: [],
   roomId: null,
-  sentMessageInfo:{},
+  sentMessageInfo: {},
   chatType: null,
 };
 

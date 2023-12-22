@@ -16,11 +16,11 @@ const NavButton = [
     to: "/c#load",
     icon: <ChatCircleDots />,
   },
-  {
-    to: "/group",
-    index: 1,
-    icon: <Users />,
-  },
+  // {
+  //   to: "/group",
+  //   index: 1,
+  //   icon: <Users />,
+  // },
   {
     to: "/callhistory",
     index: 2,
