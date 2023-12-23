@@ -1,17 +1,23 @@
-import React, { useState, Fragment } from "react";
+import React, { Fragment } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import { Stack } from "@mui/system";
 import { Typography } from "@mui/material";
-import { theme } from "@cloudinary/url-gen/actions/effect";
+import { socket } from "../../../socket";
+import { Howl } from "howler";
 
-const RingingCall = ({ state, setState, handleAcceptCall }) => {
+const RingingCall = ({ state, setState, handleAcceptCall, id }) => {
   const handleClose = () => {
     setState(false);
   };
   const handleCloseRejectCall = () => {
+    const sound = new Howl({
+      src: ["/error-warning-login-denied-132113.mp3"],
+    });
+    sound.play();
+    socket.emit("call_denied", { id });
     handleClose();
   };
 
@@ -75,7 +81,7 @@ const RingingCall = ({ state, setState, handleAcceptCall }) => {
         }}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={state}
-        // onClose={handleClose}
+        onClose={handleClose}
         message={
           <Stack
             direction={"row"}

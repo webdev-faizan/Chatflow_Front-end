@@ -202,8 +202,8 @@ const FriendElement = ({ handleClose }) => {
       { token, from: _id },
       (conversation_id, userId) => {
         disptach(UserInfo(userId));
-
         navigate(`/c/${userId}#load`);
+
 
         disptach(SelectConversation({ roomId: conversation_id, userId }));
 
@@ -216,9 +216,11 @@ const FriendElement = ({ handleClose }) => {
             disptach(FetchCurrentMessages(data));
           }
         );
+        socket?.emit("get_direct_conversions", { token }, (data, userId) => {
+          disptach(FetchDirectConversion(data, userId));
+        });
 
         handleClose();
-        setTimeout(() => {}, 100);
       }
     );
 

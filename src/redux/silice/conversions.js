@@ -104,6 +104,7 @@ const slice = createSlice({
       state.direct_chat.current_messages = [];
     },
     userInfo(state, action) {
+      
       const this_user = current(state.direct_chat.convsersions).find(
         (ele) => ele.userId === action.payload.userId
       );

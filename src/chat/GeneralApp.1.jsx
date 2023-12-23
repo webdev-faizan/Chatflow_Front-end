@@ -9,7 +9,13 @@ import { useSelector } from "react-redux";
 import StartMessages from "../components/Chat/StarMessages";
 import { connectSocket, socket } from "../socket";
 import { Cookies } from "react-cookie";
-import { SelectConversation, showSnackBar } from "../redux/app";
+import {
+  SelectConversation,
+  showSnackBar,
+  CallNotifcation,
+  ShowVideo,
+} from "../redux/app";
+
 import { useDispatch } from "react-redux";
 
 import { Howl } from "howler";
@@ -18,19 +24,22 @@ import {
   FetchDirectConversion,
   UpdateCurrentMessage,
 } from "../redux/silice/conversions";
-import Videocall from "../components/videocalling/p2p/Videocall.jsx";
-import RingingCall from "../components/videocalling/p2p/Ringingcall.jsx";
+import { incomingCall } from "../redux/silice/videocall";
 
 export const GeneralApp = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const disptach = useDispatch();
   const sideBar = useSelector((state) => state.app.sideBar);
+  const { incoming } = useSelector((state) => state.video);
+
   const ref = useRef(null);
   useEffect(() => {
     ref.current.scrollTo(0, 0);
   }, [sideBar.type]);
-
+  const soundAngery = new Howl({
+    src: ["/ error-warning-login-denied-132113.mp3"],
+  });
   useEffect(() => {
     if (token && token != undefined && token !== null) {
       window.onload = function () {
@@ -85,20 +94,32 @@ export const GeneralApp = () => {
       socket?.emit("get_direct_conversions", { token }, (data, userId) => {
         disptach(FetchDirectConversion(data, userId));
       });
-    
 
       // Scroll to the bottom of the page
       window.scrollTo(0, document.body.scrollHeight);
 
-     
-
       // window.scrollTo()
     });
+    //! user notifcation about call
+    socket.on("busy_another_call", ({ message }) => {
+      soundAngery.play();
+      disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
+    });
 
-    // window.scrollTo = window.innerHeight;
+    socket.on("user_offline", ({ message }) => {
+      soundAngery.play();
 
-    // window.scrollTo(0, window.innerHeight);
-    // window.scrollTo(1000, 10000);
+      disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
+    });
+    socket.on("call_denied", ({ message }) => {
+      disptach(ShowVideo(false));
+      soundAngery.play();
+
+      disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
+    });
+    // socket.on("end_call", () => {
+    //   disptach(incomingCall(false));
+    // });
 
     return () => {
       socket?.off("friend_request_accepted");
@@ -112,8 +133,6 @@ export const GeneralApp = () => {
 
   return (
     <div>
-      {/* //! video calling */}
-      {/* <Videocall /> */}
       <Stack direction={"row"} sx={{ position: "fixed", left: "100px" }}>
         <Chart />
       </Stack>

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../service/axiosInstance";
+import { setting } from "../data/setting";
 const initialState = {
   sideBar: {
     open: false,
@@ -15,6 +16,11 @@ const initialState = {
   roomId: null,
   sentMessageInfo: {},
   chatType: null,
+  callNotifcation: {
+    showNotifcation: false,
+    message: "",
+  },
+  showVideo: false,
 };
 
 export const Slice = createSlice({
@@ -33,8 +39,12 @@ export const Slice = createSlice({
       state.snackbar.open = action.payload.open;
       state.snackbar.message = action.payload.message;
     },
-
-    //all user who have register in our app
+    CallNotifcation: (state, action) => {
+      state.callNotifcation.showNotifcation =
+        action.payload.ShowCallNotifcation;
+      state.callNotifcation.message = action.payload.message;
+      state.showVideo = false;
+    },
     allUser: (state, action) => {
       // console.log(action.payload)
       state.alluser = action.payload.allUsers;
@@ -50,6 +60,9 @@ export const Slice = createSlice({
       state.chatType = "individual";
       state.sentMessageInfo.roomId = action.payload.roomId;
       state.sentMessageInfo.from = action.payload.from;
+    },
+    showVideo: (state, action) => {
+      state.showVideo = action.payload;
     },
   },
 });
@@ -129,5 +142,18 @@ export function FetchRequestToConnectedFriends() {
 export function SelectConversation({ roomId, userId }) {
   return (disptach) => {
     disptach(Slice.actions.selectConversation({ roomId, from: userId }));
+  };
+}
+//!shwo call notifcation info
+export function CallNotifcation(payload) {
+  return (disptach) => {
+    disptach(Slice.actions.CallNotifcation(payload));
+  };
+}
+// show video
+
+export function ShowVideo(payload) {
+  return async (disptach) => {
+    disptach(Slice.actions.showVideo(payload));
   };
 }
