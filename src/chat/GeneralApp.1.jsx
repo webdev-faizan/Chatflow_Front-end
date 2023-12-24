@@ -14,6 +14,7 @@ import {
   showSnackBar,
   CallNotifcation,
   ShowVideo,
+  ShowAudio,
 } from "../redux/app";
 
 import { useDispatch } from "react-redux";
@@ -24,15 +25,12 @@ import {
   FetchDirectConversion,
   UpdateCurrentMessage,
 } from "../redux/silice/conversions";
-import { incomingCall } from "../redux/silice/videocall";
 
 export const GeneralApp = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const disptach = useDispatch();
   const sideBar = useSelector((state) => state.app.sideBar);
-  const { incoming } = useSelector((state) => state.video);
-
   const ref = useRef(null);
   useEffect(() => {
     ref.current.scrollTo(0, 0);
@@ -113,13 +111,11 @@ export const GeneralApp = () => {
     });
     socket.on("call_denied", ({ message }) => {
       disptach(ShowVideo(false));
+      disptach(ShowAudio(false));
       soundAngery.play();
 
       disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
     });
-    // socket.on("end_call", () => {
-    //   disptach(incomingCall(false));
-    // });
 
     return () => {
       socket?.off("friend_request_accepted");

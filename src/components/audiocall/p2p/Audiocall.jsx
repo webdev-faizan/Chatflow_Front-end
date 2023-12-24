@@ -14,19 +14,18 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-import { IconButton } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
-import { ShowVideo } from "../../../redux/app";
+import { ShowAudio } from "../../../redux/app";
 
-const Videocall = forwardRef((props, ref) => {
+const Audiocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
 
-  const { sentMessageInfo, showVideo } = useSelector((state) => state.app);
+  const { sentMessageInfo, showAudio } = useSelector((state) => state.app);
   const { incoming } = useSelector((state) => state.video);
   const userVideo = useRef();
   const myVideo = useRef();
-  const [startVideoCalling, setStartVideoCalling] = useState(false);
 
   const [signal, setSignal] = useState("");
   const connectionRef = useRef();
@@ -38,22 +37,9 @@ const Videocall = forwardRef((props, ref) => {
       src: ["/mixkit-happy-bells-notification-937.wav"],
     });
 
-    socket?.on("calluser", ({ signal, to }) => {
-      // let timePlayed = 0;
-
-      // sound.on("play", () => {
-      //   const interval = setInterval(() => {
-      //     timePlayed += 1;
-      //     if (timePlayed >= 30) {
-      //       sound.stop();
-      //       clearInterval(interval);
-      //     }
-      //   }, 1000);
-      // });
-
+    socket?.on("calluser_audio", ({ signal, to }) => {
       if (!incoming) {
         sound.play();
-
         setState(true);
         setId(to);
         setSignal(signal);
@@ -65,22 +51,21 @@ const Videocall = forwardRef((props, ref) => {
       }
     });
     return () => {
-      socket?.off("calluser");
+      socket?.off("calluser_audio");
+      socket?.off("busy_another_call");
       socket?.off("callAccepted");
     };
   }, [socket]);
 
   let peer1;
   let peer2;
-  const requestVideoToCallUser = () => {
-    setStartVideoCalling(true);
-    dispatch(ShowVideo(true));
+  const requesAudioToCallUser = () => {
+    dispatch(ShowAudio(true));
     dispatch(incomingCall(true));
-
     navigator.mediaDevices
-      .getUserMedia({ audio: true, video: true })
+      .getUserMedia({ audio: true })
       .then((stream) => {
-        myVideo.current.srcObject = stream;
+        userVideo.current.srcObject = stream;
 
         peer1 = new Peer({
           initiator: true,
@@ -111,11 +96,11 @@ const Videocall = forwardRef((props, ref) => {
       });
   };
 
-  const handleVideoAcceptCall = () => {
-    dispatch(ShowVideo(true));
+  const handleAudioAcceptCall = () => {
+    dispatch(ShowAudio(true));
 
     navigator.mediaDevices
-      .getUserMedia({ audio: true, video: true })
+      .getUserMedia({ audio: true })
       .then((stream) => {
         myVideo.current.srcObject = stream;
         peer2 = new Peer({
@@ -145,7 +130,7 @@ const Videocall = forwardRef((props, ref) => {
       });
   };
   useImperativeHandle(ref, () => ({
-    requestVideoToCallUser: requestVideoToCallUser,
+    requesAudioToCallUser: requesAudioToCallUser,
   }));
   const endCall = async () => {
     try {
@@ -153,15 +138,18 @@ const Videocall = forwardRef((props, ref) => {
         src: ["/error-warning-login-denied-132113.mp3"],
       });
       sound.play();
-      dispatch(ShowVideo(false));
+      dispatch(ShowAudio(false));
       dispatch(incomingCall(false));
-      myVideo.current.srcObject.getTracks().forEach((track) => track.stop());
-      userVideo.current.srcObject.getTracks().forEach((track) => track.stop());
-      peer1.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
-      peer2.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
-      peer2.removeAllListeners();
-      peer1.removeAllListeners();
-      
+
+      (await navigator.mediaDevices.getUserMedia())
+        .getAudioTracks()
+        .forEach((track) => track.stop());
+
+      // userVideo.current.srcObject.getTracks().forEach((track) => track.stop());
+      // peer2.replaceTrack(userVideo.current.srcObject.getTracks()[0], null);
+      // peer2.removeAllListeners();
+      // peer1.removeAllListeners();
+
       socket.emit("call_end", { id });
 
       if (peer1) {
@@ -181,9 +169,9 @@ const Videocall = forwardRef((props, ref) => {
         id={id}
         state={state}
         setState={setState}
-        handleAcceptCall={handleVideoAcceptCall}
+        handleAcceptCall={handleAudioAcceptCall}
       />
-      {showVideo && (
+      {showAudio && (
         <Box
           sx={{
             // display: "none",
@@ -198,6 +186,7 @@ const Videocall = forwardRef((props, ref) => {
               width: "480px",
               height: "250px",
               padding: "0",
+              background: "purple",
             }}
           >
             <CardCover
@@ -205,46 +194,28 @@ const Videocall = forwardRef((props, ref) => {
                 padding: "0",
               }}
             >
-              <video
-                style={{
-                  width: "500px",
-                  // height:"400px"
-                }}
-                ref={userVideo}
-                autoPlay
-                loop
-                // muted
-                // poster="https://assets.codepen.io/6093409/river.jpg"
-              >
-                <source
-                // src="https://assets.codepen.io/6093409/river.mp4"
-                // type="video/mp4"
-                />
-              </video>
+              <audio ref={userVideo} autoPlay loop></audio>
             </CardCover>
             <CardContent>
-              <Box>
-                <video
-                  style={{
-                    display: "block",
-                    width: "150px",
-                    borderRadius: "10px",
-                    height: "100px",
-                    marginLeft: "auto",
-                    marginTop: "10px",
-                    position: "relative",
-                    right: "-11px",
-                  }}
-                  autoPlay
-                  muted
-                  ref={myVideo}
-                  // poster="https://assets.codepen.io/6093409/river.jpg"
-                >
-                  <source
-                    src="https://assets.codepen.io/6093409/river.mp4"
-                    type="video/mp4"
-                  />
-                </video>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  height: "100%",
+                  alignItems: "center",
+                  padding: "0 40px",
+                }}
+              >
+                <Avatar
+                  sx={{ width: "100px", height: "100px" }}
+                  alt={"Faizan ALi"}
+                  src="FA A"
+                />
+                <Avatar
+                  sx={{ width: "100px", height: "100px" }}
+                  alt={"Faizan ALi"}
+                  src="FA A"
+                />
               </Box>
 
               <Box
@@ -278,4 +249,4 @@ const Videocall = forwardRef((props, ref) => {
   );
 });
 
-export default Videocall;
+export default Audiocall;

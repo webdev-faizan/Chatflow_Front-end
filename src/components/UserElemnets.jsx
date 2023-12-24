@@ -24,6 +24,7 @@ import { socket, token } from "../socket";
 import {
   FetchCurrentMessages,
   FetchDirectConversion,
+  NewConversion,
   UserInfo,
 } from "../redux/silice/conversions";
 
@@ -201,9 +202,9 @@ const FriendElement = ({ handleClose }) => {
       "start_conversion",
       { token, from: _id },
       (conversation_id, userId) => {
-        disptach(UserInfo(userId));
-        navigate(`/c/${userId}#load`);
+        disptach(NewConversion(false));
 
+        navigate(`/c/${userId}#load`);
 
         disptach(SelectConversation({ roomId: conversation_id, userId }));
 
@@ -211,11 +212,13 @@ const FriendElement = ({ handleClose }) => {
           "get_message",
           {
             conversions_id: conversation_id,
+            token,
           },
           (data) => {
             disptach(FetchCurrentMessages(data));
           }
         );
+
         socket?.emit("get_direct_conversions", { token }, (data, userId) => {
           disptach(FetchDirectConversion(data, userId));
         });
@@ -227,6 +230,7 @@ const FriendElement = ({ handleClose }) => {
     socket?.emit("get_direct_conversions", { token }, (data, userId) => {
       disptach(FetchDirectConversion(data, userId));
     });
+    disptach(UserInfo(_id));
 
     // socket.emit(
     //   "get_message",

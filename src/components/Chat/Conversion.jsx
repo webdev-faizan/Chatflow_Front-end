@@ -693,28 +693,15 @@
 // };
 
 // export default Conversion;
-import Peer from "simple-peer";
-
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useState } from "react";
 import { StyledBadge } from "../StyledBadge";
 import data from "@emoji-mart/data";
 import { useSelector } from "react-redux";
 import Picker from "@emoji-mart/react";
 import { useDispatch } from "react-redux";
 import { Howl } from "howler";
-import { PhoneDisconnect } from "phosphor-react";
 import Box from "@mui/joy/Box";
-import Card from "@mui/joy/Card";
-import CardCover from "@mui/joy/CardCover";
-import CardContent from "@mui/joy/CardContent";
+
 import {
   Stack,
   IconButton,
@@ -741,14 +728,12 @@ import {
 import { toggleSidebar } from "../../redux/app";
 import { socket, token } from "../../socket";
 import SelectConverstion from "../setting/SelectConverstion";
-import RingingCall from "../videocalling/p2p/Ringingcall";
 import { P2PCallContext } from "../../routes/RouterComponent";
 const Conversion = () => {
   const { requestCall } = useContext(P2PCallContext);
   // const cld = new Cloudinary({cloud: {cloudName: 'dkhgfsefj'}});
   const dispatch = useDispatch();
   const { userInfo, newConversion } = useSelector((state) => state.conversions);
-
   const [showPicker, setShowPicker] = useState(false);
   const [ShowAttachement, setShowAttachement] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -759,14 +744,6 @@ const Conversion = () => {
   };
   const { sentMessageInfo, sideBar } = useSelector((state) => state.app);
   const [error, setError] = useState(false);
-  const [steam, setSteam] = useState(null);
-  const userVideo = useRef();
-  const myVideo = useRef();
-
-  useEffect(() => {
-    // requestToCallUser();
-  }, [socket]);
-
   //! upload assests
   const handleAssestUpload = async () => {
     let formData = new FormData();
@@ -874,6 +851,8 @@ const Conversion = () => {
 
     setInputValue("");
   };
+  const { incoming } = useSelector((state) => state.video);
+
 
   return (
     <>
@@ -936,7 +915,7 @@ const Conversion = () => {
                   sx={{ width: "48px", height: "48px" }}
                   src={userInfo?.name}
                   alt={userInfo?.name}
-                  onClick={() => dispatch(toggleSidebar())}
+                  // onClick={() => dispatch(toggleSidebar())}
                 />
               </StyledBadge>
             ) : (
@@ -944,7 +923,7 @@ const Conversion = () => {
                 sx={{ width: "48px", height: "48px" }}
                 src={userInfo?.name}
                 alt={userInfo?.name}
-                onClick={() => dispatch(toggleSidebar())}
+                // onClick={() => dispatch(toggleSidebar())}
               />
             )}
 
@@ -988,10 +967,10 @@ const Conversion = () => {
           </Box>
           {/* converions */}
           <Stack direction={"row"}>
-            <IconButton onClick={() => requestCall("VIDEO_CALL")}>
+            <IconButton disabled={incoming} onClick={() => requestCall("VIDEO_CALL")}>
               <VideoCamera />
             </IconButton>
-            <IconButton onClick={() => requestCall("AUDIO_CALL")}>
+            <IconButton disabled={incoming} onClick={() => requestCall("AUDIO_CALL")}>
               <Phone />
             </IconButton>
             <IconButton>

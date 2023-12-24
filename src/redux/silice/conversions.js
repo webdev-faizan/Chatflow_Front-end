@@ -108,8 +108,8 @@ const slice = createSlice({
       const this_user = current(state.direct_chat.convsersions).find(
         (ele) => ele.userId === action.payload.userId
       );
-      state.userInfo.name = this_user.name;
-      state.userInfo.online = this_user.online;
+      state.userInfo.name = this_user?.name;
+      state.userInfo.online = this_user?.online;
     },
   },
 });

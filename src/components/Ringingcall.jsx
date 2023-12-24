@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import { Stack } from "@mui/system";
 import { Typography } from "@mui/material";
-import { socket } from "../../../socket";
+import { socket } from "../socket";
 import { Howl } from "howler";
 
 const RingingCall = ({ state, setState, handleAcceptCall, id }) => {

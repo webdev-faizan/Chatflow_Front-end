@@ -21,6 +21,7 @@ const initialState = {
     message: "",
   },
   showVideo: false,
+  showAudio: false,
 };
 
 export const Slice = createSlice({
@@ -44,6 +45,7 @@ export const Slice = createSlice({
         action.payload.ShowCallNotifcation;
       state.callNotifcation.message = action.payload.message;
       state.showVideo = false;
+      state.showAudio = false;
     },
     allUser: (state, action) => {
       // console.log(action.payload)
@@ -53,7 +55,6 @@ export const Slice = createSlice({
       state.friends = action.payload.friends;
     },
     requestToConnected: (state, action) => {
-      console.log(action.payload);
       state.requestToConnected = action.payload.requestToConnected;
     },
     selectConversation: (state, action) => {
@@ -63,6 +64,9 @@ export const Slice = createSlice({
     },
     showVideo: (state, action) => {
       state.showVideo = action.payload;
+    },
+    showAudio: (state, action) => {
+      state.showAudio = action.payload;
     },
   },
 });
@@ -155,5 +159,10 @@ export function CallNotifcation(payload) {
 export function ShowVideo(payload) {
   return async (disptach) => {
     disptach(Slice.actions.showVideo(payload));
+  };
+}
+export function ShowAudio(payload) {
+  return async (disptach) => {
+    disptach(Slice.actions.showAudio(payload));
   };
 }

@@ -21,11 +21,11 @@ const NavButton = [
   //   index: 1,
   //   icon: <Users />,
   // },
-  {
-    to: "/callhistory",
-    index: 2,
-    icon: <Phone />,
-  },
+  // {
+  //   to: "/callhistory",
+  //   index: 2,
+  //   icon: <Phone />,
+  // },
 ];
 
 const chatlist = [

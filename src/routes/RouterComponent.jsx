@@ -11,10 +11,12 @@ import Signup from "../pages/auth/Signup";
 import Login from "../pages/auth/Login";
 import Videocall from "../components/videocalling/p2p/Videocall";
 import SnackbarCallInfo from "../components/SnackbarCallInfo";
+import Audiocall from "../components/audiocall/p2p/Audiocall";
 export const P2PCallContext = createContext();
 
 const RouterComponent = () => {
   const videocallRef = useRef();
+  const audiocallRef = useRef();
   const isLoginPage =
     window.location.pathname === "/login" ||
     window.location.pathname === "/signup";
@@ -26,13 +28,15 @@ const RouterComponent = () => {
   const requestCall = (callRequestType) => {
     if (callRequestType === "VIDEO_CALL") {
       videocallRef.current.requestVideoToCallUser();
-    } else if (callRequestType === "AURDIO_CALL") {
+    } else if (callRequestType === "AUDIO_CALL") {
+      audiocallRef.current.requesAudioToCallUser();
     }
   };
 
   return (
     <>
       <Videocall ref={videocallRef} />
+      <Audiocall ref={audiocallRef} />
       <P2PCallContext.Provider value={{ requestCall }}>
         {indexComponent}
         <Routes>

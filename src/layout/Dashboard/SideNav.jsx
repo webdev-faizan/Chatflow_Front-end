@@ -122,20 +122,20 @@ function Index() {
                 alignItems: "center",
               }}
             >
-              <Gear
+              {/* <Gear
                 sx={{
                   width: "24px",
                   height: "24px",
                   color: "#080707",
                   fontSize: "24px",
                 }}
-              />
+              /> */}
             </IconButton>
           </NavLink>
           <Stack spacing={3}>
-            <NavLink to={"/profile"}>
               <Avatar alt="Remy Sharp" src="./Ellipse 1.svg" />
-            </NavLink>
+            {/* <NavLink to={"/profile"}>
+            </NavLink> */}
           </Stack>
         </Stack>
       </Box>
