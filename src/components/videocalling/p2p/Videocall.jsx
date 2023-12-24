@@ -17,7 +17,7 @@ import CardContent from "@mui/joy/CardContent";
 import { IconButton } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
-import { ShowVideo } from "../../../redux/app";
+import { CallNotifcation, ShowVideo } from "../../../redux/app";
 
 const Videocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
@@ -64,6 +64,11 @@ const Videocall = forwardRef((props, ref) => {
         socket.emit("busy_another_call", { id: to });
       }
     });
+    socket?.on("Video_call_end", ({ message }) => {
+      dispatch(ShowVideo(false));
+      dispatch(incomingCall(false));
+      dispatch(CallNotifcation({ ShowCallNotifcation: true, message }));
+    });
     return () => {
       socket?.off("calluser");
       socket?.off("callAccepted");
@@ -77,7 +82,7 @@ const Videocall = forwardRef((props, ref) => {
     dispatch(ShowVideo(true));
     dispatch(incomingCall(true));
 
-    navigator.mediaDevices
+      navigator.mediaDevices
       .getUserMedia({ audio: true, video: true })
       .then((stream) => {
         myVideo.current.srcObject = stream;
@@ -149,6 +154,8 @@ const Videocall = forwardRef((props, ref) => {
   }));
   const endCall = async () => {
     try {
+      socket.emit("Video_call_end", { id });
+
       const sound = new Howl({
         src: ["/error-warning-login-denied-132113.mp3"],
       });
@@ -157,12 +164,10 @@ const Videocall = forwardRef((props, ref) => {
       dispatch(incomingCall(false));
       myVideo.current.srcObject.getTracks().forEach((track) => track.stop());
       userVideo.current.srcObject.getTracks().forEach((track) => track.stop());
-      peer1.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
-      peer2.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
-      peer2.removeAllListeners();
-      peer1.removeAllListeners();
-      
-      socket.emit("call_end", { id });
+      // peer1.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
+      // peer2.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
+      // peer2.removeAllListeners();
+      // peer1.removeAllListeners();
 
       if (peer1) {
         peer1.destroy();

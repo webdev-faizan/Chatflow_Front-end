@@ -17,7 +17,7 @@ import CardContent from "@mui/joy/CardContent";
 import { Avatar, IconButton } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
-import { ShowAudio } from "../../../redux/app";
+import { CallNotifcation, ShowAudio } from "../../../redux/app";
 
 const Audiocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
@@ -25,8 +25,6 @@ const Audiocall = forwardRef((props, ref) => {
   const { sentMessageInfo, showAudio } = useSelector((state) => state.app);
   const { incoming } = useSelector((state) => state.video);
   const userVideo = useRef();
-  const myVideo = useRef();
-
   const [signal, setSignal] = useState("");
   const connectionRef = useRef();
   const [id, setId] = useState();
@@ -50,6 +48,12 @@ const Audiocall = forwardRef((props, ref) => {
         socket.emit("busy_another_call", { id: to });
       }
     });
+    socket?.on("audio_call_end", ({ message }) => {
+      alert('')
+      dispatch(ShowAudio(false));
+      dispatch(incomingCall(false));
+      dispatch(CallNotifcation({ ShowCallNotifcation: true, message }));
+    });
     return () => {
       socket?.off("calluser_audio");
       socket?.off("busy_another_call");
@@ -59,14 +63,17 @@ const Audiocall = forwardRef((props, ref) => {
 
   let peer1;
   let peer2;
-  const requesAudioToCallUser = () => {
+  // const [isMuted, setIsMuted] = useState([]);
+  const [activeStreams_1, setActiveStreams_1] = useState();
+  const [activeStreams_2, setActiveStreams_2] = useState();
+
+  const requesAudioToCallUser = async () => {
     dispatch(ShowAudio(true));
     dispatch(incomingCall(true));
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        userVideo.current.srcObject = stream;
-
+        // activeStreams_1(stream);
         peer1 = new Peer({
           initiator: true,
           trickle: false,
@@ -74,7 +81,7 @@ const Audiocall = forwardRef((props, ref) => {
         });
 
         peer1.on("signal", (data) => {
-          socket.emit("calluser", {
+          socket.emit("calluser_audio", {
             userToCall: sentMessageInfo.from,
             token,
             signalData: data,
@@ -98,16 +105,16 @@ const Audiocall = forwardRef((props, ref) => {
 
   const handleAudioAcceptCall = () => {
     dispatch(ShowAudio(true));
-
+    dispatch(incomingCall(true));
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        myVideo.current.srcObject = stream;
         peer2 = new Peer({
           initiator: false,
           trickle: false,
           stream: stream,
         });
+        // activeStreams_2(stream);
 
         peer2.on("signal", (data) => {
           socket.emit("answerCall", {
@@ -140,17 +147,11 @@ const Audiocall = forwardRef((props, ref) => {
       sound.play();
       dispatch(ShowAudio(false));
       dispatch(incomingCall(false));
+      // console.log(isMuted);
+      activeStreams_1.getTracks().forEach((track) => track.stop());
+      activeStreams_2.getTracks().forEach((track) => track.stop());
 
-      (await navigator.mediaDevices.getUserMedia())
-        .getAudioTracks()
-        .forEach((track) => track.stop());
-
-      // userVideo.current.srcObject.getTracks().forEach((track) => track.stop());
-      // peer2.replaceTrack(userVideo.current.srcObject.getTracks()[0], null);
-      // peer2.removeAllListeners();
-      // peer1.removeAllListeners();
-
-      socket.emit("call_end", { id });
+      socket.emit("audio_call_end", { id });
 
       if (peer1) {
         peer1.destroy();
@@ -164,7 +165,11 @@ const Audiocall = forwardRef((props, ref) => {
   };
 
   return (
-    <div>
+    <Box
+      sx={{
+        background: "red",
+      }}
+    >
       <RingingCall
         id={id}
         state={state}
@@ -245,7 +250,7 @@ const Audiocall = forwardRef((props, ref) => {
           </Card>
         </Box>
       )}
-    </div>
+    </Box>
   );
 });
 

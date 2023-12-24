@@ -25,6 +25,7 @@ import {
   FetchDirectConversion,
   UpdateCurrentMessage,
 } from "../redux/silice/conversions";
+import { incomingCall } from "../redux/silice/videocall";
 
 export const GeneralApp = () => {
   const cookie = new Cookies();
@@ -112,8 +113,8 @@ export const GeneralApp = () => {
     socket.on("call_denied", ({ message }) => {
       disptach(ShowVideo(false));
       disptach(ShowAudio(false));
+      disptach(incomingCall(false));
       soundAngery.play();
-
       disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
     });
 
