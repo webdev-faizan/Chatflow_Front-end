@@ -1,7 +1,7 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import SettingRoute from "./settingRoute/SettingRoute";
 import { Box } from "@mui/material";
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useRef } from "react";
 import GeneralApp from "../chat/GeneralApp";
 import Group from "../pages/group/Group";
 import Callhistory from "../pages/call/Callhistory";
@@ -12,6 +12,9 @@ import Login from "../pages/auth/Login";
 import Videocall from "../components/videocalling/p2p/Videocall";
 import SnackbarCallInfo from "../components/SnackbarCallInfo";
 import Audiocall from "../components/audiocall/p2p/Audiocall";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import NewPassword from "../pages/auth/NewPassword";
+import EmailVerification from "../pages/auth/EmailVerification";
 export const P2PCallContext = createContext();
 
 const RouterComponent = () => {
@@ -40,14 +43,16 @@ const RouterComponent = () => {
       <P2PCallContext.Provider value={{ requestCall }}>
         {indexComponent}
         <Routes>
-          {/* auth routes */}
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/login" element={<Login />}></Route>
-          {/* index route */}
-
+          <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+          <Route path="/new-password" element={<NewPassword />}></Route>
+          <Route
+            path="/verify-email"
+            element={<EmailVerification />}
+          ></Route>
           <Route path="/c/:id" element={<GeneralApp />}></Route>
           <Route path="/c" element={<GeneralApp />}></Route>
-
           <Route path="/group" element={<Group />}></Route>
           <Route path="/Callhistory" element={<Callhistory />}></Route>
           <Route path="/profile" element={<Profile />}></Route>

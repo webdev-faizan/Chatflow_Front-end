@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   TextField,
@@ -7,28 +7,34 @@ import {
   Box,
   Link,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { LoginUser } from "../../redux/silice/auth";
+import { newPassword } from "../../redux/silice/auth";
 import { useDispatch } from "react-redux";
 import { useMediaQuery } from "@mui/material";
+
 const fieldIsRequired = "This field is required";
 const schemaSignup = yup.object({
-  email: yup
+  password: yup
     .string()
     .trim()
     .required(fieldIsRequired)
-    .email("Invalid email format")
-    .matches(
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.com)?$/,
-      "Invalid email format"
+    .min(8, "min length must be at least 8 characters"),
+  cpassword: yup
+    .string()
+    .required(fieldIsRequired)
+    .oneOf(
+      [yup.ref("password"), null],
+      "Passwords and confirm password not match"
     ),
-  password: yup.string().trim().required(fieldIsRequired),
 });
-const Login = () => {
+
+const NewPassword = () => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
+  let [searchParams] = useSearchParams();
+
   const dispatch = useDispatch();
   const {
     register,
@@ -38,13 +44,16 @@ const Login = () => {
     resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
-  const onSubmit = (formData) => {
-    dispatch(LoginUser(formData));
+
+  const onSubmit = (data) => {
+    if (!searchParams.get("token")) return;
+
+    dispatch(newPassword(data, searchParams.get("token")));
   };
 
   return (
     <Container
-      maxWidth={`${isSmallScreen ? "100%" : "xs"}`}
+      maxWidth={isSmallScreen ? "100%" : "xs"}
       sx={{
         minHeight: "100vh",
         display: "flex",
@@ -54,18 +63,9 @@ const Login = () => {
     >
       <Box mt={5}>
         <Typography variant="h4" align="center">
-          Login
+          New Password
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <TextField
-            fullWidth
-            label="Email"
-            margin="normal"
-            name="email"
-            {...register("email")}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
           <TextField
             fullWidth
             label="Password"
@@ -76,11 +76,16 @@ const Login = () => {
             helperText={errors.password?.message}
             type="password"
           />
-          <Typography variant="body2">
-            <Link component={RouterLink} to="/forgot-password">
-              Forgot Password?
-            </Link>
-          </Typography>
+          <TextField
+            fullWidth
+            label="confirm Password"
+            margin="normal"
+            name="cpassword"
+            {...register("cpassword")}
+            error={!!errors.cpassword}
+            helperText={errors.cpassword?.message}
+            type="password"
+          />
 
           <Button
             type="submit"
@@ -89,14 +94,14 @@ const Login = () => {
             fullWidth
             sx={{ mt: 2 }}
           >
-            Login
+            Change Password
           </Button>
         </form>
         <Box mt={2} textAlign="center">
           <Typography variant="body2">
             Don't have an account?{" "}
-            <Link component={RouterLink} to="/signup">
-              Sign up
+            <Link component={RouterLink} to="/login">
+              login
             </Link>
           </Typography>
         </Box>
@@ -105,4 +110,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default NewPassword;

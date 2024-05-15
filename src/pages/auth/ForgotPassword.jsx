@@ -11,7 +11,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { LoginUser } from "../../redux/silice/auth";
+import { forgetPassword } from "../../redux/silice/auth";
 import { useDispatch } from "react-redux";
 import { useMediaQuery } from "@mui/material";
 const fieldIsRequired = "This field is required";
@@ -25,9 +25,8 @@ const schemaSignup = yup.object({
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\.com)?$/,
       "Invalid email format"
     ),
-  password: yup.string().trim().required(fieldIsRequired),
 });
-const Login = () => {
+const ForgotPassword = () => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
   const dispatch = useDispatch();
   const {
@@ -39,7 +38,7 @@ const Login = () => {
     mode: "onTouched",
   });
   const onSubmit = (formData) => {
-    dispatch(LoginUser(formData));
+    dispatch(forgetPassword(formData));
   };
 
   return (
@@ -54,7 +53,7 @@ const Login = () => {
     >
       <Box mt={5}>
         <Typography variant="h4" align="center">
-          Login
+          Forget Password
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
@@ -66,22 +65,6 @@ const Login = () => {
             error={!!errors.email}
             helperText={errors.email?.message}
           />
-          <TextField
-            fullWidth
-            label="Password"
-            margin="normal"
-            name="password"
-            {...register("password")}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-            type="password"
-          />
-          <Typography variant="body2">
-            <Link component={RouterLink} to="/forgot-password">
-              Forgot Password?
-            </Link>
-          </Typography>
-
           <Button
             type="submit"
             variant="contained"
@@ -89,14 +72,14 @@ const Login = () => {
             fullWidth
             sx={{ mt: 2 }}
           >
-            Login
+            Forget Password
           </Button>
         </form>
         <Box mt={2} textAlign="center">
           <Typography variant="body2">
-            Don't have an account?{" "}
-            <Link component={RouterLink} to="/signup">
-              Sign up
+            Click to ?
+            <Link component={RouterLink} to="/login">
+              Login
             </Link>
           </Typography>
         </Box>
@@ -105,4 +88,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

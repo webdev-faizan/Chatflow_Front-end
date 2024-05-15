@@ -21,6 +21,10 @@ const slice = createSlice({
       state.isLoading = actions.payload.isLoading;
       state.error = actions.payload.error;
     },
+    updateLoadingState(state, action) {
+      state.isLoading = action.payload.isLoading;
+      state.error = action.payload.error;
+    },
   },
 });
 
@@ -33,8 +37,8 @@ export function RegisterUser(FormData) {
     );
     await axiosInstance
       .post("/auth/register", { ...FormData })
-      .then((data) => {
-        toast.success(data?.data?.message, {
+      .then(({ data }) => {
+        toast.success(data?.message, {
           autoClose: 1000,
         });
         setTimeout(() => {
@@ -66,21 +70,112 @@ export function LoginUser(FormData) {
     );
     await axiosInstance
       .post("/auth/login", { ...FormData })
-      .then((data) => {
-        toast.success(data?.data?.message, {
+      .then(({ data }) => {
+        toast.success(data?.message, {
           autoClose: 1000,
         });
-        // expires: Date.now() + 30 + 60 * 1000,
-        // expires: Date.now() + 30 * 60 * 1000,
-        cookie.set("auth", data?.data?.token, {
+        const expirationTime = new Date(Date.now() + 30 * 60 * 1000);
+        cookie.set("auth", data?.token, {
           path: "/",
+          expires: expirationTime,
         });
-        cookie.set("user_id", data?.data?.id, {
+
+        cookie.set("user_id", data?.id, {
           path: "/",
+          expires: expirationTime,
         });
         setTimeout(() => {
           window.location.href = "/c";
         }, 1500);
+      })
+      .catch((error) => {
+        toast.error(error && error?.response?.data?.message, {
+          autoClose: 3000,
+        });
+      })
+      .finally(() => {
+        disptach(
+          slice.actions.loginUser({
+            isLoading: false,
+          })
+        );
+      });
+  };
+}
+export function verifiedEmail(authToken) {
+  return async (disptach) => {
+    disptach(
+      slice.actions.updateLoadingState({
+        isLoading: true,
+      })
+    );
+    const Token = authToken;
+    await axiosInstance
+      .post("/auth/email-verification", { token: Token })
+      .then(({ data }) => {
+        toast.success(data?.message, {
+          autoClose: 1000,
+        });
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1000);
+      })
+      .catch((error) => {
+        toast.error(error && error?.response?.data?.message, {
+          autoClose: 3000,
+        });
+      })
+      .finally(() => {
+        disptach(
+          slice.actions.loginUser({
+            isLoading: false,
+          })
+        );
+      });
+  };
+}
+
+export function forgetPassword(FormData) {
+  return async (disptach) => {
+    disptach(
+      slice.actions.updateLoadingState({
+        isLoading: true,
+      })
+    );
+    await axiosInstance
+      .post("/auth/forgot-password", { ...FormData })
+      .then(({ data }) => {
+        toast.success(data?.message, {
+          autoClose: 1000,
+        });
+      })
+      .catch((error) => {
+        toast.error(error && error?.response?.data?.message, {
+          autoClose: 3000,
+        });
+      })
+      .finally(() => {
+        disptach(
+          slice.actions.loginUser({
+            isLoading: false,
+          })
+        );
+      });
+  };
+}
+export function newPassword(FormData, token) {
+  return async (disptach) => {
+    disptach(
+      slice.actions.updateLoadingState({
+        isLoading: true,
+      })
+    );
+    await axiosInstance
+      .post("/auth/new-password", { ...FormData, token })
+      .then(({ data }) => {
+        toast.success(data?.message, {
+          autoClose: 1000,
+        });
       })
       .catch((error) => {
         toast.error(error && error?.response?.data?.message, {
