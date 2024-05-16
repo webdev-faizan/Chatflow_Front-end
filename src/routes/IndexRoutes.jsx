@@ -7,27 +7,15 @@ import Group from "../pages/group/Group";
 import Callhistory from "../pages/call/Callhistory";
 import Profile from "../pages/Profile";
 import Index from "../layout/Dashboard/SideNav";
-import Signup from "../pages/auth/Signup";
-import Login from "../pages/auth/Login";
 import Videocall from "../components/videocalling/p2p/Videocall";
 import SnackbarCallInfo from "../components/SnackbarCallInfo";
 import Audiocall from "../components/audiocall/p2p/Audiocall";
-import ForgotPassword from "../pages/auth/ForgotPassword";
-import NewPassword from "../pages/auth/NewPassword";
-import EmailVerification from "../pages/auth/EmailVerification";
+import NotFoundPage from "../components/NotFoundPage";
 export const P2PCallContext = createContext();
 
 const RouterComponent = () => {
   const videocallRef = useRef();
   const audiocallRef = useRef();
-  const isLoginPage =
-    window.location.pathname === "/login" ||
-    window.location.pathname === "/signup";
-  const indexComponent = isLoginPage ? null : (
-    <Box sx={{ position: "fixed", left: 0 }}>
-      <Index />
-    </Box>
-  );
   const requestCall = (callRequestType) => {
     if (callRequestType === "VIDEO_CALL") {
       videocallRef.current.requestVideoToCallUser();
@@ -40,22 +28,17 @@ const RouterComponent = () => {
     <>
       <Videocall ref={videocallRef} />
       <Audiocall ref={audiocallRef} />
+      <Box sx={{ position: "fixed", left: 0, top: 0 }}>
+        <Index />
+      </Box>
       <P2PCallContext.Provider value={{ requestCall }}>
-        {indexComponent}
         <Routes>
-          <Route path="/signup" element={<Signup />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/forgot-password" element={<ForgotPassword />}></Route>
-          <Route path="/new-password" element={<NewPassword />}></Route>
-          <Route
-            path="/verify-email"
-            element={<EmailVerification />}
-          ></Route>
-          <Route path="/c/:id" element={<GeneralApp />}></Route>
-          <Route path="/c" element={<GeneralApp />}></Route>
-          <Route path="/group" element={<Group />}></Route>
-          <Route path="/Callhistory" element={<Callhistory />}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/c/:id" element={<GeneralApp />} />
+          <Route path="/c" element={<GeneralApp />} />
+          <Route path="/group" element={<Group />} />
+          <Route path="/Callhistory" element={<Callhistory />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="*" element={<NotFoundPage />} />
           {SettingRoute.map((ele) => {
             const { Component, path } = ele;
             return <Route path={path} element={Component} />;

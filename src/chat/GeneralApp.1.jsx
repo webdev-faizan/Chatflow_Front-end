@@ -133,7 +133,6 @@ export const GeneralApp = () => {
       <Stack direction={"row"} sx={{ position: "fixed", left: "100px" }}>
         <Chart />
       </Stack>
-
       <Stack direction={"row"}>
         <Stack
           direction={"column"}

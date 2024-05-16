@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import RouterComponent from "./routes/RouterComponent";
+import Routes from "./routes/Routes";
 import DirectionSnackbar from "./components/Snackbar";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <>
       <ToastContainer />
       {/* <Box sx={{ marginLeft: "130px" }}> */}
-      <RouterComponent />
+      <Routes />
       {/* </Box> */}
       <DirectionSnackbar />
     </>
