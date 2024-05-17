@@ -7,7 +7,7 @@ import videoReducer from "./silice/videocall";
 const rootPersistConfig = {
   key: "root",
   storage,
-  // keyPrefix: "redu",
+  keyPrefix: "reducer",
 };
 const rootReducer = combineReducers({
   app: appReducer,

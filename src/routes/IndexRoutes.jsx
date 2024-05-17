@@ -1,19 +1,14 @@
 import { Route, Routes } from "react-router-dom";
-import SettingRoute from "./settingRoute/SettingRoute";
 import { Box } from "@mui/material";
 import React, { createContext, useRef } from "react";
 import GeneralApp from "../chat/GeneralApp";
-import Group from "../pages/group/Group";
-import Callhistory from "../pages/call/Callhistory";
-import Profile from "../pages/Profile";
 import Index from "../layout/Dashboard/SideNav";
 import Videocall from "../components/videocalling/p2p/Videocall";
 import SnackbarCallInfo from "../components/SnackbarCallInfo";
 import Audiocall from "../components/audiocall/p2p/Audiocall";
 import NotFoundPage from "../components/NotFoundPage";
 export const P2PCallContext = createContext();
-
-const RouterComponent = () => {
+const IndexRoutes = () => {
   const videocallRef = useRef();
   const audiocallRef = useRef();
   const requestCall = (callRequestType) => {
@@ -35,14 +30,7 @@ const RouterComponent = () => {
         <Routes>
           <Route path="/c/:id" element={<GeneralApp />} />
           <Route path="/c" element={<GeneralApp />} />
-          <Route path="/group" element={<Group />} />
-          <Route path="/Callhistory" element={<Callhistory />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFoundPage />} />
-          {SettingRoute.map((ele) => {
-            const { Component, path } = ele;
-            return <Route path={path} element={Component} />;
-          })}
         </Routes>
       </P2PCallContext.Provider>
       <SnackbarCallInfo />
@@ -50,4 +38,4 @@ const RouterComponent = () => {
   );
 };
 
-export default RouterComponent;
+export default IndexRoutes;

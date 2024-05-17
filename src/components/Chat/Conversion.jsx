@@ -727,7 +727,7 @@ import {
 } from "phosphor-react";
 import { toggleSidebar } from "../../redux/app";
 import { socket, token } from "../../socket";
-import SelectConverstion from "../setting/SelectConverstion";
+import SelectConverstion from "../SelectConverstion";
 import { P2PCallContext } from "../../routes/IndexRoutes";
 const Conversion = () => {
   const { requestCall } = useContext(P2PCallContext);
@@ -853,7 +853,6 @@ const Conversion = () => {
   };
   const { incoming } = useSelector((state) => state.video);
 
-
   return (
     <>
       <Stack
@@ -863,7 +862,7 @@ const Conversion = () => {
           justifyItems: "center",
           width: `calc(100vw - 470px)`,
           overflow: "hidden",
-          height: "90vh",
+          height: "67vh",
         }}
         alignItems={"center"}
       >
@@ -871,6 +870,7 @@ const Conversion = () => {
       </Stack>
       <Stack
         // display={"none"}
+
         display={`${newConversion ? "none" : "block"}`}
         direction={"column"}
         sx={{
@@ -915,7 +915,6 @@ const Conversion = () => {
                   sx={{ width: "48px", height: "48px" }}
                   src={userInfo?.name}
                   alt={userInfo?.name}
-                  // onClick={() => dispatch(toggleSidebar())}
                 />
               </StyledBadge>
             ) : (
@@ -923,7 +922,6 @@ const Conversion = () => {
                 sx={{ width: "48px", height: "48px" }}
                 src={userInfo?.name}
                 alt={userInfo?.name}
-                // onClick={() => dispatch(toggleSidebar())}
               />
             )}
 
@@ -967,18 +965,17 @@ const Conversion = () => {
           </Box>
           {/* converions */}
           <Stack direction={"row"}>
-            <IconButton disabled={incoming} onClick={() => requestCall("VIDEO_CALL")}>
+            <IconButton
+              disabled={incoming}
+              onClick={() => requestCall("VIDEO_CALL")}
+            >
               <VideoCamera />
             </IconButton>
-            <IconButton disabled={incoming} onClick={() => requestCall("AUDIO_CALL")}>
+            <IconButton
+              disabled={incoming}
+              onClick={() => requestCall("AUDIO_CALL")}
+            >
               <Phone />
-            </IconButton>
-            <IconButton>
-              <MagnifyingGlass />
-            </IconButton>
-            <Divider orientation="vertical" flexItem></Divider>
-            <IconButton>
-              <CaretDown />
             </IconButton>
           </Stack>
         </Stack>
@@ -1049,16 +1046,6 @@ const Conversion = () => {
               </IconButton>
               <IconButton
                 sx={{
-                  background: "#6c757d",
-                  ":hover": {
-                    background: "#6c757d",
-                  },
-                }}
-              >
-                <User size={24} />
-              </IconButton>
-              <IconButton
-                sx={{
                   position: "relative",
                   background: "#28a745",
                   ":hover": {
@@ -1080,16 +1067,6 @@ const Conversion = () => {
                   onChange={(e) => setAssest(e.target.files[0])}
                 />
                 <Image size={24} />
-              </IconButton>
-              <IconButton
-                sx={{
-                  background: "#dc3545",
-                  ":hover": {
-                    background: "#dc3545",
-                  },
-                }}
-              >
-                <Camera size={24} />
               </IconButton>
             </Stack>
             <Stack

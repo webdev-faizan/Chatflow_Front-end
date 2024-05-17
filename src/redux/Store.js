@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
+import { persistReducer } from "redux-persist";
 import { rootPersistConfig, rootReducer } from "./rootReducer";
 import { applyMiddleware } from "redux";
 import thunk from "redux-thunk";

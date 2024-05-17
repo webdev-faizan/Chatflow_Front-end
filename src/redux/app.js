@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../service/axiosInstance";
-import { setting } from "../data/setting";
 const initialState = {
   sideBar: {
     open: false,
@@ -48,7 +47,6 @@ export const Slice = createSlice({
       state.showAudio = false;
     },
     allUser: (state, action) => {
-      // console.log(action.payload)
       state.alluser = action.payload.allUsers;
     },
     friends: (state, action) => {

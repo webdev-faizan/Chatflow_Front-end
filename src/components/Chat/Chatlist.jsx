@@ -9,10 +9,8 @@ import { socket, token } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Trash } from "phosphor-react";
-
 import { SelectConversation } from "../../redux/app";
 import {
-  CurrentConversation,
   FetchCurrentMessages,
   FetchDirectConversion,
   NewConversion,

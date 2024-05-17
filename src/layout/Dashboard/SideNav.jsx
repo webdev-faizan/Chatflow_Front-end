@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { faker } from "@faker-js/faker";
-import { Box, Stack, IconButton, Divider, Switch, Avatar } from "@mui/material";
+import { Box, Stack, IconButton, Divider, Avatar } from "@mui/material";
 import { NavButton } from "../../data/index";
-import { Gear } from "phosphor-react";
 import { NavLink } from "react-router-dom";
 import {
   NewConversion,
@@ -49,7 +47,6 @@ function Index() {
               }}
             />
           </Box>
-
           <br />
           <br />
           <Stack spacing={1} direction="column" alignItems="center">
@@ -121,21 +118,10 @@ function Index() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-            >
-              {/* <Gear
-                sx={{
-                  width: "24px",
-                  height: "24px",
-                  color: "#080707",
-                  fontSize: "24px",
-                }}
-              /> */}
-            </IconButton>
+            ></IconButton>
           </NavLink>
           <Stack spacing={3}>
-              <Avatar alt="Remy Sharp" src="./Ellipse 1.svg" />
-            {/* <NavLink to={"/profile"}>
-            </NavLink> */}
+            <Avatar alt="Remy Sharp" src="./Ellipse 1.svg" />
           </Stack>
         </Stack>
       </Box>
