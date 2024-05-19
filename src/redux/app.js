@@ -21,6 +21,12 @@ const initialState = {
   },
   showVideo: false,
   showAudio: false,
+  userInfo: {
+    email: "",
+    fullname: "",
+    createdAt: "",
+    avatar: "",
+  },
 };
 
 export const Slice = createSlice({
@@ -65,6 +71,15 @@ export const Slice = createSlice({
     },
     showAudio: (state, action) => {
       state.showAudio = action.payload;
+    },
+    AddUserInfo: (state, action) => {
+      state.userInfo = action.payload;
+    },
+    updateUserInfo: (state, action) => {
+      state.userInfo = {
+        ...state.userInfo,
+        avatar: action.payload,
+      };
     },
   },
 });
@@ -162,5 +177,15 @@ export function ShowVideo(payload) {
 export function ShowAudio(payload) {
   return async (disptach) => {
     disptach(Slice.actions.showAudio(payload));
+  };
+}
+export function AddUserInfo(payload) {
+  return async (disptach) => {
+    disptach(Slice.actions.AddUserInfo(payload));
+  };
+}
+export function UpdateUserInfo(payload) {
+  return async (disptach) => {
+    disptach(Slice.actions.updateUserInfo(payload));
   };
 }

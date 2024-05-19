@@ -6,11 +6,30 @@ import {
   NewConversion,
   RemoveCurrentMessages,
 } from "../../redux/silice/conversions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadUserImage } from "../../service/uploadUserImage";
+import { updateUserProfile } from "../../service/user";
+import { toast } from "react-toastify";
+import { UpdateUserInfo } from "../../redux/app";
+import useFetchedUserInfo from "../../hook/useGetUserInfo";
 
 function Index() {
   const [select, SetSlect] = useState(0);
-  const disptach = useDispatch();
+  const dispatch = useDispatch();
+  const {
+    userInfo: { fullname = "NAN", avatar = "" },
+  } = useSelector((state) => state.app);
+  useFetchedUserInfo();
+  const handeChange = async (e) => {
+    try {
+      const { url } = await uploadUserImage(e);
+      dispatch(UpdateUserInfo(url));
+      await updateUserProfile(url);
+    } catch (error) {
+      console.log(error);
+      toast.error("Image Upload Failed Please Try again later.");
+    }
+  };
   return (
     <Box>
       <Box
@@ -55,8 +74,8 @@ function Index() {
               return (
                 <Box
                   onClick={() => {
-                    disptach(NewConversion(true));
-                    disptach(RemoveCurrentMessages());
+                    dispatch(NewConversion(true));
+                    dispatch(RemoveCurrentMessages());
                   }}
                   sx={{
                     background: select === index ? "#5B96F7" : "#F0F4FA",
@@ -67,8 +86,8 @@ function Index() {
                     <IconButton
                       onClick={() => {
                         SetSlect(index);
-                        disptach(NewConversion(true));
-                        disptach(RemoveCurrentMessages());
+                        dispatch(NewConversion(true));
+                        dispatch(RemoveCurrentMessages());
                       }}
                       sx={{
                         color: select === index ? "#FFFFFF" : "#080707",
@@ -99,7 +118,6 @@ function Index() {
             }}
           />
         </Stack>
-        <br />
 
         <Stack
           sx={{
@@ -120,8 +138,28 @@ function Index() {
               }}
             ></IconButton>
           </NavLink>
-          <Stack spacing={3}>
-            <Avatar alt="Remy Sharp" src="./Ellipse 1.svg" />
+          <Stack
+            // spacing={3}
+            sx={{
+              position: "relative",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Stack
+              sx={{
+                position: "absolute",
+                zIndex: 3,
+              }}
+            >
+              <input
+                type="file"
+                style={{ width: "39px", height: "40px", opacity: "0" }}
+                accept="Image/*"
+                onChange={handeChange}
+              />
+            </Stack>
+            <Avatar alt={fullname} src={avatar} />
           </Stack>
         </Stack>
       </Box>
