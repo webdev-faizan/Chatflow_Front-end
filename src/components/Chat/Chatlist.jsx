@@ -57,8 +57,17 @@ export const Chatlist = () => {
   return (
     <Stack spacing={1}>
       {convsersions.map((ele) => {
-        const { userId, name, online, time, unread, conversation_id, lastMsg } =
-          ele;
+        const {
+          userId,
+          name,
+          online,
+          time,
+          unread,
+          conversation_id,
+          lastMsg,
+          avatar,
+        } = ele;
+        console.log(avatar);
         return (
           <Box
             className="userChat"
@@ -77,7 +86,7 @@ export const Chatlist = () => {
               padding: "0 10px",
               marginTop: "10px",
               cursor: "pointer",
-              background: `${conversationId == userId ? "#5B96F7" : ""}`,
+              background: `${conversationId === userId ? "#5B96F7" : ""}`,
               "&:hover": {
                 background: "#5B96F7",
               },
@@ -91,17 +100,15 @@ export const Chatlist = () => {
               >
                 <Avatar
                   sx={{ width: "48px", height: "48px" }}
+                  src={avatar}
                   alt={name}
-                  src={name}
-
-                  // src="./Ellipse 1.svg"
                 />
               </StyledBadge>
             ) : (
               <Avatar
                 sx={{ width: "48px", height: "48px" }}
-                src={name}
-                // src="./Ellipse 1.svg"
+                src={avatar}
+                alt={name}
               />
             )}
 
@@ -116,36 +123,39 @@ export const Chatlist = () => {
               <Box>
                 <Typography
                   sx={{
-                    color: "#030303",
+                    color: `${conversationId === userId ? "white" : "#030303"}`,
                     fontFamily: "Manrope",
                     fontSize: "16px",
                     fontStyle: "normal",
                     fontWeight: "800",
                     background: "unset",
                     marginBottom: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {name}
                 </Typography>
                 <Typography
                   sx={{
-                    color: "#7C7C7D",
                     fontFamily: "Manrope",
                     fontSize: "14px",
                     fontStyle: "normal",
                     fontWeight: "600",
                     lineHeight: "normal",
                     background: "unset",
+                    color: `${conversationId === userId ? "white" : "#7C7C7D"}`,
                   }}
                 >
-                  {lastMsg}{" "}
+                  {lastMsg && lastMsg.length > 30
+                    ? lastMsg.slice(0, 26) + " ...."
+                    : lastMsg}
                 </Typography>
               </Box>
 
               <Box>
                 <Typography
                   sx={{
-                    color: "#686768",
+                    color: `${conversationId === userId ? "white" : "#686768"}`,
                     fontFamily: "Manrope",
                     fontSize: "12px",
                     fontStyle: "normal",
@@ -153,6 +163,7 @@ export const Chatlist = () => {
                     lineHeight: "normal",
                     marginBottom: "10px",
                     textAlign: "end",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {time}

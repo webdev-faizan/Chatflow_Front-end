@@ -81,7 +81,9 @@ const GeneralApp = () => {
       socket?.emit("get_direct_conversions", { token }, (data, userId) => {
         disptach(FetchDirectConversion(data, userId));
       });
-      window.scrollTo(0, document.body.scrollHeight);
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 200);
     });
     //! user notifcation about call
     socket.on("busy_another_call", ({ message }) => {

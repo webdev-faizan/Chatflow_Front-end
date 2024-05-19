@@ -12,7 +12,7 @@ const initialState = {
     current_conversion: null,
   },
   group_chat: {},
-  userInfo: {},
+  userInfo: { name: "", online: "", avatar: "" },
 };
 
 const slice = createSlice({
@@ -31,17 +31,17 @@ const slice = createSlice({
           unread,
           lastMessageTimeSort,
           status,
+          participants,
         } = el;
-
         let user = el.participants.find((ele) => ele._id !== userId);
+        console.log(user);
         const window_url = window.location.href;
         const open_conversion = window_url.split("/").at(-1).split("#").at(0);
-
         if (user._id.toString() === open_conversion) {
           const directConversionsUser = {
             conversation_id: el._id,
             userId: user?._id,
-            img: faker.image.avatar(),
+            avatar: user?.avatar || "",
             name: user?.fullname,
             lastMsg: lastMessage,
             time: lastMessageTime,
@@ -58,7 +58,7 @@ const slice = createSlice({
         const directConversionsUser = {
           conversation_id: el._id,
           userId: user?._id,
-          img: faker.image.avatar(),
+          avatar: user?.avatar || "",
           name: user?.fullname,
           lastMsg: lastMessage,
           time: lastMessageTime,
@@ -90,10 +90,12 @@ const slice = createSlice({
     },
     CurrentMessages(state, action) {
       state.direct_chat.current_messages = action.payload;
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight + 300);
+      }, 100);
     },
     updateCurrentMessage(state, action) {
       if (state.newConversion) return;
-
       window.scrollTo(0, document.body.scrollHeight + 300);
       state.direct_chat.current_messages.push(action.payload);
       setTimeout(() => {
@@ -104,12 +106,12 @@ const slice = createSlice({
       state.direct_chat.current_messages = [];
     },
     userInfo(state, action) {
-      
       const this_user = current(state.direct_chat.convsersions).find(
         (ele) => ele.userId === action.payload.userId
       );
       state.userInfo.name = this_user?.name;
       state.userInfo.online = this_user?.online;
+      state.userInfo.avatar = this_user?.avatar;
     },
   },
 });
@@ -146,7 +148,9 @@ export function RemoveCurrentMessages() {
 }
 export function UserInfo(userId) {
   return async (disptach) => {
+    // setTimeout(() => {
     disptach(slice.actions.userInfo({ userId }));
+    // }, 500);
   };
 }
 export function NewConversion(value) {

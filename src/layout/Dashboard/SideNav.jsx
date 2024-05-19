@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Stack, IconButton, Divider, Avatar } from "@mui/material";
 
 import { NavButton } from "../../data/index";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   NewConversion,
   RemoveCurrentMessages,
@@ -153,12 +153,17 @@ function Index() {
             <Stack
               sx={{
                 position: "absolute",
+                top: 0,
                 zIndex: 3,
               }}
             >
               <input
                 type="file"
-                style={{ width: "39px", height: "40px", opacity: "0" }}
+                style={{
+                  width: "39px",
+                  height: "50px",
+                  opacity: "0",
+                }}
                 accept="Image/*"
                 onChange={handeChange}
               />
@@ -166,8 +171,10 @@ function Index() {
             <Avatar alt={fullname} src={avatar} />
             <IconButton
               onClick={() => {
+                window.location.reload();
                 cookie.remove("auth");
                 cookie.remove("user_id");
+                window.location.href = "/login";
               }}
             >
               <SignOut size={32} />

@@ -4,13 +4,16 @@ import { Box, Stack, IconButton, Divider } from "@mui/material";
 import { Chatlist } from "../components/Chat/Chatlist";
 import Friends from "../layout/Dashboard/Friends";
 import { socket, token } from "../socket";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { User } from "phosphor-react";
 const Chart = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const disptach = useDispatch();
+  const {
+    userInfo: { fullname },
+  } = useSelector((state) => state.app);
 
   useEffect(() => {
     // socket?.emit("get_direct_conversions", { token }, (data, userId) => {
@@ -35,6 +38,21 @@ const Chart = () => {
           padding: "10px 10px 30px",
         }}
       >
+        <Typography
+          variant="h2"
+          sx={{
+            color: "#000",
+            fontFamily: "Manrope",
+            fontSize: "32px",
+            fontStyle: "normal",
+            fontWeight: 800,
+            lineHeight: "normal",
+            textTransform: "capitalize",
+            textAlign:"center"
+          }}
+        >
+        👋  {fullname} 
+        </Typography>
         <Stack direction={"column"} spacing={3}>
           <Stack
             direction={"row"}

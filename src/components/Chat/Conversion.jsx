@@ -710,6 +710,7 @@ import {
   Avatar,
   TextField,
   InputAdornment,
+  Button,
 } from "@mui/material";
 
 import {
@@ -836,20 +837,21 @@ const Conversion = () => {
       });
     } else {
       // ! for tet message
-      socket?.emit("text_message", {
-        token,
-        from: sentMessageInfo.from,
-        conversation_id: sentMessageInfo.roomId,
-        type: "Text",
-        message: inputValue,
+      if (inputValue.length > 0) {
+        socket?.emit("text_message", {
+          token,
+          from: sentMessageInfo.from,
+          conversation_id: sentMessageInfo.roomId,
+          type: "Text",
+          message: inputValue,
+        });
+        setInputValue("");
+      }
+      const sound = new Howl({
+        src: ["/mixkit-bubble-pop-up-alert-notification-2357.wav"],
       });
+      sound.play();
     }
-    const sound = new Howl({
-      src: ["/mixkit-bubble-pop-up-alert-notification-2357.wav"],
-    });
-    sound.play();
-
-    setInputValue("");
   };
   const { incoming } = useSelector((state) => state.video);
 
@@ -913,14 +915,14 @@ const Conversion = () => {
               >
                 <Avatar
                   sx={{ width: "48px", height: "48px" }}
-                  src={userInfo?.name}
+                  src={userInfo?.avatar}
                   alt={userInfo?.name}
                 />
               </StyledBadge>
             ) : (
               <Avatar
                 sx={{ width: "48px", height: "48px" }}
-                src={userInfo?.name}
+                src={userInfo?.avatar}
                 alt={userInfo?.name}
               />
             )}
@@ -1084,62 +1086,76 @@ const Conversion = () => {
               bottom="-10px"
               zIndex={100}
             >
-              <Stack
-                sx={{ alignItems: "center" }}
-                width={"inherit"}
-                direction={"row"}
-                spacing={1}
+              <form
+                style={{ width: "100%" }}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  sendMsg();
+                }}
               >
-                <TextField
-                  fullWidth
-                  placeholder="write a message..."
-                  sx={{
-                    background: "white",
-                    "&:hover": {
-                      outline: "none",
-                      border: "none",
-                    },
-                  }}
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  InputProps={{
-                    disableUnderline: true,
-                    // Corrected attribute name
-                    startAdornment: (
-                      <InputAdornment>
-                        <IconButton>
-                          <LinkSimple
-                            onClick={() => setShowAttachement(!ShowAttachement)}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment>
-                        <IconButton>
-                          <Smiley onClick={() => setShowPicker(!showPicker)} />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <IconButton
-                  onClick={sendMsg}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                  sx={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "12px",
-                    background: "#5B96F7",
-                    "&:hover": {
-                      background: "#5B96F7",
-                    },
-                  }}
+                <Stack
+                  sx={{ alignItems: "center" }}
+                  width={"inherit"}
+                  direction={"row"}
+                  spacing={1}
                 >
-                  <PaperPlaneTilt size={25} color="white" />
-                </IconButton>
-              </Stack>
+                  <TextField
+                    fullWidth
+                    placeholder="write a message..."
+                    sx={{
+                      background: "white",
+                      "&:hover": {
+                        outline: "none",
+                        border: "none",
+                      },
+                    }}
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    InputProps={{
+                      disableUnderline: true,
+                      // Corrected attribute name
+                      startAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <LinkSimple
+                              onClick={() =>
+                                setShowAttachement(!ShowAttachement)
+                              }
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <Smiley
+                              onClick={() => setShowPicker(!showPicker)}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  ></TextField>
+                  <Button type="submit">
+                    <IconButton
+                      // onClick={sendMsg}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      sx={{
+                        width: "48px",
+                        height: "48px",
+                        borderRadius: "12px",
+                        background: "#5B96F7",
+                        "&:hover": {
+                          background: "#5B96F7",
+                        },
+                      }}
+                    >
+                      <PaperPlaneTilt size={25} color="white" />
+                    </IconButton>
+                  </Button>
+                </Stack>
+              </form>
             </Stack>
           </Box>
         </Stack>

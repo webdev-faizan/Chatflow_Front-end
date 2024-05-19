@@ -205,9 +205,7 @@ const FriendElement = ({ handleClose }) => {
         disptach(NewConversion(false));
 
         navigate(`/c/${userId}#load`);
-
         disptach(SelectConversation({ roomId: conversation_id, userId }));
-
         socket.emit(
           "get_message",
           {
@@ -227,9 +225,9 @@ const FriendElement = ({ handleClose }) => {
       }
     );
 
-    socket?.emit("get_direct_conversions", { token }, (data, userId) => {
-      disptach(FetchDirectConversion(data, userId));
-    });
+    // socket?.emit("get_direct_conversions", { token }, (data, userId) => {
+    //   disptach(FetchDirectConversion(data, userId));
+    // });
     disptach(UserInfo(_id));
 
     // socket.emit(
