@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Stack, IconButton, Divider, Avatar } from "@mui/material";
+
 import { NavButton } from "../../data/index";
 import { NavLink } from "react-router-dom";
 import {
@@ -12,9 +13,12 @@ import { updateUserProfile } from "../../service/user";
 import { toast } from "react-toastify";
 import { UpdateUserInfo } from "../../redux/app";
 import useFetchedUserInfo from "../../hook/useGetUserInfo";
+import { SignOut } from "phosphor-react";
+import { Cookies } from "react-cookie";
 
 function Index() {
   const [select, SetSlect] = useState(0);
+  const cookie = new Cookies();
   const dispatch = useDispatch();
   const {
     userInfo: { fullname = "NAN", avatar = "" },
@@ -139,7 +143,7 @@ function Index() {
             ></IconButton>
           </NavLink>
           <Stack
-            // spacing={3}
+            spacing={1}
             sx={{
               position: "relative",
               justifyContent: "center",
@@ -160,6 +164,14 @@ function Index() {
               />
             </Stack>
             <Avatar alt={fullname} src={avatar} />
+            <IconButton
+              onClick={() => {
+                cookie.remove("auth");
+                cookie.remove("user_id");
+              }}
+            >
+              <SignOut size={32} />
+            </IconButton>
           </Stack>
         </Stack>
       </Box>
