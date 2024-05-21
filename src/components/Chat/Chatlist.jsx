@@ -15,6 +15,7 @@ import {
   FetchDirectConversion,
   NewConversion,
   RemoveCurrentMessages,
+  RemoveUserInfo,
   UserInfo,
 } from "../../redux/silice/conversions";
 export const Chatlist = () => {
@@ -194,13 +195,11 @@ export const Chatlist = () => {
                       className="trash showtrash"
                       onClick={(e) => {
                         e.stopPropagation();
-
                         disptach(RemoveCurrentMessages());
                         socket.emit("delete_chatlist", {
                           token,
                           conversions_id: conversation_id,
                         });
-
                         socket?.emit(
                           "get_direct_conversions",
                           { token },
@@ -208,9 +207,9 @@ export const Chatlist = () => {
                             disptach(FetchDirectConversion(data, userId));
                           }
                         );
-
-                        disptach(NewConversion(false));
                         navigate(`/c/#load`);
+                        disptach(NewConversion(true));
+                        disptach(RemoveUserInfo());
                       }}
                     />
                   </Box>

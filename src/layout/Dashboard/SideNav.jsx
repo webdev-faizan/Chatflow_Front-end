@@ -30,7 +30,6 @@ function Index() {
       dispatch(UpdateUserInfo(url));
       await updateUserProfile(url);
     } catch (error) {
-      console.log(error);
       toast.error("Image Upload Failed Please Try again later.");
     }
   };

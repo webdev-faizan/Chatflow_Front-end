@@ -4,11 +4,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import { Stack } from "@mui/system";
-import { Typography } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import { socket } from "../socket";
 import { Howl } from "howler";
+import { useSelector } from "react-redux";
 
 const RingingCall = ({ state, setState, handleAcceptCall, id }) => {
+  const {
+    callUserInfo: { Username, profileImage },
+  } = useSelector((state) => state.app);
   const handleClose = () => {
     setState(false);
   };
@@ -89,7 +93,11 @@ const RingingCall = ({ state, setState, handleAcceptCall, id }) => {
             spacing={3}
             alignItems={"center"}
           >
-            {" "}
+            <Avatar
+              sx={{ width: "30px", height: "30px" }}
+              alt={Username}
+              src={profileImage}
+            />
             <Typography
               sx={{
                 fontSize: "1.5em",

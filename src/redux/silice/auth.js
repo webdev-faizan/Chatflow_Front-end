@@ -74,7 +74,7 @@ export function LoginUser(FormData) {
         toast.success(data?.message, {
           autoClose: 1000,
         });
-        const expirationTime = new Date(Date.now() + 30 * 60 * 1000);
+        const expirationTime = new Date(Date.now() + 30 + 24 * 60 * 60 * 1000);
         cookie.set("auth", data?.token, {
           path: "/",
           expires: expirationTime,

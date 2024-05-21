@@ -113,6 +113,11 @@ const slice = createSlice({
       state.userInfo.online = this_user?.online;
       state.userInfo.avatar = this_user?.avatar;
     },
+    removeUserInfo(state) {
+      state.userInfo.name = "";
+      state.userInfo.online = "";
+      state.userInfo.avatar = "";
+    },
   },
 });
 
@@ -148,9 +153,14 @@ export function RemoveCurrentMessages() {
 }
 export function UserInfo(userId) {
   return async (disptach) => {
-    // setTimeout(() => {
-    disptach(slice.actions.userInfo({ userId }));
-    // }, 500);
+    setTimeout(() => {
+      disptach(slice.actions.userInfo({ userId }));
+    }, 500);
+  };
+}
+export function RemoveUserInfo() {
+  return async (disptach) => {
+    disptach(slice.actions.removeUserInfo());
   };
 }
 export function NewConversion(value) {

@@ -17,17 +17,29 @@ import CardContent from "@mui/joy/CardContent";
 import { Avatar, IconButton } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
-import { CallNotifcation, ShowAudio } from "../../../redux/app";
+import {
+  CallNotifcation,
+  SetCallUserInfo,
+  ShowAudio,
+} from "../../../redux/app";
 
 const Audiocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
-
   const { sentMessageInfo, showAudio } = useSelector((state) => state.app);
+  const {
+    userInfo: { name, avatar: profile },
+  } = useSelector((state) => state.conversions);
+  const [isCallUser, setIsCallUser] = useState(false);
+  const [isCallAccept, setIsAccept] = useState(false);
+  const {
+    userInfo: { fullname, avatar },
+    callUserInfo: { Username, profileImage },
+  } = useSelector((state) => state.app);
   const { incoming } = useSelector((state) => state.video);
-  const userVideo = useRef();
-  const [signal, setSignal] = useState("");
   const connectionRef = useRef();
+  const userAudio = useRef();
   const [id, setId] = useState();
+  const [signal, setSignal] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,21 +47,21 @@ const Audiocall = forwardRef((props, ref) => {
       src: ["/mixkit-happy-bells-notification-937.wav"],
     });
 
-    socket?.on("calluser_audio", ({ signal, to }) => {
+    socket?.on("calluser_audio", ({ signal, to, avatar, fullname }) => {
       if (!incoming) {
         sound.play();
         setState(true);
         setId(to);
         setSignal(signal);
-        setTimeout(() => {
-          setState(false);
-        }, 20000);
+        dispatch(SetCallUserInfo({ Username: fullname, profileImage: avatar }));
+        // setTimeout(() => {
+        //   setState(false);
+        // }, 20000);
       } else {
         socket.emit("busy_another_call", { id: to });
       }
     });
     socket?.on("audio_call_end", ({ message }) => {
-      alert('')
       dispatch(ShowAudio(false));
       dispatch(incomingCall(false));
       dispatch(CallNotifcation({ ShowCallNotifcation: true, message }));
@@ -63,33 +75,46 @@ const Audiocall = forwardRef((props, ref) => {
 
   let peer1;
   let peer2;
-  // const [isMuted, setIsMuted] = useState([]);
-  const [activeStreams_1, setActiveStreams_1] = useState();
-  const [activeStreams_2, setActiveStreams_2] = useState();
-
   const requesAudioToCallUser = async () => {
+    dispatch(SetCallUserInfo({ Username: name, profileImage: profile }));
+
     dispatch(ShowAudio(true));
+    setIsCallUser(true);
     dispatch(incomingCall(true));
+
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
-        // activeStreams_1(stream);
         peer1 = new Peer({
           initiator: true,
           trickle: false,
           stream: stream,
         });
 
-        peer1.on("signal", (data) => {
+        peer1?.on("signal", (data) => {
           socket.emit("calluser_audio", {
             userToCall: sentMessageInfo.from,
             token,
             signalData: data,
+            fullname,
+            avatar,
           });
         });
-
-        peer1.on("stream", (remoteStream) => {
-          userVideo.current.srcObject = remoteStream;
+        peer1?.on("close", () => {
+          stream.getTracks().forEach((track) => track.stop());
+          dispatch(ShowAudio(false));
+          dispatch(incomingCall(false));
+          setIsCallUser(false);
+          setIsAccept(false);
+          peer1.destroy();
+        });
+        peer1.on("error", (err) => {
+          console.error("Error in peer connection:", err);
+          peer1.destroy(); // Optionally close the connection on error
+          // Optionally attempt to reconnect or notify the user
+        });
+        peer1?.on("stream", (remoteStream) => {
+          userAudio.current.srcObject = remoteStream;
         });
 
         socket.on("callAccepted", (signal) => {
@@ -102,9 +127,16 @@ const Audiocall = forwardRef((props, ref) => {
         console.log(error);
       });
   };
-
-  const handleAudioAcceptCall = () => {
+  const handleAudioAcceptCall = async () => {
+    // dispatch(
+    //   SetCallUserInfo({
+    //     Username: callRequestInfo?.fullname,
+    //     profileImage: callRequestInfo.avatar,
+    //   })
+    // );
     dispatch(ShowAudio(true));
+    setIsAccept(true);
+    setIsCallUser(false);
     dispatch(incomingCall(true));
     navigator.mediaDevices
       .getUserMedia({ audio: true })
@@ -114,22 +146,31 @@ const Audiocall = forwardRef((props, ref) => {
           trickle: false,
           stream: stream,
         });
-        // activeStreams_2(stream);
-
-        peer2.on("signal", (data) => {
+        peer2?.on("signal", (data) => {
           socket.emit("answerCall", {
             signal: data,
             caluserinfo: id,
           });
         });
-
-        peer2.on("stream", (remoteStream) => {
-          if (userVideo.current) {
-            userVideo.current.srcObject = remoteStream;
+        peer2.on("close", () => {
+          dispatch(ShowAudio(false));
+          dispatch(incomingCall(false));
+          stream.getTracks().forEach((track) => track.stop());
+          setIsCallUser(false);
+          setIsAccept(false);
+          peer2.destroy();
+        });
+        peer2.on("error", (err) => {
+          console.error("Error in peer connection:", err);
+          peer2.destroy();
+        });
+        peer2?.on("stream", (remoteStream) => {
+          if (userAudio.current) {
+            userAudio.current.srcObject = remoteStream;
           }
         });
 
-        peer2.signal(signal);
+        peer2?.signal(signal);
         connectionRef.current = peer2;
       })
       .catch((error) => {
@@ -139,7 +180,7 @@ const Audiocall = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     requesAudioToCallUser: requesAudioToCallUser,
   }));
-  const endCall = async () => {
+  async function endCall() {
     try {
       const sound = new Howl({
         src: ["/error-warning-login-denied-132113.mp3"],
@@ -147,22 +188,12 @@ const Audiocall = forwardRef((props, ref) => {
       sound.play();
       dispatch(ShowAudio(false));
       dispatch(incomingCall(false));
-      // console.log(isMuted);
-      activeStreams_1.getTracks().forEach((track) => track.stop());
-      activeStreams_2.getTracks().forEach((track) => track.stop());
-
+      connectionRef?.current?.destroy();
       socket.emit("audio_call_end", { id });
-
-      if (peer1) {
-        peer1.destroy();
-      }
-      if (peer2) {
-        peer2.destroy();
-      }
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   return (
     <Box
@@ -199,7 +230,7 @@ const Audiocall = forwardRef((props, ref) => {
                 padding: "0",
               }}
             >
-              <audio ref={userVideo} autoPlay loop></audio>
+              <audio ref={userAudio} autoPlay loop></audio>
             </CardCover>
             <CardContent>
               <Box
@@ -211,16 +242,36 @@ const Audiocall = forwardRef((props, ref) => {
                   padding: "0 40px",
                 }}
               >
-                <Avatar
-                  sx={{ width: "100px", height: "100px" }}
-                  alt={"Faizan ALi"}
-                  src="FA A"
-                />
-                <Avatar
-                  sx={{ width: "100px", height: "100px" }}
-                  alt={"Faizan ALi"}
-                  src="FA A"
-                />
+                {isCallUser && (
+                  <>
+                    <Avatar
+                      sx={{ width: "100px", height: "100px" }}
+                      alt={fullname}
+                      src={avatar}
+                    />
+                    <Avatar
+                      sx={{ width: "100px", height: "100px" }}
+                      alt={Username}
+                      src={profileImage}
+                    />
+                  </>
+                )}
+                {isCallAccept && (
+                  <>
+                    <Avatar
+                      sx={{ width: "100px", height: "100px" }}
+                      alt={fullname}
+                      src={avatar}
+                    />
+                    <Avatar
+                      sx={{ width: "100px", height: "100px" }}
+                      alt={Username}
+                      src={profileImage}
+                      // alt={name}
+                      // src={profile}
+                    />
+                  </>
+                )}
               </Box>
 
               <Box

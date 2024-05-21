@@ -80,7 +80,7 @@ const UserElement = () => {
     >
       <Stack spacing={2}>
         {alluser?.map((ele, index) => {
-          const { status, fullname, _id } = ele;
+          const { status, fullname, _id, avatar } = ele;
           return (
             <Stack
               key={_id}
@@ -89,16 +89,16 @@ const UserElement = () => {
               justifyContent="space-between"
             >
               <Stack direction="row" alignItems={"center"} spacing={2}>
-                {status == "online" ? (
+                {status === "online" ? (
                   <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                     variant="dot"
                   >
-                    <Avatar alt={"fa"} />
+                    <Avatar alt={fullname} src={avatar} />
                   </StyledBadge>
                 ) : (
-                  <Avatar alt={"fa"} />
+                  <Avatar alt={fullname} src={avatar} />
                 )}
                 <Stack spacing={0.3}>
                   <Typography variant="subtitle2">{fullname}</Typography>
@@ -149,7 +149,7 @@ const FriendRequestElement = () => {
       <Stack spacing={2}>
         {requestToConnected.map((ele) => {
           // const { fullname, _id, status } = ele.recipeint;
-          const { fullname, _id, status } = ele.sender;
+          const { fullname, _id, status, avatar } = ele.sender;
           return (
             <Stack
               direction="row"
@@ -157,17 +157,16 @@ const FriendRequestElement = () => {
               justifyContent="space-between"
             >
               <Stack direction="row" alignItems={"center"} spacing={2}>
-                {" "}
-                {status == "online" ? (
+                {status === "online" ? (
                   <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                     variant="dot"
                   >
-                    <Avatar alt={"fa"} />
+                    <Avatar alt={fullname} src={avatar} />
                   </StyledBadge>
                 ) : (
-                  <Avatar alt={"fa"} />
+                  <Avatar alt={fullname} src={avatar} />
                 )}
                 <Stack spacing={0.3}>
                   <Typography variant="subtitle2">{fullname}</Typography>
@@ -203,7 +202,6 @@ const FriendElement = ({ handleClose }) => {
       { token, from: _id },
       (conversation_id, userId) => {
         disptach(NewConversion(false));
-
         navigate(`/c/${userId}#load`);
         disptach(SelectConversation({ roomId: conversation_id, userId }));
         socket.emit(
@@ -216,18 +214,18 @@ const FriendElement = ({ handleClose }) => {
             disptach(FetchCurrentMessages(data));
           }
         );
-
         socket?.emit("get_direct_conversions", { token }, (data, userId) => {
           disptach(FetchDirectConversion(data, userId));
         });
+        disptach(UserInfo(userId));
 
         handleClose();
       }
     );
 
-    // socket?.emit("get_direct_conversions", { token }, (data, userId) => {
-    //   disptach(FetchDirectConversion(data, userId));
-    // });
+    socket?.emit("get_direct_conversions", { token }, (data, userId) => {
+      disptach(FetchDirectConversion(data, userId));
+    });
     disptach(UserInfo(_id));
 
     // socket.emit(
@@ -266,7 +264,7 @@ const FriendElement = ({ handleClose }) => {
     >
       <Stack spacing={2}>
         {friends?.map((ele) => {
-          const { _id, fullname, status } = ele;
+          const { _id, fullname, status, avatar } = ele;
 
           return (
             <>
@@ -283,10 +281,10 @@ const FriendElement = ({ handleClose }) => {
                       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                       variant="dot"
                     >
-                      <Avatar alt="fa" />
+                      <Avatar alt={fullname} src={avatar} />
                     </StyledBadge>
                   ) : (
-                    <Avatar alt="fa" />
+                    <Avatar alt={fullname} src={avatar} />
                   )}
                   <Stack spacing={0.3}>
                     <Typography variant="subtitle2">{fullname}</Typography>

@@ -27,6 +27,10 @@ const initialState = {
     createdAt: "",
     avatar: "",
   },
+  callUserInfo: {
+    Username: "",
+    profileImage: "",
+  },
 };
 
 export const Slice = createSlice({
@@ -80,6 +84,10 @@ export const Slice = createSlice({
         ...state.userInfo,
         avatar: action.payload,
       };
+    },
+    setCallUserInfo: (state, action) => {
+      state.callUserInfo.Username = action.payload.Username;
+      state.callUserInfo.profileImage = action.payload.profileImage;
     },
   },
 });
@@ -187,5 +195,10 @@ export function AddUserInfo(payload) {
 export function UpdateUserInfo(payload) {
   return async (disptach) => {
     disptach(Slice.actions.updateUserInfo(payload));
+  };
+}
+export function SetCallUserInfo(payload) {
+  return async (disptach) => {
+    disptach(Slice.actions.setCallUserInfo(payload));
   };
 }

@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./redux/Store";
 import { BrowserRouter } from "react-router-dom";
+import process from 'process';
+window.process = process;
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
