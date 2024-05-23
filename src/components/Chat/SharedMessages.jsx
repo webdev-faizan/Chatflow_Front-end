@@ -57,8 +57,7 @@ const SharedMessages = () => {
           paddingLeft: "30px",
         }}
       >
-        <IconButton onClick={() => dispatch(updateSidebarTap("CONTACT"))}
-        >
+        <IconButton onClick={() => dispatch(updateSidebarTap("CONTACT"))}>
           <ArrowLeft size={24} />
         </IconButton>
       </Box>

@@ -1,4 +1,4 @@
-export const uploadUserImage = async (e) => {
+export const uploadUserAssest = async (e) => {
     const image = e.target.files[0];
     if (!image.type.startsWith("image/")) return;
     let formData = new FormData();

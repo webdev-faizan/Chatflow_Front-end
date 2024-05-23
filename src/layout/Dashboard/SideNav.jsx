@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import { Box, Stack, IconButton, Divider, Avatar } from "@mui/material";
-
+import { SignOut } from "phosphor-react";
+import { Cookies } from "react-cookie";
+import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import { NavButton } from "../../data/index";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   NewConversion,
   RemoveCurrentMessages,
 } from "../../redux/silice/conversions";
-import { useDispatch, useSelector } from "react-redux";
-import { uploadUserImage } from "../../service/uploadUserImage";
+import { uploadUserAssest } from "../../service/uploadUserAssest.js";
 import { updateUserProfile } from "../../service/user";
-import { toast } from "react-toastify";
 import { UpdateUserInfo } from "../../redux/app";
 import useFetchedUserInfo from "../../hook/useGetUserInfo";
-import { SignOut } from "phosphor-react";
-import { Cookies } from "react-cookie";
-
-function Index() {
+function SideNav() {
   const [select, SetSlect] = useState(0);
   const cookie = new Cookies();
   const dispatch = useDispatch();
@@ -26,7 +24,7 @@ function Index() {
   useFetchedUserInfo();
   const handeChange = async (e) => {
     try {
-      const { url } = await uploadUserImage(e);
+      const { url } = await uploadUserAssest(e);
       dispatch(UpdateUserInfo(url));
       await updateUserProfile(url);
     } catch (error) {
@@ -185,4 +183,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default SideNav;

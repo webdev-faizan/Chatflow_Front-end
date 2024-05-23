@@ -175,7 +175,6 @@ export function CallNotifcation(payload) {
     disptach(Slice.actions.CallNotifcation(payload));
   };
 }
-// show video
 
 export function ShowVideo(payload) {
   return async (disptach) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   TextField,
@@ -6,7 +6,6 @@ import {
   Typography,
   Box,
   Link,
-  Stack,
 } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -40,7 +39,7 @@ const schemaSignup = yup.object({
 const Signup = () => {
   const dispatch = useDispatch();
   const isSmallScreen = useMediaQuery("(max-width:600px)");
-  // const { isLoadding } = useSelector((state) => state.auth);
+  const { isLoadding } = useSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -94,6 +93,7 @@ const Signup = () => {
           />
           <Button
             type="submit"
+            disabled={isLoadding}
             variant="contained"
             color="primary"
             fullWidth

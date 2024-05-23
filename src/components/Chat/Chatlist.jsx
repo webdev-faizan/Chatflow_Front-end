@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import { Trash } from "phosphor-react";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
@@ -8,7 +9,6 @@ import { StyledBadge } from "../StyledBadge";
 import { socket, token } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { Trash } from "phosphor-react";
 import { SelectConversation } from "../../redux/app";
 import {
   FetchCurrentMessages,

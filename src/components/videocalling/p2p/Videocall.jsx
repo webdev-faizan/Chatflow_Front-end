@@ -26,8 +26,6 @@ const Videocall = forwardRef((props, ref) => {
   const { incoming } = useSelector((state) => state.video);
   const userVideo = useRef();
   const myVideo = useRef();
-  const [startVideoCalling, setStartVideoCalling] = useState(false);
-
   const [signal, setSignal] = useState("");
   const connectionRef = useRef();
   const [id, setId] = useState();
@@ -39,18 +37,6 @@ const Videocall = forwardRef((props, ref) => {
     });
 
     socket?.on("calluser", ({ signal, to }) => {
-      // let timePlayed = 0;
-
-      // sound.on("play", () => {
-      //   const interval = setInterval(() => {
-      //     timePlayed += 1;
-      //     if (timePlayed >= 30) {
-      //       sound.stop();
-      //       clearInterval(interval);
-      //     }
-      //   }, 1000);
-      // });
-
       if (!incoming) {
         sound.play();
 
@@ -71,6 +57,7 @@ const Videocall = forwardRef((props, ref) => {
     });
     return () => {
       socket?.off("calluser");
+      socket?.off("Video_call_end");
       socket?.off("callAccepted");
     };
   }, [socket]);
@@ -78,11 +65,9 @@ const Videocall = forwardRef((props, ref) => {
   let peer1;
   let peer2;
   const requestVideoToCallUser = () => {
-    setStartVideoCalling(true);
     dispatch(ShowVideo(true));
     dispatch(incomingCall(true));
-
-      navigator.mediaDevices
+    navigator.mediaDevices
       .getUserMedia({ audio: true, video: true })
       .then((stream) => {
         myVideo.current.srcObject = stream;
@@ -164,11 +149,6 @@ const Videocall = forwardRef((props, ref) => {
       dispatch(incomingCall(false));
       myVideo.current.srcObject.getTracks().forEach((track) => track.stop());
       userVideo.current.srcObject.getTracks().forEach((track) => track.stop());
-      // peer1.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
-      // peer2.replaceTrack(myVideo.current.srcObject.getTracks()[0], null);
-      // peer2.removeAllListeners();
-      // peer1.removeAllListeners();
-
       if (peer1) {
         peer1.destroy();
       }
@@ -191,7 +171,6 @@ const Videocall = forwardRef((props, ref) => {
       {showVideo && (
         <Box
           sx={{
-            // display: "none",
             zIndex: 289,
             position: "fixed",
             right: "28px",
@@ -213,19 +192,12 @@ const Videocall = forwardRef((props, ref) => {
               <video
                 style={{
                   width: "500px",
-                  // height:"400px"
                 }}
                 ref={userVideo}
                 autoPlay
                 loop
-                // muted
-                // poster="https://assets.codepen.io/6093409/river.jpg"
-              >
-                <source
-                // src="https://assets.codepen.io/6093409/river.mp4"
-                // type="video/mp4"
-                />
-              </video>
+                poster="https://assets.codepen.io/6093409/river.jpg"
+              ></video>
             </CardCover>
             <CardContent>
               <Box>

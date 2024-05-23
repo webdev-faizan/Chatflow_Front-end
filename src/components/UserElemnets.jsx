@@ -148,7 +148,6 @@ const FriendRequestElement = () => {
     >
       <Stack spacing={2}>
         {requestToConnected.map((ele) => {
-          // const { fullname, _id, status } = ele.recipeint;
           const { fullname, _id, status, avatar } = ele.sender;
           return (
             <Stack
@@ -227,23 +226,6 @@ const FriendElement = ({ handleClose }) => {
       disptach(FetchDirectConversion(data, userId));
     });
     disptach(UserInfo(_id));
-
-    // socket.emit(
-    //   "get_message",
-    //   {
-    //     conversions_id: conversation_id,
-    //   },
-    //   (data) => {
-    //     disptach(FetchCurrentMessages(data));
-    //   }
-    // );
-
-    // socket?.on("start_chat", (data) => {
-
-    //   // disptach(SelectConversation(data._id));
-    // });
-
-    // handleClose();
   };
 
   const disptach = useDispatch();

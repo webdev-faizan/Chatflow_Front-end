@@ -54,9 +54,6 @@ const Audiocall = forwardRef((props, ref) => {
         setId(to);
         setSignal(signal);
         dispatch(SetCallUserInfo({ Username: fullname, profileImage: avatar }));
-        // setTimeout(() => {
-        //   setState(false);
-        // }, 20000);
       } else {
         socket.emit("busy_another_call", { id: to });
       }
@@ -110,8 +107,7 @@ const Audiocall = forwardRef((props, ref) => {
         });
         peer1.on("error", (err) => {
           console.error("Error in peer connection:", err);
-          peer1.destroy(); // Optionally close the connection on error
-          // Optionally attempt to reconnect or notify the user
+          peer1.destroy();
         });
         peer1?.on("stream", (remoteStream) => {
           userAudio.current.srcObject = remoteStream;
@@ -128,12 +124,6 @@ const Audiocall = forwardRef((props, ref) => {
       });
   };
   const handleAudioAcceptCall = async () => {
-    // dispatch(
-    //   SetCallUserInfo({
-    //     Username: callRequestInfo?.fullname,
-    //     profileImage: callRequestInfo.avatar,
-    //   })
-    // );
     dispatch(ShowAudio(true));
     setIsAccept(true);
     setIsCallUser(false);
@@ -210,7 +200,6 @@ const Audiocall = forwardRef((props, ref) => {
       {showAudio && (
         <Box
           sx={{
-            // display: "none",
             zIndex: 289,
             position: "fixed",
             right: "28px",
@@ -267,8 +256,6 @@ const Audiocall = forwardRef((props, ref) => {
                       sx={{ width: "100px", height: "100px" }}
                       alt={Username}
                       src={profileImage}
-                      // alt={name}
-                      // src={profile}
                     />
                   </>
                 )}

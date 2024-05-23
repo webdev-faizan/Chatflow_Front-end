@@ -6,7 +6,6 @@ const initialState = {
   incoming: false,
   connection: {
     signal: null,
-    signal: null,
   },
   requestToCall: null,
 };

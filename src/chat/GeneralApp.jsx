@@ -1,10 +1,11 @@
+import { useDispatch } from "react-redux";
+import { Cookies } from "react-cookie";
 import React, { useEffect } from "react";
 import { Box, Stack } from "@mui/material";
 import Chart from "./Chart";
 import Conversion from "../components/Chat/Conversion";
 import Message from "../components/Chat/message";
 import { connectSocket, socket } from "../socket";
-import { Cookies } from "react-cookie";
 import {
   SelectConversation,
   showSnackBar,
@@ -12,7 +13,6 @@ import {
   ShowVideo,
   ShowAudio,
 } from "../redux/app";
-import { useDispatch } from "react-redux";
 import { Howl } from "howler";
 import {
   FetchDirectConversion,
@@ -70,13 +70,12 @@ const GeneralApp = () => {
     });
 
     socket?.on("new_message", (data) => {
-      if (token != data.token) {
+      if (token != data?.token) {
         const sound = new Howl({
           src: ["/mixkit-happy-bells-notification-937.wav"],
         });
         sound.play();
       }
-
       disptach(UpdateCurrentMessage(data));
       socket?.emit("get_direct_conversions", { token }, (data, userId) => {
         disptach(FetchDirectConversion(data, userId));
@@ -111,6 +110,9 @@ const GeneralApp = () => {
       socket?.off("friend_request_sent");
       socket?.off("get_direct_conversions");
       socket?.off("new_message");
+      socket?.off("call_denied");
+      socket?.off("user_offline");
+      socket?.off("busy_another_call");
     };
   }, [socket]);
 

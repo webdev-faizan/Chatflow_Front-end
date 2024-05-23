@@ -1,8 +1,8 @@
+import { useLayoutEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import AuthRoutes from "./AuthRoutes";
 import IndexRoutes from "./IndexRoutes";
 import { Cookies } from "react-cookie";
-import { useEffect, useState } from "react";
 
 const Routes = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const Routes = () => {
   const [isAuthenticated] = useState(
     Boolean(cookie.get("auth") && cookie.get("auth") !== " undefined")
   );
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (location.pathname === "/") {
       isAuthenticated ? navigate("/c") : navigate("/login");
     }

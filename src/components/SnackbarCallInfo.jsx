@@ -1,10 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { CallNotifcation, showSnackBar } from "../redux/app";
-
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import { Alert } from "@mui/material";
+import { CallNotifcation } from "../redux/app";
 
 export default function PositionedSnackbar() {
   const { callNotifcation } = useSelector((state) => state.app);

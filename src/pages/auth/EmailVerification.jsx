@@ -1,8 +1,8 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Button, Typography, Box } from "@mui/material";
 import { EmailOutlined as EmailIcon } from "@mui/icons-material";
 import { useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { verifiedEmail } from "../../redux/silice/auth";
 const EmailVerification = () => {
   let [searchParams] = useSearchParams();

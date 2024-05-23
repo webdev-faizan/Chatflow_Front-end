@@ -9,13 +9,7 @@ import {
   MenuItem,
   Menu,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import {
-  Download,
-  Image,
-  DotsThreeVertical,
-  DownloadSimple,
-} from "phosphor-react";
+import { Image, DotsThreeVertical, DownloadSimple } from "phosphor-react";
 import { message_options } from "../../data/index";
 import { Cookies } from "react-cookie";
 const cookie = new Cookies().get("user_id");
@@ -81,8 +75,7 @@ const DocMsg = ({ ele }) => {
   );
 };
 const LinkMsg = ({ ele }) => {
-  const time=ele.created_at.split("+").at(-1)
-
+  const time = ele.created_at.split("+").at(-1);
 
   return (
     <Stack
@@ -209,8 +202,7 @@ const TimeLine = ({ ele }) => {
 
 const TextMsg = ({ ele }) => {
   const path = window.location.pathname;
-  const time=ele.created_at.split("+").at(-1)
-  
+  const time = ele.created_at.split("+").at(-1);
 
   return (
     <Stack

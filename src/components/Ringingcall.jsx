@@ -5,9 +5,9 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import { Stack } from "@mui/system";
 import { Avatar, Typography } from "@mui/material";
-import { socket } from "../socket";
 import { Howl } from "howler";
 import { useSelector } from "react-redux";
+import { socket } from "../socket";
 
 const RingingCall = ({ state, setState, handleAcceptCall, id }) => {
   const {

@@ -7,7 +7,6 @@ import thunk from "redux-thunk";
 export const store = configureStore(
   {
     reducer: persistReducer(rootPersistConfig, rootReducer),
-
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,

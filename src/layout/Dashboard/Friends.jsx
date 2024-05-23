@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { token, socket } from "../../socket";
+import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -58,7 +57,7 @@ const Friends = ({ open, handleClose }) => {
             case 0:
               return <UserElement />;
             case 1:
-              return <FriendElement handleClose={handleClose}/>;
+              return <FriendElement handleClose={handleClose} />;
             case 2:
               return <FriendRequestElement />;
             default:

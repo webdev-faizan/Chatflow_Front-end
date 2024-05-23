@@ -1,6 +1,5 @@
 import React from "react";
-import { faker } from "@faker-js/faker";
-import { Typography, Stack, IconButton, Avatar, Divider } from "@mui/material";
+import { Typography, Stack } from "@mui/material";
 const SelectConverstion = () => {
   return (
     <Stack

@@ -1,29 +1,18 @@
 import { Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { User } from "phosphor-react";
 import { Box, Stack, IconButton, Divider } from "@mui/material";
 import { Chatlist } from "../components/Chat/Chatlist";
 import Friends from "../layout/Dashboard/Friends";
-import { socket, token } from "../socket";
-import { useDispatch, useSelector } from "react-redux";
-import { User } from "phosphor-react";
+
 const Chart = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const disptach = useDispatch();
   const {
     userInfo: { fullname },
   } = useSelector((state) => state.app);
-
-  useEffect(() => {
-    // socket?.emit("get_direct_conversions", { token }, (data, userId) => {
-    //   disptach(FetchDirectConversion(data, userId));
-    // });
-
-    return () => {
-      // socket?.off("get_direct_conversions");
-    };
-  }, [socket]);
 
   return (
     <Box component={"section"}>
@@ -48,10 +37,10 @@ const Chart = () => {
             fontWeight: 800,
             lineHeight: "normal",
             textTransform: "capitalize",
-            textAlign:"center"
+            textAlign: "center",
           }}
         >
-        👋  {fullname} 
+          👋 {fullname}
         </Typography>
         <Stack direction={"column"} spacing={3}>
           <Stack
