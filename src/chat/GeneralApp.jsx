@@ -19,10 +19,12 @@ import {
   UpdateCurrentMessage,
 } from "../redux/silice/conversions";
 import { incomingCall } from "../redux/silice/videocall";
+import { useNavigate } from "react-router-dom";
 
 const GeneralApp = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  const navigate = useNavigate();
   const disptach = useDispatch();
   const soundAngery = new Howl({
     src: ["/ error-warning-login-denied-132113.mp3"],
@@ -91,8 +93,10 @@ const GeneralApp = () => {
     });
 
     socket.on("user_offline", ({ message }) => {
+      disptach(ShowVideo(false));
+      disptach(ShowAudio(false));
+      disptach(incomingCall(false));
       soundAngery.play();
-
       disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
     });
     socket.on("call_denied", ({ message }) => {
@@ -101,6 +105,13 @@ const GeneralApp = () => {
       disptach(incomingCall(false));
       soundAngery.play();
       disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
+    });
+    socket.on("connect_error", (err) => {
+      if (err.message === "not authorized") {
+        cookie.remove("auth");
+        cookie.remove("id");
+        navigate("/login");
+      }
     });
 
     return () => {
@@ -113,15 +124,16 @@ const GeneralApp = () => {
       socket?.off("call_denied");
       socket?.off("user_offline");
       socket?.off("busy_another_call");
+      socket?.off("connect_error");
     };
   }, [socket]);
 
   return (
-    <Box>
+    <Box minWidth="1000px">
       <Stack direction={"row"} sx={{ position: "fixed", left: "100px" }}>
         <Chart />
       </Stack>
-      <Stack direction={"row"}>
+      <Stack direction={"row"} minWidth={1000}>
         <Stack
           direction={"column"}
           sx={{ marginLeft: "460px", marginTop: "110px" }}

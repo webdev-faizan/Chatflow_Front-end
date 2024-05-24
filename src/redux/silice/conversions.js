@@ -1,13 +1,9 @@
-import { faker } from "@faker-js/faker";
 import { createSlice, current } from "@reduxjs/toolkit";
-import { Cookies } from "react-cookie";
 import { socket, token } from "../../socket";
-
-// const user_id = new Cookies().get("user_id");
 const initialState = {
   newConversion: true,
   direct_chat: {
-    convsersions: [], //chat list,
+    convsersions: [],
     current_messages: [],
     current_conversion: null,
   },
@@ -31,12 +27,11 @@ const slice = createSlice({
           unread,
           lastMessageTimeSort,
           status,
-          participants,
         } = el;
         let user = el.participants.find((ele) => ele._id !== userId);
-        console.log(user);
         const window_url = window.location.href;
         const open_conversion = window_url.split("/").at(-1).split("#").at(0);
+        console.log("check ", user?.status);
         if (user._id.toString() === open_conversion) {
           const directConversionsUser = {
             conversation_id: el._id,
@@ -81,9 +76,7 @@ const slice = createSlice({
       const sortUserChatList = removeDeleteUser.sort((a, b) => {
         return Date.parse(b.sort) - Date.parse(a.sort);
       });
-
       state.direct_chat.convsersions = sortUserChatList;
-      // state.direct_chat.convsersions.push({_conversation_id:actions.directConversions._id})
     },
     CurrentConversation(state, actions) {
       state.direct_chat.current_conversion = actions.payload;

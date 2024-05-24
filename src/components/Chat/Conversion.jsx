@@ -24,67 +24,29 @@ import {
   File,
   Image,
   PaperPlaneTilt,
+  XCircle,
 } from "phosphor-react";
 import { socket, token } from "../../socket";
 import SelectConverstion from "../SelectConverstion";
 import { P2PCallContext } from "../../routes/IndexRoutes";
 import { uploadUserAssest } from "../../service/uploadUserAssest.js";
+import { toast } from "react-toastify";
 const Conversion = () => {
   const { requestCall } = useContext(P2PCallContext);
+  const [PreviewImage, setPreviewImage] = useState(null);
+  const [previewType, setPreviewType] = useState(null);
   const { userInfo, newConversion } = useSelector((state) => state.conversions);
   const [showPicker, setShowPicker] = useState(false);
   const [ShowAttachement, setShowAttachement] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [Assest, setAssest] = useState(null);
-  const [link, setLink] = useState(null);
   const EmojiSelect = ({ native }) => {
     setInputValue(inputValue + native);
   };
   const { sentMessageInfo, sideBar } = useSelector((state) => state.app);
-  const [error, setError] = useState(false);
-  //! upload assests
-  // const handleAssestUpload = async () => {
-  //   let formData = new FormData();
-  //   formData.append("file", Assest);
-  //   formData.append("cloud_name", "dkhgfsefj");
-  //   formData.append("upload_preset", "chating");
-
-  //   try {
-  //     const response = await fetch(
-  //       "https://api.cloudinary.com/v1_1/dkhgfsefj/upload",
-  //       {
-  //         method: "POST",
-
-  //         body: formData,
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     setLink(result.url);
-  //     setError(false);
-
-  //     return {
-  //       link: result?.url,
-  //       fileName: result?.original_filename,
-  //     };
-  //   } catch (error) {
-  //     setError(true);
-  //     formData = {};
-  //     return {
-  //       link: null,
-  //       fileName: null,
-  //     };
-  //   }
-  // };
-
   const sendMsg = async () => {
-    //! image message
     if (Assest) {
-      const { link, fileName } = await uploadUserAssest();
-      if (error) {
-        return alert("fail to upload");
-      }
-
+      const { url, fileName } = await uploadUserAssest(Assest);
       if (Assest.type.startsWith("image")) {
         socket.emit("link_message", {
           token,
@@ -93,25 +55,34 @@ const Conversion = () => {
           type: "msg",
           subType: "Media",
           fileName,
-          link: link,
+          link: url,
           mimeType: "",
-          message: inputValue || inputValue === 0 ? inputValue : "",
+          message: inputValue || "",
         });
+        setPreviewImage(null);
+        setPreviewType(null);
+        setAssest(null);
+        return;
       } else {
         socket.emit("link_message", {
           token,
           from: sentMessageInfo.from,
           conversation_id: sentMessageInfo.roomId,
           type: "msg",
-          fileName: "",
+          fileName: fileName,
           mimeType: "",
           subType: "Document",
-          link: link,
-          message: inputValue,
+          link: url,
+          message: inputValue | "",
         });
+        setPreviewImage(null);
+        setPreviewType(null);
+        setAssest(null);
+        return;
       }
     }
 
+    if (!inputValue) return;
     // ! for text Link
     //check is link or not
     else if (
@@ -144,10 +115,6 @@ const Conversion = () => {
         });
         setInputValue("");
       }
-      const sound = new Howl({
-        src: ["/mixkit-bubble-pop-up-alert-notification-2357.wav"],
-      });
-      sound.play();
     }
   };
   const { incoming } = useSelector((state) => state.video);
@@ -316,6 +283,7 @@ const Conversion = () => {
                 position: "absolute",
                 left: "42px",
                 bottom: "72px",
+                zIndex: 200,
 
                 display: `${ShowAttachement ? "flex" : "none"}`,
               }}
@@ -338,8 +306,20 @@ const Conversion = () => {
                   }}
                   type="file"
                   accept="application/*"
-                  size={"10MB"}
-                  onChange={(e) => setAssest(e.target.files[0])}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    const maxSizeInBytes = 100 * 1024;
+                    if (file && file.size > maxSizeInBytes) {
+                      toast.error("File size exceeds the limit of 100 KB.", {
+                        autoClose: 2000,
+                      });
+                      e.target.value = null;
+                      return;
+                    }
+                    setAssest(file);
+                    setShowAttachement(false);
+                    setPreviewType("Document");
+                  }}
                 />
                 <File size={24} />
               </IconButton>
@@ -362,8 +342,25 @@ const Conversion = () => {
                   }}
                   type="file"
                   accept="image/*"
-                  size={"10MB"}
-                  onChange={(e) => setAssest(e.target.files[0])}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    const maxSizeInBytes = 30 * 1024;
+                    if (file && file.size > maxSizeInBytes) {
+                      toast.error("File size exceeds the limit of 30 KB.", {
+                        autoClose: 2000,
+                      });
+                      e.target.value = null;
+                      return;
+                    }
+                    setAssest(file);
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setPreviewImage(reader.result);
+                      setPreviewType("Image");
+                      setShowAttachement(false);
+                    };
+                    reader?.readAsDataURL(file);
+                  }}
                 />
                 <Image size={24} />
               </IconButton>
@@ -390,6 +387,58 @@ const Conversion = () => {
                   sendMsg();
                 }}
               >
+                {previewType && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      background: "#5B96F7",
+                      width: "210px",
+                      height: "160px",
+                      top: "0",
+                      marginTop: "-150px",
+                      padding: "6px",
+                      zIndex: 1,
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <Box
+                      sx={{ position: "absolute", right: "7px", top: "7px" }}
+                    >
+                      <XCircle
+                        size={22}
+                        cursor={"pointer"}
+                        onClick={() => {
+                          setPreviewType(null);
+                          setAssest(null);
+                        }}
+                      />
+                    </Box>
+                    {previewType === "Document" ? (
+                      <img
+                        src={"/pdf.webp"}
+                        alt=""
+                        style={{
+                          objectFit: "cover",
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={PreviewImage}
+                        alt=""
+                        style={{
+                          objectFit: "fill",
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: "10px",
+                        }}
+                      />
+                    )}
+                  </Box>
+                )}
+
                 <Stack
                   sx={{ alignItems: "center" }}
                   width={"inherit"}

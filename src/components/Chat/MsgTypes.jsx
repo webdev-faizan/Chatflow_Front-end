@@ -70,7 +70,7 @@ const DocMsg = ({ ele }) => {
           </Typography>
         </Stack>
       </Box>
-      <MessageOption />
+      {/* <MessageOption /> */}
     </Stack>
   );
 };
@@ -113,7 +113,7 @@ const LinkMsg = ({ ele }) => {
           </Typography>
         </Stack>
       </Box>
-      <MessageOption />
+      {/* <MessageOption /> */}
     </Stack>
   );
 };
@@ -151,7 +151,7 @@ const ReplyMsg = ({ ele }) => {
           <Typography color={"white"}> {ele.message}</Typography>
         </Stack>
       </Box>
-      <MessageOption />
+      {/* <MessageOption /> */}
     </Stack>
   );
 };
@@ -181,7 +181,7 @@ const MediaMsg = ({ ele }) => {
           {ele.message}
         </Typography>
       </Box>
-      <MessageOption />
+      {/* <MessageOption /> */}
     </Stack>
   );
 };

@@ -24,7 +24,7 @@ function SideNav() {
   useFetchedUserInfo();
   const handeChange = async (e) => {
     try {
-      const { url } = await uploadUserAssest(e);
+      const { url } = await uploadUserAssest(e.traget.files[0]);
       dispatch(UpdateUserInfo(url));
       await updateUserProfile(url);
     } catch (error) {
@@ -59,11 +59,12 @@ function SideNav() {
             }}
           >
             <img
-              src={"./logo.ico"}
+              src={"/logo.webp"}
               alt=""
               style={{
-                height: "37px",
-                width: "37px",
+                height: "47px",
+                width: "47px",
+                borderRadius:"100%"
               }}
             />
           </Box>
