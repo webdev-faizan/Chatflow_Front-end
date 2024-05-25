@@ -43,7 +43,6 @@ export const Slice = createSlice({
       state.sideBar.open = !state.sideBar.open;
     },
     updateSidebarTap: (state, action) => {
-      window.scrollTo(0, 0);
       state.sideBar.type = action.payload.type;
     },
     showShackbar: (state, action) => {

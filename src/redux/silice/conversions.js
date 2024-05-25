@@ -82,17 +82,10 @@ const slice = createSlice({
     },
     CurrentMessages(state, action) {
       state.direct_chat.current_messages = action.payload;
-      setTimeout(() => {
-        window.scrollTo(0, document.body.scrollHeight + 300);
-      }, 100);
     },
     updateCurrentMessage(state, action) {
       if (state.newConversion) return;
-      window.scrollTo(0, document.body.scrollHeight + 300);
       state.direct_chat.current_messages.push(action.payload);
-      setTimeout(() => {
-        window.scrollTo(0, document.body.scrollHeight + 300);
-      }, 100);
     },
     removeCurrentMessages(state) {
       state.direct_chat.current_messages = [];

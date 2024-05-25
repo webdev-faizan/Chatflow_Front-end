@@ -54,10 +54,6 @@ export const DirectConversion = () => {
     socket?.emit("get_direct_conversions", { token }, (data, userId) => {
       disptach(FetchDirectConversion(data, userId));
     });
-
-    setTimeout(() => {
-      window.scrollTo(0, document.body.scrollHeight);
-    }, 200);
   };
 
   return (
