@@ -32,7 +32,7 @@ const DocMsg = ({ ele }) => {
           link.click();
         });
       })
-      .catch((err) => {
+      .catch((error) => {
         toast.error(error?.response?.message, {
           autoClose: 1200,
         });
