@@ -5,6 +5,7 @@ import ForgotPassword from "../pages/auth/ForgotPassword";
 import NewPassword from "../pages/auth/NewPassword";
 import EmailVerification from "../pages/auth/EmailVerification";
 import NotFoundPage from "../components/NotFoundPage";
+import Index from "../pages/Index";
 
 const AuthRoutes = () => {
   return (
@@ -14,6 +15,7 @@ const AuthRoutes = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/new-password" element={<NewPassword />} />
       <Route path="/verify-email" element={<EmailVerification />} />
+      <Route path="/" element={<Index />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
