@@ -14,11 +14,11 @@ import {
   FriendElement,
   FriendRequestElement,
   UserElement,
-} from "../../components/UserElemnets";
+} from "./UserElemnets";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-const Friends = ({ open, handleClose }) => {
+const UserDialog = ({ open, handleClose }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -69,4 +69,4 @@ const Friends = ({ open, handleClose }) => {
   );
 };
 
-export default Friends;
+export default UserDialog;

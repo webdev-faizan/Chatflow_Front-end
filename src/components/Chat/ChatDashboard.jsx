@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { User } from "phosphor-react";
 import { Box, Stack, IconButton, Divider } from "@mui/material";
-import { Chatlist } from "../components/Chat/Chatlist";
-import Friends from "../layout/Dashboard/Friends";
+import DirectConversion from "./DirectConversion";
+import Friends from "../user/UserDialog";
 
-const Chart = () => {
+const ChatDashboard = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -87,7 +87,7 @@ const Chart = () => {
         >
           All Chats
         </Typography>
-        <Chatlist />
+        <DirectConversion />
       </Box>
       {/*  */}
       <Friends handleClose={handleClose} open={open} />
@@ -95,4 +95,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default ChatDashboard;

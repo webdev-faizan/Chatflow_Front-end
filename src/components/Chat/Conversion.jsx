@@ -28,7 +28,7 @@ import {
   XCircle,
 } from "phosphor-react";
 import { socket, token } from "../../socket";
-import SelectConverstion from "../SelectConverstion";
+import SelectConverstion from "./SelectConverstion.jsx";
 import { P2PCallContext } from "../../routes/IndexRoutes";
 import { uploadUserAssest } from "../../service/uploadUserAssest.js";
 import { toast } from "react-toastify";

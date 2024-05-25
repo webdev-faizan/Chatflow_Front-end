@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import { Box } from "@mui/material";
 import React, { createContext, useRef } from "react";
-import GeneralApp from "../chat/GeneralApp";
-import SideNav from "../layout/Dashboard/SideNav";
+import Chat from "../pages/Chat";
+import SideNav from "../components/SideNav";
 import Videocall from "../components/videocalling/p2p/Videocall";
 import SnackbarCallInfo from "../components/SnackbarCallInfo";
 import Audiocall from "../components/audiocall/p2p/Audiocall";
@@ -30,8 +30,8 @@ const IndexRoutes = () => {
       <P2PCallContext.Provider value={{ requestCall }}>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/c/:id" element={<GeneralApp />} />
-          <Route path="/c" element={<GeneralApp />} />
+          <Route path="/c/:id" element={<Chat />} />
+          <Route path="/c" element={<Chat />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </P2PCallContext.Provider>

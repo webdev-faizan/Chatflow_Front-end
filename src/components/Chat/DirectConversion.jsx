@@ -18,7 +18,7 @@ import {
   RemoveUserInfo,
   UserInfo,
 } from "../../redux/silice/conversions";
-export const Chatlist = () => {
+export const DirectConversion = () => {
   const { convsersions } = useSelector(
     (state) => state.conversions.direct_chat
   );
@@ -227,4 +227,4 @@ export const Chatlist = () => {
   );
 };
 
-export default Chatlist;
+export default DirectConversion;

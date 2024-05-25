@@ -18,15 +18,15 @@ import {
   FetchFriends,
   FetchRequestToConnectedFriends,
   SelectConversation,
-} from "../redux/app";
+} from "../../redux/app";
 import { useDispatch, useSelector } from "react-redux";
-import { socket, token } from "../socket";
+import { socket, token } from "../../socket";
 import {
   FetchCurrentMessages,
   FetchDirectConversion,
   NewConversion,
   UserInfo,
-} from "../redux/silice/conversions";
+} from "../../redux/silice/conversions";
 
 const StyledChatBox = styled(Box)(({ theme }) => ({
   "&:hover": {

@@ -4,16 +4,16 @@ import { SignOut } from "phosphor-react";
 import { Cookies } from "react-cookie";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import { NavButton } from "../../data/index";
+import { NavButton } from "../data/index";
 import { useDispatch, useSelector } from "react-redux";
 import {
   NewConversion,
   RemoveCurrentMessages,
-} from "../../redux/silice/conversions";
-import { uploadUserAssest } from "../../service/uploadUserAssest.js";
-import { updateUserProfile } from "../../service/user";
-import { UpdateUserInfo } from "../../redux/app";
-import useFetchedUserInfo from "../../hook/useGetUserInfo";
+} from "../redux/silice/conversions.js";
+import { uploadUserAssest } from "../service/uploadUserAssest.js";
+import { updateUserProfile } from "../service/user.js";
+import { UpdateUserInfo } from "../redux/app.js";
+import useFetchedUserInfo from "../hook/useGetUserInfo.jsx";
 function SideNav() {
   const [select, SetSlect] = useState(0);
   const cookie = new Cookies();

@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { Cookies } from "react-cookie";
 import React, { useEffect, useRef } from "react";
 import { Box, Stack, useMediaQuery } from "@mui/material";
-import Chart from "./Chart";
+import ChatDashboard from "../components/Chat/ChatDashboard";
 import Conversion from "../components/Chat/Conversion";
 import Message from "../components/Chat/message";
 import { connectSocket, socket } from "../socket";
@@ -21,7 +21,7 @@ import {
 import { incomingCall } from "../redux/silice/videocall";
 import { useNavigate } from "react-router-dom";
 
-const GeneralApp = () => {
+const Chat = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const navigate = useNavigate();
@@ -143,7 +143,7 @@ const GeneralApp = () => {
     };
   }, [socket]);
   useEffect(() => {
-     setTimeout(() => {
+    setTimeout(() => {
       const ele = container.current;
       if (ele) {
         ele.scrollTo(0, ele.scrollHeight);
@@ -159,7 +159,7 @@ const GeneralApp = () => {
           left: "100px",
         }}
       >
-        <Chart />
+        <ChatDashboard />
       </Stack>
       <Stack>
         <Stack
@@ -183,4 +183,4 @@ const GeneralApp = () => {
   );
 };
 
-export default GeneralApp;
+export default Chat;
