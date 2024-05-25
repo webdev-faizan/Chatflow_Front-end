@@ -37,6 +37,7 @@ const Conversion = () => {
   const isSmallScreen = useMediaQuery("(max-width:1050px)");
   const [PreviewImage, setPreviewImage] = useState(null);
   const [previewType, setPreviewType] = useState(null);
+  const [loadding, setIsloading] = useState(false);
   const { userInfo, newConversion } = useSelector((state) => state.conversions);
   const [showPicker, setShowPicker] = useState(false);
   const [ShowAttachement, setShowAttachement] = useState(false);
@@ -45,78 +46,88 @@ const Conversion = () => {
   const EmojiSelect = ({ native }) => {
     setInputValue(inputValue + native);
   };
-  const { sentMessageInfo, sideBar } = useSelector((state) => state.app);
+  const { sentMessageInfo } = useSelector((state) => state.app);
   const sendMsg = async () => {
-    if (Assest) {
-      const { url, fileName } = await uploadUserAssest(Assest);
-      if (Assest.type.startsWith("image")) {
-        socket.emit("link_message", {
-          token,
-          from: sentMessageInfo.from,
-          conversation_id: sentMessageInfo.roomId,
-          type: "msg",
-          subType: "Media",
-          fileName,
-          link: url,
-          mimeType: "",
-          message: inputValue || "",
-        });
-        setPreviewImage(null);
-        setPreviewType(null);
-        setAssest(null);
-        return;
-      } else {
-        socket.emit("link_message", {
-          token,
-          from: sentMessageInfo.from,
-          conversation_id: sentMessageInfo.roomId,
-          type: "msg",
-          fileName: fileName,
-          mimeType: "",
-          subType: "Document",
-          link: url,
-          message: inputValue | "",
-        });
-        setPreviewImage(null);
-        setPreviewType(null);
-        setAssest(null);
-        return;
-      }
-    }
+    try {
+      setIsloading(true);
 
-    if (!inputValue) return;
-    // ! for text Link
-    //check is link or not
-    else if (
-      inputValue.startsWith("http://") ||
-      inputValue.startsWith("https://")
-    ) {
-      //sperate text or link
-      const linkPattern = /\b(?:https?|ftp):\/\/\S+\b/g;
-      const links = inputValue.match(inputValue) || [];
-      const textWithoutLinks = inputValue.replace(linkPattern, "");
-      //send link_message
-      socket.emit("link_message", {
-        token,
-        from: sentMessageInfo.from,
-        conversation_id: sentMessageInfo.roomId,
-        type: "msg",
-        subType: "Link",
-        link: links[0],
-        message: textWithoutLinks,
-      });
-    } else {
-      // ! for tet message
-      if (inputValue.length > 0) {
-        socket?.emit("text_message", {
+      if (Assest) {
+        const { url, fileName } = await uploadUserAssest(Assest);
+        if (Assest.type.startsWith("image")) {
+          socket.emit("link_message", {
+            token,
+            from: sentMessageInfo.from,
+            conversation_id: sentMessageInfo.roomId,
+            type: "msg",
+            subType: "Media",
+            fileName,
+            link: url,
+            mimeType: "",
+            message: inputValue || "",
+          });
+          setPreviewImage(null);
+          setPreviewType(null);
+          setAssest(null);
+          return;
+        } else {
+          socket.emit("link_message", {
+            token,
+            from: sentMessageInfo.from,
+            conversation_id: sentMessageInfo.roomId,
+            type: "msg",
+            fileName: fileName,
+            mimeType: "",
+            subType: "Document",
+            link: url,
+            message: inputValue | "",
+          });
+          setPreviewImage(null);
+          setPreviewType(null);
+          setAssest(null);
+          return;
+        }
+      }
+
+      if (!inputValue) return;
+      // ! for text Link
+      //check is link or not
+      else if (
+        inputValue.startsWith("http://") ||
+        inputValue.startsWith("https://")
+      ) {
+        //sperate text or link
+        const linkPattern = /\b(?:https?|ftp):\/\/\S+\b/g;
+        const links = inputValue.match(inputValue) || [];
+        const textWithoutLinks = inputValue.replace(linkPattern, "");
+        //send link_message
+        socket.emit("link_message", {
           token,
           from: sentMessageInfo.from,
           conversation_id: sentMessageInfo.roomId,
-          type: "Text",
-          message: inputValue,
+          type: "msg",
+          subType: "Link",
+          link: links[0],
+          message: textWithoutLinks,
         });
-        setInputValue("");
+      } else {
+        // ! for tet message
+        if (inputValue.length > 0) {
+          socket?.emit("text_message", {
+            token,
+            from: sentMessageInfo.from,
+            conversation_id: sentMessageInfo.roomId,
+            type: "Text",
+            message: inputValue,
+          });
+          setInputValue("");
+        }
       }
+    } catch (error) {
+      toast.error("Unabel to send message", {
+        autoClose: 1200,
+      });
+    } finally {
+      setIsloading(false);
     }
   };
   const { incoming } = useSelector((state) => state.video);
@@ -487,7 +498,7 @@ const Conversion = () => {
                       ),
                     }}
                   ></TextField>
-                  <Button type="submit">
+                  <Button type="submit" disabled={loadding}>
                     <IconButton
                       alignItems={"center"}
                       justifyContent={"center"}
