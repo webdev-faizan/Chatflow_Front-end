@@ -154,7 +154,6 @@ export function FetchRequestToConnectedFriends() {
   return async (disptach) => {
     try {
       const { data } = await axiosInstance.get("/user/requestconnectedusers");
-      console.log(data);
       disptach(
         Slice.actions.requestToConnected({ requestToConnected: data.data })
       );

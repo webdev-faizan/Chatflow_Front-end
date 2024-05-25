@@ -46,6 +46,11 @@ export const Chatlist = () => {
         disptach(FetchCurrentMessages(data));
       }
     );
+    const isScroll = !!sessionStorage.getItem("scroll");
+    sessionStorage.setItem(
+      "scroll",
+      `${isScroll === "true" ? "false" : "true"}`
+    );
     socket?.emit("get_direct_conversions", { token }, (data, userId) => {
       disptach(FetchDirectConversion(data, userId));
     });
@@ -68,7 +73,6 @@ export const Chatlist = () => {
           lastMsg,
           avatar,
         } = ele;
-        console.log(avatar);
         return (
           <Box
             className="userChat"

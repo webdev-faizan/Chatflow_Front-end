@@ -31,7 +31,6 @@ const slice = createSlice({
         let user = el.participants.find((ele) => ele._id !== userId);
         const window_url = window.location.href;
         const open_conversion = window_url.split("/").at(-1).split("#").at(0);
-        console.log("check ", user?.status);
         if (user._id.toString() === open_conversion) {
           const directConversionsUser = {
             conversation_id: el._id,

@@ -82,13 +82,15 @@ const GeneralApp = () => {
         sound.play();
       }
       disptach(UpdateCurrentMessage(data));
+      setTimeout(() => {
+        const ele = container.current;
+        if (ele) {
+          ele.scrollTo(0, ele.scrollHeight);
+        }
+      }, 200);
       socket?.emit("get_direct_conversions", { token }, (data, userId) => {
         disptach(FetchDirectConversion(data, userId));
       });
-      setTimeout(() => {
-        container.current.scrollTo(0)
-        window.scrollTo(0, document.body.scrollHeight);
-      }, 200);
     });
     //! user notifcation about call
     socket.on("busy_another_call", ({ message }) => {
@@ -111,10 +113,19 @@ const GeneralApp = () => {
       disptach(CallNotifcation({ ShowCallNotifcation: true, message }));
     });
     socket.on("connect_error", (err) => {
-      if (err.message === "not authorized") {
+      if (err.message === "InterNal Server Error") {
         cookie.remove("auth");
         cookie.remove("id");
         navigate("/login");
+        navigate("/");
+        window.location.reload();
+      }
+
+      if (err.message === "not authorized") {
+        cookie.remove("auth");
+        cookie.remove("id");
+        navigate("/");
+        window.location.reload();
       }
     });
 
@@ -131,7 +142,14 @@ const GeneralApp = () => {
       socket?.off("connect_error");
     };
   }, [socket]);
-
+  useEffect(() => {
+     setTimeout(() => {
+      const ele = container.current;
+      if (ele) {
+        ele.scrollTo(0, ele.scrollHeight);
+      }
+    }, 200);
+  }, [sessionStorage.getItem("scroll")]);
   return (
     <>
       <Stack
