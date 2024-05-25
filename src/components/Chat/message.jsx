@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Stack } from "@mui/system";
-import { chat_history } from "../../data";
+// import { chat_history } from "../../data";
 import {
   TimeLine,
   TextMsg,
@@ -9,10 +9,10 @@ import {
   LinkMsg,
   DocMsg,
 } from "./MsgTypes";
-// import { useSelector } from "react-redux";
 import { useSelector } from "react-redux";
-
+import { useMediaQuery } from "@mui/material";
 const Message = () => {
+  const isMediumScreen = useMediaQuery("(max-width:1050px)");
   const { current_messages } = useSelector(
     (state) => state.conversions.direct_chat
   );
@@ -21,8 +21,9 @@ const Message = () => {
       <Stack
         spacing={3}
         sx={{
-          marginBottom: "100px",
-          paddingX:"18px"
+          marginBottom: "50px",
+          paddingTop: "10px",
+          padding: isMediumScreen ? "0 0 0 18px" : "0 18px",
         }}
       >
         {current_messages.map((ele) => {

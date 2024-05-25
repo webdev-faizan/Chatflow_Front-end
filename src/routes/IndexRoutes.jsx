@@ -23,7 +23,7 @@ const IndexRoutes = () => {
     <>
       <Videocall ref={videocallRef} />
       <Audiocall ref={audiocallRef} />
-      <Box sx={{ position: "fixed", left: 0, top: 0 }}>
+      <Box sx={{ position: "absolute", left: 0, top: 0 }}>
         <Index />
       </Box>
       <P2PCallContext.Provider value={{ requestCall }}>

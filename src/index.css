@@ -20,6 +20,7 @@ code {
 /* CSS for custom scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
 
 /* Track */
@@ -39,7 +40,10 @@ code {
 }
 
 body {
-  overflow-x: hidden !important;
+  min-width: 1050px;
+  height: 100vh;
+  min-height: 400px;
+  overflow-y: hidden;
 }
 
 .trash {

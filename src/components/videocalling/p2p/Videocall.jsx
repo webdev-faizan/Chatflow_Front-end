@@ -14,13 +14,14 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-import { IconButton } from "@mui/material";
+import { IconButton, useMediaQuery } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
 import { CallNotifcation, ShowVideo } from "../../../redux/app";
 
 const Videocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
+  const isMediumScreen = useMediaQuery("(max-width:1050px)");
 
   const { sentMessageInfo, showVideo } = useSelector((state) => state.app);
   const { incoming } = useSelector((state) => state.video);
@@ -173,14 +174,14 @@ const Videocall = forwardRef((props, ref) => {
           sx={{
             zIndex: 289,
             position: "fixed",
-            right: "28px",
-            top: "10px",
+            right: isMediumScreen ? "5px" : "25px",
+            top: "5px",
           }}
         >
           <Card
             sx={{
-              width: "480px",
-              height: "250px",
+              width: isMediumScreen ? "360px" : "480px",
+              height: isMediumScreen ? "210px" : "250px",
               padding: "0",
             }}
           >
@@ -191,7 +192,7 @@ const Videocall = forwardRef((props, ref) => {
             >
               <video
                 style={{
-                  width: "500px",
+                  width: isMediumScreen ? "360px" : "500px",
                 }}
                 ref={userVideo}
                 autoPlay
@@ -204,13 +205,13 @@ const Videocall = forwardRef((props, ref) => {
                 <video
                   style={{
                     display: "block",
-                    width: "150px",
-                    borderRadius: "10px",
+                    width: isMediumScreen ? "100px" : "150px",
+                    borderRadius: "20px",
                     height: "100px",
                     marginLeft: "auto",
-                    marginTop: "10px",
                     position: "relative",
-                    right: "-11px",
+                    right: isMediumScreen ? "-2px" : "-30px",
+                    top: isMediumScreen ? "119px" : "148px",
                   }}
                   autoPlay
                   muted

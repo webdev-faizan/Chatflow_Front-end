@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { Cookies } from "react-cookie";
-import React, { useEffect } from "react";
-import { Box, Stack } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import { Box, Stack, useMediaQuery } from "@mui/material";
 import Chart from "./Chart";
 import Conversion from "../components/Chat/Conversion";
 import Message from "../components/Chat/message";
@@ -26,11 +26,14 @@ const GeneralApp = () => {
   const token = cookie.get("auth");
   const navigate = useNavigate();
   const disptach = useDispatch();
+  const container = useRef();
+  const isMediumScreen = useMediaQuery("(max-width:1050px)");
+
   const soundAngery = new Howl({
     src: ["/ error-warning-login-denied-132113.mp3"],
   });
   useEffect(() => {
-    if (token && token != undefined && token !== null) {
+    if (token && token != undefined && token != null) {
       window.onload = function () {
         if (!window.location.hash) {
           window.location = window.location + "#load";
@@ -83,6 +86,7 @@ const GeneralApp = () => {
         disptach(FetchDirectConversion(data, userId));
       });
       setTimeout(() => {
+        container.current.scrollTo(0)
         window.scrollTo(0, document.body.scrollHeight);
       }, 200);
     });
@@ -129,22 +133,35 @@ const GeneralApp = () => {
   }, [socket]);
 
   return (
-    <Box minWidth="1000px">
-      <Stack direction={"row"} sx={{ position: "fixed", left: "100px" }}>
+    <>
+      <Stack
+        direction={"row"}
+        sx={{
+          position: isMediumScreen ? "absolute" : "fixed",
+          left: "100px",
+        }}
+      >
         <Chart />
       </Stack>
-      <Stack direction={"row"} minWidth={1000}>
+      <Stack>
         <Stack
           direction={"column"}
-          sx={{ marginLeft: "460px", marginTop: "110px" }}
+          sx={{ marginLeft: "459px", marginTop: "90px" }}
         >
           <Conversion />
-          <Box>
+          <Box
+            ref={container}
+            sx={{
+              height: "calc(100vh - 145px)",
+              width: isMediumScreen ? " calc(100% + 9px)" : "unset",
+              overflowX: "auto",
+            }}
+          >
             <Message />
           </Box>
         </Stack>
       </Stack>
-    </Box>
+    </>
   );
 };
 

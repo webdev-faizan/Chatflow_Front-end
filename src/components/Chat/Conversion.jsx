@@ -14,6 +14,7 @@ import {
   TextField,
   InputAdornment,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 
 import {
@@ -33,6 +34,7 @@ import { uploadUserAssest } from "../../service/uploadUserAssest.js";
 import { toast } from "react-toastify";
 const Conversion = () => {
   const { requestCall } = useContext(P2PCallContext);
+  const isSmallScreen = useMediaQuery("(max-width:1050px)");
   const [PreviewImage, setPreviewImage] = useState(null);
   const [previewType, setPreviewType] = useState(null);
   const { userInfo, newConversion } = useSelector((state) => state.conversions);
@@ -129,18 +131,17 @@ const Conversion = () => {
           width: `calc(100vw - 470px)`,
           overflow: "hidden",
           height: "67vh",
+          position: "relative",
         }}
         alignItems={"center"}
       >
         <SelectConverstion />
       </Stack>
       <Stack
-        // display={"none"}
-
         display={`${newConversion ? "none" : "block"}`}
         direction={"column"}
         sx={{
-          width: `calc(100vw - ${sideBar.open ? "781px" : "462px"})`,
+          width: `calc(100vw - 452px)`,
         }}
         justifyContent={"space-between"}
       >
@@ -149,11 +150,12 @@ const Conversion = () => {
           justifyContent={"space-between"}
           alignItems={"center"}
           sx={{
-            width: "inherit",
-            position: "fixed",
-            top: "0",
+            width: isSmallScreen ? "600px" : "inherit",
+            position: isSmallScreen ? "absolute" : "fixed",
+            top: 0,
             height: "80px",
-            padding: "5px 20px",
+            padding: "5px 20px 0",
+            marginBottom: "30px",
             background: "#F8FAFF",
             "box-shadow": "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           }}
@@ -252,7 +254,11 @@ const Conversion = () => {
           direction={"row"}
           paddingRight={"10px"}
           alignItems={"center"}
-          sx={{ width: "inherit", position: "fixed", bottom: "3px" }}
+          sx={{
+            width: isSmallScreen ? "600px" : "inherit",
+            position: isSmallScreen ? "absolute" : "fixed",
+            bottom: "3px",
+          }}
         >
           <Box
             display={"flex"}

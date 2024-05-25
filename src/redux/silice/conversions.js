@@ -1,7 +1,7 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { socket, token } from "../../socket";
 const initialState = {
-  newConversion: true,
+  newConversion: false,
   direct_chat: {
     convsersions: [],
     current_messages: [],

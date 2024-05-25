@@ -6,9 +6,9 @@ import DirectionSnackbar from "./components/Snackbar";
 function App() {
   return (
     <>
+      <Routes />
       <ToastContainer />
       <DirectionSnackbar />
-      <Routes />
     </>
   );
 }

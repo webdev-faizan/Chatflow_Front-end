@@ -14,7 +14,7 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, IconButton, useMediaQuery } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
 import {
@@ -25,6 +25,7 @@ import {
 
 const Audiocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
+  const isMediumScreen = useMediaQuery("(max-width:1050px)");
   const { sentMessageInfo, showAudio } = useSelector((state) => state.app);
   const {
     userInfo: { name, avatar: profile },
@@ -171,18 +172,14 @@ const Audiocall = forwardRef((props, ref) => {
     requesAudioToCallUser: requesAudioToCallUser,
   }));
   async function endCall() {
-    try {
-      const sound = new Howl({
-        src: ["/error-warning-login-denied-132113.mp3"],
-      });
-      sound.play();
-      dispatch(ShowAudio(false));
-      dispatch(incomingCall(false));
-      connectionRef?.current?.destroy();
-      socket.emit("audio_call_end", { id });
-    } catch (error) {
-      console.log(error);
-    }
+    const sound = new Howl({
+      src: ["/error-warning-login-denied-132113.mp3"],
+    });
+    sound.play();
+    dispatch(ShowAudio(false));
+    dispatch(incomingCall(false));
+    connectionRef?.current?.destroy();
+    socket.emit("audio_call_end", { id });
   }
 
   return (
@@ -202,16 +199,18 @@ const Audiocall = forwardRef((props, ref) => {
           sx={{
             zIndex: 289,
             position: "fixed",
-            right: "28px",
-            top: "10px",
+            right: "6px",
+            top: "6px",
           }}
         >
           <Card
             sx={{
-              width: "480px",
-              height: "250px",
+              width: isMediumScreen ? "360px" : "480px",
+              height: isMediumScreen ? "210px" : "250px",
+              backgroundImage:
+                "url('https://assets.codepen.io/6093409/river.jpg')",
+              backgroundSize: "100% 100%",
               padding: "0",
-              background: "purple",
             }}
           >
             <CardCover
