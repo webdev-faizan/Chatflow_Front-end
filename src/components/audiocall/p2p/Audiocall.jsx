@@ -5,6 +5,7 @@ import React, {
   useState,
   useImperativeHandle,
 } from "react";
+import { toast } from "react-toastify";
 import { socket, token } from "../../../socket";
 import { Howl } from "howler";
 import Peer from "simple-peer";
@@ -121,7 +122,9 @@ const Audiocall = forwardRef((props, ref) => {
         connectionRef.current = peer1;
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error?.response?.message, {
+          autoClose: 1200,
+        });
       });
   };
   const handleAudioAcceptCall = async () => {
@@ -165,7 +168,9 @@ const Audiocall = forwardRef((props, ref) => {
         connectionRef.current = peer2;
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error?.response?.message, {
+          autoClose: 1200,
+        });
       });
   };
   useImperativeHandle(ref, () => ({

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../service/axiosInstance";
+import { toast } from "react-toastify";
 const initialState = {
   sideBar: {
     open: false,
@@ -131,7 +132,9 @@ export function FetchAllUsers() {
           return disptach(Slice.actions.allUser({ allUsers: resp.data.data }));
         });
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.message, {
+        autoClose: 1200,
+      });
     }
   };
 }
@@ -145,7 +148,9 @@ export function FetchFriends() {
       });
       disptach(Slice.actions.friends({ friends: data.data }));
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.message, {
+        autoClose: 1200,
+      });
     }
   };
 }
@@ -158,7 +163,9 @@ export function FetchRequestToConnectedFriends() {
         Slice.actions.requestToConnected({ requestToConnected: data.data })
       );
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.message, {
+        autoClose: 1200,
+      });
     }
   };
 }

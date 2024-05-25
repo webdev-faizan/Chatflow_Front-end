@@ -18,6 +18,7 @@ import { IconButton, useMediaQuery } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
 import { CallNotifcation, ShowVideo } from "../../../redux/app";
+import { toast } from "react-toastify";
 
 const Videocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
@@ -98,7 +99,9 @@ const Videocall = forwardRef((props, ref) => {
         connectionRef.current = peer1;
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error?.response?.message, {
+          autoClose: 1200,
+        });
       });
   };
 
@@ -132,7 +135,9 @@ const Videocall = forwardRef((props, ref) => {
         connectionRef.current = peer2;
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error?.response?.message, {
+          autoClose: 1200,
+        });
       });
   };
   useImperativeHandle(ref, () => ({
@@ -157,7 +162,9 @@ const Videocall = forwardRef((props, ref) => {
         peer2.destroy();
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.message, {
+        autoClose: 1200,
+      });
     }
   };
 

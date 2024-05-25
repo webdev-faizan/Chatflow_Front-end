@@ -12,6 +12,7 @@ import {
 import { Image, DotsThreeVertical, DownloadSimple } from "phosphor-react";
 import { message_options } from "../../data/index";
 import { Cookies } from "react-cookie";
+import { toast } from "react-toastify";
 const cookie = new Cookies().get("user_id");
 
 const DocMsg = ({ ele }) => {
@@ -32,7 +33,9 @@ const DocMsg = ({ ele }) => {
         });
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(error?.response?.message, {
+          autoClose: 1200,
+        });
       });
   };
 
