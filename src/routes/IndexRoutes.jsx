@@ -30,8 +30,8 @@ const IndexRoutes = () => {
       <P2PCallContext.Provider value={{ requestCall }}>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/c/:id" element={<Chat />} />
           <Route path="/c" element={<Chat />} />
+          <Route path="/c/:id" element={<Chat />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </P2PCallContext.Provider>

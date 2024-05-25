@@ -6,7 +6,7 @@ let socket;
 const token = cookie.get("auth");
 
 const connectSocket = () => {
-  socket = io("http://localhost:5000", {
+  socket = io(process.env.REACT_APP_BASE_URL_SOCET_SERVER, {
     query: `user_token=${token}`,
   });
 };

@@ -46,10 +46,10 @@ export const DirectConversion = () => {
         disptach(FetchCurrentMessages(data));
       }
     );
-    const isScroll = !!sessionStorage.getItem("scroll");
+    const isScroll = sessionStorage.getItem("scroll") || false;
     sessionStorage.setItem(
       "scroll",
-      `${isScroll === "true" ? "false" : "true"}`
+      `${isScroll == "true" ? "false" : "true"}`
     );
     socket?.emit("get_direct_conversions", { token }, (data, userId) => {
       disptach(FetchDirectConversion(data, userId));

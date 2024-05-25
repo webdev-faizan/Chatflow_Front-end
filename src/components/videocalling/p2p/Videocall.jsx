@@ -53,6 +53,7 @@ const Videocall = forwardRef((props, ref) => {
       }
     });
     socket?.on("Video_call_end", ({ message }) => {
+      alert(message);
       dispatch(ShowVideo(false));
       dispatch(incomingCall(false));
       dispatch(CallNotifcation({ ShowCallNotifcation: true, message }));
@@ -73,6 +74,11 @@ const Videocall = forwardRef((props, ref) => {
       .getUserMedia({ audio: true, video: true })
       .then((stream) => {
         myVideo.current.srcObject = stream;
+        socket.on("user_offline", ({ message }) => {
+          stream.getTracks().forEach((track) => {
+            track.stop();
+          });
+        });
 
         peer1 = new Peer({
           initiator: true,
@@ -107,7 +113,6 @@ const Videocall = forwardRef((props, ref) => {
 
   const handleVideoAcceptCall = () => {
     dispatch(ShowVideo(true));
-
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: true })
       .then((stream) => {
@@ -146,7 +151,6 @@ const Videocall = forwardRef((props, ref) => {
   const endCall = async () => {
     try {
       socket.emit("Video_call_end", { id });
-
       const sound = new Howl({
         src: ["/error-warning-login-denied-132113.mp3"],
       });

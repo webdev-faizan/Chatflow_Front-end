@@ -76,7 +76,6 @@ const Audiocall = forwardRef((props, ref) => {
   let peer2;
   const requesAudioToCallUser = async () => {
     dispatch(SetCallUserInfo({ Username: name, profileImage: profile }));
-
     dispatch(ShowAudio(true));
     setIsCallUser(true);
     dispatch(incomingCall(true));
@@ -84,6 +83,11 @@ const Audiocall = forwardRef((props, ref) => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
+        socket.on("user_offline", () => {
+          stream.getTracks().forEach((track) => {
+            track.stop();
+          });
+        });
         peer1 = new Peer({
           initiator: true,
           trickle: false,
@@ -108,7 +112,6 @@ const Audiocall = forwardRef((props, ref) => {
           peer1.destroy();
         });
         peer1.on("error", (err) => {
-          console.error("Error in peer connection:", err);
           peer1.destroy();
         });
         peer1?.on("stream", (remoteStream) => {

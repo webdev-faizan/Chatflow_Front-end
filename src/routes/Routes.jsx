@@ -23,6 +23,3 @@ const Routes = () => {
   return <>{isAuthenticated ? <IndexRoutes /> : <AuthRoutes />}</>;
 };
 export default Routes;
-// else if (location.pathname === "/") {
-//   isAuthenticated ? navigate("/c") : navigate("/login");
-// }
