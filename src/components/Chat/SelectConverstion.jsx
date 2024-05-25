@@ -4,7 +4,7 @@ const SelectConverstion = () => {
   return (
     <Stack
       flexGrow={1}
-      sx={{ background: "" }}
+      sx={{ width: "100%" }}
       justifyContent={"center"}
       alignItems={"center"}
     >
@@ -13,7 +13,10 @@ const SelectConverstion = () => {
           src={"/conversion.svg"}
           width={287}
           height={287}
-          style={{ objectFit: "cover" }}
+          style={{
+            objectFit: "cover",
+            filter: "drop-shadow(40px 44px 45px rgba(40, 0, 0, 0.1))",
+          }}
           alt=""
         />
         <Stack direction={"row"} gap={0.4}>

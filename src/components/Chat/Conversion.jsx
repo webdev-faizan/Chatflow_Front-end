@@ -139,9 +139,9 @@ const Conversion = () => {
         direction={"row"}
         sx={{
           justifyItems: "center",
-          width: `calc(100vw - 470px)`,
+          top: "-90px",
           overflow: "hidden",
-          height: "67vh",
+          height: "100vh",
           position: "relative",
         }}
         alignItems={"center"}
