@@ -15,7 +15,6 @@ const SelectConverstion = () => {
           height={287}
           style={{
             objectFit: "cover",
-            filter: "drop-shadow(40px 44px 45px rgba(40, 0, 0, 0.1))",
           }}
           alt=""
         />
