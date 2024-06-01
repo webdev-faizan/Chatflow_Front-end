@@ -18,7 +18,6 @@ const download = (e) => {
   const parsedUrl = new URL(e);
   const pathname = parsedUrl.pathname;
   const fileExtension = pathname.substring(pathname.lastIndexOf("."));
-  console.log(e);
   fetch(e, {
     method: "GET",
     headers: {},
