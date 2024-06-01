@@ -14,29 +14,33 @@ import { Cookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { message_options } from "../../data/index";
 const cookie = new Cookies().get("user_id");
+const download = (e) => {
+  const parsedUrl = new URL(e);
+  const pathname = parsedUrl.pathname;
+  const fileExtension = pathname.substring(pathname.lastIndexOf("."));
+  console.log(e);
+  fetch(e, {
+    method: "GET",
+    headers: {},
+  })
+    .then((response) => {
+      response.arrayBuffer().then(function (buffer) {
+        const url = window.URL.createObjectURL(new Blob([buffer]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", Date.now() + fileExtension);
+        document.body.appendChild(link);
+        link.click();
+      });
+    })
+    .catch((error) => {
+      toast.error(error?.response?.message, {
+        autoClose: 1200,
+      });
+    });
+};
 const DocMsg = ({ ele }) => {
   const [, , time] = ele.created_at.split("+");
-  const download = (e, filename) => {
-    fetch(e, {
-      method: "GET",
-    })
-      .then((response) => {
-        response.arrayBuffer().then(function (buffer) {
-          const url = window.URL.createObjectURL(new Blob([buffer]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", `file.pdf`);
-          document.body.appendChild(link);
-          link.click();
-        });
-      })
-      .catch((error) => {
-        toast.error(error?.response?.message, {
-          autoClose: 1200,
-        });
-      });
-  };
-
   return (
     <Stack
       direction={"row"}
@@ -59,7 +63,7 @@ const DocMsg = ({ ele }) => {
             >
               {ele.message}
             </Typography>
-            <IconButton onClick={() => download(ele.link, ele.fileName)}>
+            <IconButton onClick={() => download(ele.link)}>
               <DownloadSimple />
             </IconButton>
           </Stack>
@@ -144,8 +148,8 @@ const ReplyMsg = ({ ele }) => {
     </Stack>
   );
 };
-
 const MediaMsg = ({ ele }) => {
+  const [, , time] = ele.created_at.split("+");
   return (
     <Stack
       direction={"row"}
@@ -158,17 +162,40 @@ const MediaMsg = ({ ele }) => {
           padding: "10px",
         }}
       >
-        <img
-          src={ele.link}
-          alt="as"
-          style={{ width: "201px", height: "183px", objectFit: "cover" }}
-        />
-        <Typography
-          variant="body2"
-          color={ele.to === cookie ? "#696969" : "#FFF"}
-        >
-          {ele.message}
-        </Typography>
+        <Stack spacing={1}>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{
+              borderRadius: "10px",
+              width: "max-content",
+              padding: "10px",
+            }}
+          >
+            <img
+              src={ele.link}
+              alt="as"
+              style={{
+                width: "201px",
+                height: "183px",
+                objectFit: "cover",
+                borderRadius: "10px",
+              }}
+            />
+            <Typography
+              variant="caption"
+              color={ele.to === cookie ? "#696969" : "#FFF"}
+            >
+              {ele.message}
+            </Typography>
+            <IconButton onClick={() => download(ele.link)}>
+              <DownloadSimple />
+            </IconButton>
+          </Stack>
+          <Typography color={ele.to === cookie ? "#696969" : "#FFF"}>
+            {time}
+          </Typography>
+        </Stack>
       </Box>
       {/* <MessageOption /> */}
     </Stack>
