@@ -61,7 +61,6 @@ export const StartMessages = () => {
                 default:
                   return <TextMsg ele={ele} />;
               }
-
             default:
           }
         })}

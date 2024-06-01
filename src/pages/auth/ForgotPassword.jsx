@@ -11,9 +11,9 @@ import { Link as RouterLink } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { forgetPassword } from "../../redux/silice/auth";
 import { useDispatch } from "react-redux";
 import { useMediaQuery } from "@mui/material";
+import { forgetPassword } from "../../redux/silice/auth";
 const fieldIsRequired = "This field is required";
 const schemaSignup = yup.object({
   email: yup

@@ -4,8 +4,7 @@ import { useSelector } from "react-redux";
 import { User } from "phosphor-react";
 import { Box, Stack, IconButton, Divider } from "@mui/material";
 import DirectConversion from "./DirectConversion";
-import Friends from "../user/UserDialog";
-
+import Friends from "../User/UserDialog";
 const ChatDashboard = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -13,17 +12,15 @@ const ChatDashboard = () => {
   const {
     userInfo: { fullname },
   } = useSelector((state) => state.app);
-
   return (
-    <Box component={"section"}>
+    <>
       <Box
         sx={{
           height: "100vh",
           overflowY: "auto",
           width: "360px",
           background: "#F8FAFF",
-          "box-shadow": " 0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
-
+          boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.25)",
           padding: "10px 10px 30px",
         }}
       >
@@ -44,9 +41,11 @@ const ChatDashboard = () => {
         </Typography>
         <Stack direction={"column"} spacing={3}>
           <Stack
-            direction={"row"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
           >
             <Typography
               variant="h2"
@@ -59,7 +58,7 @@ const ChatDashboard = () => {
                 lineHeight: "normal",
               }}
             >
-              Chats
+              All Chats
             </Typography>
             <IconButton onClick={handleOpen}>
               <User fontSize={24} />
@@ -89,9 +88,8 @@ const ChatDashboard = () => {
         </Typography>
         <DirectConversion />
       </Box>
-      {/*  */}
       <Friends handleClose={handleClose} open={open} />
-    </Box>
+    </>
   );
 };
 

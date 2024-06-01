@@ -10,24 +10,22 @@ import {
   Menu,
 } from "@mui/material";
 import { Image, DotsThreeVertical, DownloadSimple } from "phosphor-react";
-import { message_options } from "../../data/index";
 import { Cookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { message_options } from "../../data/index";
 const cookie = new Cookies().get("user_id");
-
 const DocMsg = ({ ele }) => {
   const [, , time] = ele.created_at.split("+");
   const download = (e, filename) => {
     fetch(e, {
       method: "GET",
-      headers: {},
     })
       .then((response) => {
         response.arrayBuffer().then(function (buffer) {
           const url = window.URL.createObjectURL(new Blob([buffer]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `file.pdf`); //or any other extension
+          link.setAttribute("download", `file.pdf`);
           document.body.appendChild(link);
           link.click();
         });
@@ -48,7 +46,6 @@ const DocMsg = ({ ele }) => {
         sx={{
           borderRadius: "10px",
           background: ele.to === cookie ? "#d3d3d3fa" : "#5B96F7",
-
           width: "max-content",
           padding: "10px",
         }}
@@ -60,7 +57,6 @@ const DocMsg = ({ ele }) => {
               variant="caption"
               color={ele.to === cookie ? "#696969" : "#FFF"}
             >
-              {" "}
               {ele.message}
             </Typography>
             <IconButton onClick={() => download(ele.link, ele.fileName)}>
@@ -68,7 +64,6 @@ const DocMsg = ({ ele }) => {
             </IconButton>
           </Stack>
           <Typography color={ele.to === cookie ? "#696969" : "#FFF"}>
-            {" "}
             {time}
           </Typography>
         </Stack>
@@ -83,14 +78,12 @@ const LinkMsg = ({ ele }) => {
   return (
     <Stack
       direction={"row"}
-      justifyContent={ele.to == cookie ? "start" : "end"}
+      justifyContent={ele.to === cookie ? "start" : "end"}
     >
       <Box
         sx={{
           borderRadius: "10px",
-
-          background: ele.to == cookie ? "#5B96F7" : "#d3d3d3fa",
-
+          background: ele.to === cookie ? "#5B96F7" : "#d3d3d3fa",
           width: "max-content",
           padding: "10px",
         }}
@@ -107,7 +100,7 @@ const LinkMsg = ({ ele }) => {
 
           <Typography
             variant="subtitle2"
-            color={ele.to == cookie ? "#696969" : "#FFF"}
+            color={ele.to === cookie ? "#696969" : "#FFF"}
           >
             {ele.message}
           </Typography>
@@ -128,18 +121,12 @@ const ReplyMsg = ({ ele }) => {
         sx={{
           borderRadius: "10px",
           background: ele.incoming ? "#d3d3d3fa" : "#5B96F7",
-
           width: "max-content",
           padding: "10px",
         }}
       >
         <Stack spacing={0.5}>
-          <Stack
-            direction={"column"}
-            background={"#FFF"}
-            // alignItems={"center"}
-            borderRadius={1}
-          >
+          <Stack direction={"column"} background={"#FFF"} borderRadius={1}>
             <Typography
               sx={{
                 background: "white",
@@ -147,7 +134,6 @@ const ReplyMsg = ({ ele }) => {
                 borderRadius: "4px",
               }}
             >
-              {" "}
               {ele.reply}
             </Typography>
           </Stack>
@@ -163,7 +149,7 @@ const MediaMsg = ({ ele }) => {
   return (
     <Stack
       direction={"row"}
-      justifyContent={ele.to == cookie ? "start" : "end"}
+      justifyContent={ele.to === cookie ? "start" : "end"}
     >
       <Box
         sx={{
@@ -175,11 +161,11 @@ const MediaMsg = ({ ele }) => {
         <img
           src={ele.link}
           alt="as"
-          style={{ width: "201px", height: "183px" }}
+          style={{ width: "201px", height: "183px", objectFit: "cover" }}
         />
         <Typography
           variant="body2"
-          color={ele.to == cookie ? "#696969" : "#FFF"}
+          color={ele.to === cookie ? "#696969" : "#FFF"}
         >
           {ele.message}
         </Typography>
@@ -204,7 +190,6 @@ const TimeLine = ({ ele }) => {
 };
 
 const TextMsg = ({ ele }) => {
-  const path = window.location.pathname;
   const time = ele.created_at.split("+").at(-1);
 
   return (
@@ -214,11 +199,11 @@ const TextMsg = ({ ele }) => {
         overflow: "hidden",
         textOverflow: "ellipsis",
       }}
-      justifyContent={ele.to == cookie ? "start" : "end"}
+      justifyContent={ele.to === cookie ? "start" : "end"}
     >
       <Box
         sx={{
-          background: ele.to == cookie ? "#5B96F7" : "#d3d3d3fa",
+          background: ele.to === cookie ? "#5B96F7" : "#d3d3d3fa",
           overflowWrap: "break-word",
           wordWrap: "break-word",
           borderRadius: "10px",
@@ -227,7 +212,7 @@ const TextMsg = ({ ele }) => {
         }}
       >
         <Typography
-          color={ele.to == cookie ? "white" : "black"}
+          color={ele.to === cookie ? "white" : "black"}
           sx={{
             overflowWrap: "break-word",
             wordWrap: "break-word",
@@ -236,7 +221,7 @@ const TextMsg = ({ ele }) => {
           {ele.message}
         </Typography>
         <Typography
-          color={ele.to == cookie ? "white" : "black"}
+          color={ele.to === cookie ? "white" : "black"}
           sx={{
             fontSize: "10px",
           }}
@@ -244,7 +229,7 @@ const TextMsg = ({ ele }) => {
           {time}
         </Typography>
       </Box>
-      <MessageOption />
+      {/* <MessageOption /> */}
     </Stack>
   );
 };

@@ -28,7 +28,7 @@ const Chat = () => {
   const disptach = useDispatch();
   const container = useRef();
   const isMediumScreen = useMediaQuery("(max-width:1050px)");
-
+  const isLargeScreen = useMediaQuery("(min-width:1550px)");
   const soundAngery = new Howl({
     src: ["/ error-warning-login-denied-132113.mp3"],
   });
@@ -153,30 +153,47 @@ const Chat = () => {
   return (
     <>
       <Stack
-        direction={"row"}
         sx={{
-          position: isMediumScreen ? "absolute" : "fixed",
+          position: isLargeScreen | isMediumScreen ? "absolute" : "fixed",
           left: "100px",
+          direction: "row",
         }}
       >
         <ChatDashboard />
       </Stack>
-      <Stack>
+      <Stack alignItems={"center"}>
         <Stack
-          direction={"column"}
-          sx={{ marginLeft: "459px", marginTop: "90px" }}
+          sx={{
+            ...(isLargeScreen && {
+              minWidth: "850px",
+              maxWidth: "850px",
+              marginLeft: "460px",
+              position: "relative",
+            }),
+          }}
         >
-          <Conversion />
-          <Box
-            ref={container}
+          <Stack
+            direction={"column"}
             sx={{
-              height: "calc(100vh - 145px)",
-              width: isMediumScreen ? " calc(100% + 9px)" : "unset",
-              overflowX: "auto",
+              marginLeft: isLargeScreen ? "unset" : "459px",
+              marginTop: "90px",
             }}
           >
-            <Message />
-          </Box>
+            <Conversion />
+            <Box
+              ref={container}
+              sx={{
+                height: "calc(100vh - 145px)",
+                overflowX: "auto",
+                width:
+                  isLargeScreen | isMediumScreen
+                    ? " calc(100% + 9px)"
+                    : "unset",
+              }}
+            >
+              <Message />
+            </Box>
+          </Stack>
         </Stack>
       </Stack>
     </>

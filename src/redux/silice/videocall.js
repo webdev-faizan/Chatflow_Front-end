@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
   open_video_dialog: false,
   open_video_notification: false,
@@ -16,7 +15,6 @@ const slice = createSlice({
     incoming: (state, action) => {
       state.incoming = action.payload;
     },
-
     setOpenCloseCallNotification: (state, action) => {
       state.open_video_notification = action.payload;
     },
@@ -28,7 +26,6 @@ export function SetOpenCloseVideoDialog(payload) {
     disptach(slice.actions.SetOpenCloseVideoDialog(payload));
   };
 }
-
 export function incomingCall(payload) {
   return async (disptach) => {
     disptach(slice.actions.incoming(payload));

@@ -5,7 +5,7 @@ import React, {
   useState,
   useImperativeHandle,
 } from "react";
-import { socket, token } from "../../../socket";
+import { toast } from "react-toastify";
 import { Howl } from "howler";
 import Peer from "simple-peer";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,12 +18,10 @@ import { IconButton, useMediaQuery } from "@mui/material";
 import RingingCall from "../../Ringingcall";
 import { incomingCall } from "../../../redux/silice/videocall";
 import { CallNotifcation, ShowVideo } from "../../../redux/app";
-import { toast } from "react-toastify";
-
+import { socket, token } from "../../../socket";
 const Videocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
   const isMediumScreen = useMediaQuery("(max-width:1050px)");
-
   const { sentMessageInfo, showVideo } = useSelector((state) => state.app);
   const { incoming } = useSelector((state) => state.video);
   const userVideo = useRef();
@@ -227,7 +225,6 @@ const Videocall = forwardRef((props, ref) => {
                   autoPlay
                   muted
                   ref={myVideo}
-                  // poster="https://assets.codepen.io/6093409/river.jpg"
                 >
                   <source
                     src="https://assets.codepen.io/6093409/river.mp4"

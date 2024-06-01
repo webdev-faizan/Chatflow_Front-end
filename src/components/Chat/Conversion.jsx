@@ -47,6 +47,8 @@ const Conversion = () => {
     setInputValue(inputValue + native);
   };
   const { sentMessageInfo } = useSelector((state) => state.app);
+  const isLargeScreen = useMediaQuery("(min-width:1550px)");
+
   const sendMsg = async () => {
     try {
       setIsloading(true);
@@ -152,7 +154,7 @@ const Conversion = () => {
         display={`${newConversion ? "none" : "block"}`}
         direction={"column"}
         sx={{
-          width: `calc(100vw - 452px)`,
+          width: isLargeScreen ? "850px" : "calc(100vw - 452px)",
         }}
         justifyContent={"space-between"}
       >
@@ -203,7 +205,6 @@ const Conversion = () => {
                 alt={userInfo?.name}
               />
             )}
-
             <Box
               sx={{
                 display: "flex",
@@ -446,7 +447,7 @@ const Conversion = () => {
                         src={PreviewImage}
                         alt=""
                         style={{
-                          objectFit: "fill",
+                          objectFit: "cover",
                           width: "100%",
                           height: "100%",
                           borderRadius: "10px",

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Howl } from "howler";
-
 import {
   Box,
   Badge,
@@ -13,13 +12,13 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Chat } from "phosphor-react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FetchAllUsers,
   FetchFriends,
   FetchRequestToConnectedFriends,
   SelectConversation,
 } from "../../redux/app";
-import { useDispatch, useSelector } from "react-redux";
 import { socket, token } from "../../socket";
 import {
   FetchCurrentMessages,
@@ -141,10 +140,9 @@ const FriendRequestElement = () => {
     <StyledChatBox
       sx={{
         width: "100%",
-
         borderRadius: 1,
+        p: 2,
       }}
-      p={2}
     >
       <Stack spacing={2}>
         {requestToConnected.map((ele) => {
@@ -238,16 +236,14 @@ const FriendElement = ({ handleClose }) => {
   return (
     <StyledChatBox
       sx={{
+        p: 2,
         width: "100%",
-
         borderRadius: 1,
       }}
-      p={2}
     >
       <Stack spacing={2}>
         {friends?.map((ele) => {
           const { _id, fullname, status, avatar } = ele;
-
           return (
             <>
               <Stack
@@ -256,7 +252,6 @@ const FriendElement = ({ handleClose }) => {
                 justifyContent="space-between"
               >
                 <Stack direction="row" alignItems={"center"} spacing={2}>
-                  {" "}
                   {status === "online" ? (
                     <StyledBadge
                       overlap="circular"

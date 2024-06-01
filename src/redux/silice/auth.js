@@ -1,14 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../service/axiosInstance";
-
 import { Cookies } from "react-cookie";
 import { toast } from "react-toastify";
+import axiosInstance from "../../service/axiosInstance";
 const cookie = new Cookies();
 const initialState = {
   isLoading: false,
   error: false,
 };
-
 const slice = createSlice({
   name: "auth",
   initialState,

@@ -42,11 +42,9 @@ const Message = () => {
 
                 case "reply":
                   return <ReplyMsg ele={ele} />;
-
                 default:
                   return <TextMsg ele={ele} />;
               }
-
             default:
               <></>;
           }

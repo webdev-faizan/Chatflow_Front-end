@@ -6,7 +6,6 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { toast } from "react-toastify";
-import { socket, token } from "../../../socket";
 import { Howl } from "howler";
 import Peer from "simple-peer";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +22,7 @@ import {
   SetCallUserInfo,
   ShowAudio,
 } from "../../../redux/app";
-
+import { socket, token } from "../../../socket";
 const Audiocall = forwardRef((props, ref) => {
   const [state, setState] = useState(false);
   const isMediumScreen = useMediaQuery("(max-width:1050px)");
@@ -43,7 +42,6 @@ const Audiocall = forwardRef((props, ref) => {
   const [id, setId] = useState();
   const [signal, setSignal] = useState("");
   const dispatch = useDispatch();
-
   useEffect(() => {
     const sound = new Howl({
       src: ["/mixkit-happy-bells-notification-937.wav"],
@@ -79,7 +77,6 @@ const Audiocall = forwardRef((props, ref) => {
     dispatch(ShowAudio(true));
     setIsCallUser(true);
     dispatch(incomingCall(true));
-
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -117,11 +114,9 @@ const Audiocall = forwardRef((props, ref) => {
         peer1?.on("stream", (remoteStream) => {
           userAudio.current.srcObject = remoteStream;
         });
-
         socket.on("callAccepted", (signal) => {
           peer1.signal(signal);
         });
-
         connectionRef.current = peer1;
       })
       .catch((error) => {
@@ -158,7 +153,6 @@ const Audiocall = forwardRef((props, ref) => {
           peer2.destroy();
         });
         peer2.on("error", (err) => {
-          console.error("Error in peer connection:", err);
           peer2.destroy();
         });
         peer2?.on("stream", (remoteStream) => {
@@ -189,13 +183,8 @@ const Audiocall = forwardRef((props, ref) => {
     connectionRef?.current?.destroy();
     socket.emit("audio_call_end", { id });
   }
-
   return (
-    <Box
-      sx={{
-        background: "red",
-      }}
-    >
+    <>
       <RingingCall
         id={id}
         state={state}
@@ -267,7 +256,6 @@ const Audiocall = forwardRef((props, ref) => {
                   </>
                 )}
               </Box>
-
               <Box
                 textAlign={"center"}
                 level="body-lg"
@@ -295,7 +283,7 @@ const Audiocall = forwardRef((props, ref) => {
           </Card>
         </Box>
       )}
-    </Box>
+    </>
   );
 });
 

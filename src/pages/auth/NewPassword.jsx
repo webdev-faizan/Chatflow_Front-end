@@ -39,16 +39,16 @@ const NewPassword = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
-
   const onSubmit = (data) => {
     if (!searchParams.get("token")) return;
-
     dispatch(newPassword(data, searchParams.get("token")));
+    reset();
   };
 
   return (

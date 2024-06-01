@@ -10,7 +10,6 @@ const initialState = {
   group_chat: {},
   userInfo: { name: "", online: "", avatar: "" },
 };
-
 const slice = createSlice({
   name: "conversions",
   initialState,

@@ -20,7 +20,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 const UserDialog = ({ open, handleClose }) => {
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
