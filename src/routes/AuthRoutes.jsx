@@ -4,7 +4,7 @@ import Login from "../pages/auth/Login";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import NewPassword from "../pages/auth/NewPassword";
 import EmailVerification from "../pages/auth/EmailVerification";
-import NotFound from "../components/Error/NotFound";
+import NotFound from "../pages/Error/NotFound";
 import Index from "../pages/Index";
 const AuthRoutes = () => {
   return (
