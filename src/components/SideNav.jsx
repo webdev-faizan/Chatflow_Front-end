@@ -169,9 +169,9 @@ function SideNav() {
             <Avatar alt={fullname} src={avatar} />
             <IconButton
               onClick={() => {
-                window.location.reload();
                 cookie.remove("auth");
                 cookie.remove("user_id");
+                window.location.reload();
                 window.location.href = "/login";
               }}
             >
